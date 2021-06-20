@@ -28,13 +28,32 @@ export function HeadlinesPage(props: Props) {
       <span>Headlines</span>
       <Div>
         {headlines?.map((headline, i) => (
-          <div key={`headline-${i}`}>
-            <img src={headline.imageUrl} alt={`headline-${i}`} />
-          </div>
+          <GridItem key={`headline-${i}`}>
+            <Image src={headline.imageUrl} alt={`headline-${i}`} />
+          </GridItem>
         ))}
       </Div>
     </>
   );
 }
 
-const Div = styled.div``;
+const Div = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 1vw;
+  overflow-y: scroll;
+`;
+const GridItem = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lightgrey;
+  border: 1.5px solid black;
+  margin: 0.5vw;
+`;
+
+const Image = styled.img`
+  height: auto;
+  width: 40vw;
+  align-self: center;
+`;
