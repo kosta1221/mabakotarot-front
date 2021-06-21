@@ -3,17 +3,25 @@ import { headlinesActions as actions } from '.';
 import axios from 'axios';
 
 import { selectHeadlines } from './selectors';
+import { sortByDateAsc, sortByDateDesc } from './utils';
 
 function* fetchHeadlinesWorkerSaga() {
   try {
-    const { page, headlines: currentHeadlines } = yield select(selectHeadlines);
+    const { page, headlines: currentHeadlines, isSortAsc } = yield select(
+      selectHeadlines,
+    );
     yield put(actions.setIsLoading(true));
 
-    const headlines = yield call(fetchHeadlines, page, 5);
-    if (headlines.length === 0) {
+    const fetchedHeadlines = yield call(fetchHeadlines, page, 5);
+
+    const allHeadlinesSorted = isSortAsc
+      ? sortByDateAsc([...currentHeadlines, ...fetchedHeadlines])
+      : sortByDateDesc([...currentHeadlines, ...fetchedHeadlines]);
+
+    if (fetchedHeadlines.length === 0) {
       yield put(actions.setLoadMoreHeadlines(false));
     }
-    yield put(actions.setHeadlines([...currentHeadlines, ...headlines]));
+    yield put(actions.setHeadlines(allHeadlinesSorted));
 
     yield put(actions.setIsLoading(false));
   } catch (e) {

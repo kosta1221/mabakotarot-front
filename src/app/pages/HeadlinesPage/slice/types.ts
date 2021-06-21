@@ -4,4 +4,5 @@ export interface HeadlinesState {
   page: number;
   loadMoreHeadlines: boolean;
   isLoading: boolean;
+  isSortAsc: boolean;
 }

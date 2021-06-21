@@ -9,6 +9,7 @@ export const initialState: HeadlinesState = {
   page: 1,
   loadMoreHeadlines: true,
   isLoading: false,
+  isSortAsc: false,
 };
 
 const slice = createSlice({
@@ -26,6 +27,9 @@ const slice = createSlice({
     },
     setIsLoading(state, action: PayloadAction<boolean>) {
       state.isLoading = action.payload;
+    },
+    setIsSortAsc(state, action: PayloadAction<boolean>) {
+      state.isSortAsc = action.payload;
     },
   },
 });
