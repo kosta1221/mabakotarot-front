@@ -4,21 +4,18 @@ import axios from 'axios';
 
 import { selectHeadlines } from './selectors';
 
-function* doSomething() {
+function* fetchHeadlinesWorkerSaga() {
   try {
-    const {
-      page,
-      loadMoreHeadlines,
-      headlines: currentHeadlines,
-    } = yield select(selectHeadlines);
+    const { page, headlines: currentHeadlines } = yield select(selectHeadlines);
+    yield put(actions.setIsLoading(true));
 
     const headlines = yield call(fetchHeadlines, page, 5);
     if (headlines.length === 0) {
-      console.log(loadMoreHeadlines);
-      console.log('here');
       yield put(actions.setLoadMoreHeadlines(false));
     }
     yield put(actions.setHeadlines([...currentHeadlines, ...headlines]));
+
+    yield put(actions.setIsLoading(false));
   } catch (e) {
     console.log(e);
     // yield put({ type: 'HEADLINES_FETCH_FAILED', message: e.message });
@@ -26,7 +23,7 @@ function* doSomething() {
 }
 
 export function* headlinesSaga() {
-  yield takeLatest(actions.sagaGetHeadlines.type, doSomething);
+  yield takeLatest(actions.sagaGetHeadlines.type, fetchHeadlinesWorkerSaga);
 }
 
 const fetchHeadlines = async (page: Number, count: Number) => {

@@ -8,6 +8,7 @@ export const initialState: HeadlinesState = {
   headlines: [],
   page: 1,
   loadMoreHeadlines: true,
+  isLoading: false,
 };
 
 const slice = createSlice({
@@ -22,6 +23,9 @@ const slice = createSlice({
     },
     setLoadMoreHeadlines(state, action: PayloadAction<boolean>) {
       state.loadMoreHeadlines = action.payload;
+    },
+    setIsLoading(state, action: PayloadAction<boolean>) {
+      state.isLoading = action.payload;
     },
   },
 });

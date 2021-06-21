@@ -5,6 +5,7 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
+import Loader from 'react-loader-spinner';
 
 import { useHeadlinesSlice } from './slice';
 import { useDispatch } from 'react-redux';
@@ -17,7 +18,9 @@ interface Props {}
 export function HeadlinesPage(props: Props) {
   const { actions } = useHeadlinesSlice();
   const dispatch = useDispatch();
-  const { headlines, page, loadMoreHeadlines } = useSelector(selectHeadlines);
+  const { headlines, page, loadMoreHeadlines, isLoading } = useSelector(
+    selectHeadlines,
+  );
 
   const observer = useRef<IntersectionObserver>();
 
@@ -51,7 +54,7 @@ export function HeadlinesPage(props: Props) {
   return (
     <>
       <span>Headlines</span>
-      <Div>
+      <Grid>
         {headlines?.map((headline, i) => {
           if (headlines.length === i + 1) {
             return (
@@ -66,12 +69,15 @@ export function HeadlinesPage(props: Props) {
               </GridItem>
             );
         })}
-      </Div>
+      </Grid>
+      {isLoading ? (
+        <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
+      ) : null}
     </>
   );
 }
 
-const Div = styled.div`
+const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1vw;
@@ -90,4 +96,9 @@ const Image = styled.img`
   height: auto;
   width: 40vw;
   align-self: center;
+`;
+
+const CenteredLoader = styled(Loader)`
+  display: flex;
+  justify-content: center;
 `;
