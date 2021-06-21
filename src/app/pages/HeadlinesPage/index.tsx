@@ -10,28 +10,62 @@ import { useHeadlinesSlice } from './slice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
 import { selectHeadlines } from './slice/selectors';
-import { useEffect } from 'react';
+import { useEffect, useCallback, useRef } from 'react';
 
 interface Props {}
 
 export function HeadlinesPage(props: Props) {
   const { actions } = useHeadlinesSlice();
   const dispatch = useDispatch();
-  const { headlines } = useSelector(selectHeadlines);
+  const { headlines, page, loadMoreHeadlines } = useSelector(selectHeadlines);
+
+  const observer = useRef<IntersectionObserver>();
+
+  console.log(page);
 
   useEffect(() => {
     dispatch(actions.sagaGetHeadlines());
-  }, [dispatch, actions]);
+  }, [dispatch, actions, page]);
+
+  const lastItem = useCallback(
+    element => {
+      if (observer.current) {
+        observer.current.disconnect();
+      }
+      observer.current = new IntersectionObserver(
+        entries => {
+          if (entries[0].isIntersecting && loadMoreHeadlines) {
+            dispatch(actions.incrementPageByAmount(1));
+          }
+        },
+        { threshold: 1 },
+      );
+
+      if (element) {
+        observer.current.observe(element);
+      }
+    },
+    [dispatch, actions, loadMoreHeadlines],
+  );
 
   return (
     <>
       <span>Headlines</span>
       <Div>
-        {headlines?.map((headline, i) => (
-          <GridItem key={`headline-${i}`}>
-            <Image src={headline.imageUrl} alt={`headline-${i}`} />
-          </GridItem>
-        ))}
+        {headlines?.map((headline, i) => {
+          if (headlines.length === i + 1) {
+            return (
+              <GridItem ref={lastItem} key={headline._id}>
+                <Image src={headline.imageUrl} alt={`headline-${i}`} />
+              </GridItem>
+            );
+          } else
+            return (
+              <GridItem key={headline._id}>
+                <Image src={headline.imageUrl} alt={`headline-${i}`} />
+              </GridItem>
+            );
+        })}
       </Div>
     </>
   );

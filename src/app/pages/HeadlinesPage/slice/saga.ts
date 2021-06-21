@@ -1,11 +1,24 @@
-import { call, put, takeLatest } from 'redux-saga/effects';
+import { call, put, takeLatest, select } from 'redux-saga/effects';
 import { headlinesActions as actions } from '.';
 import axios from 'axios';
 
+import { selectHeadlines } from './selectors';
+
 function* doSomething() {
   try {
-    const headlines = yield call(fetchHeadlines, 1, 15);
-    yield put(actions.setHeadlines(headlines));
+    const {
+      page,
+      loadMoreHeadlines,
+      headlines: currentHeadlines,
+    } = yield select(selectHeadlines);
+
+    const headlines = yield call(fetchHeadlines, page, 5);
+    if (headlines.length === 0) {
+      console.log(loadMoreHeadlines);
+      console.log('here');
+      yield put(actions.setLoadMoreHeadlines(false));
+    }
+    yield put(actions.setHeadlines([...currentHeadlines, ...headlines]));
   } catch (e) {
     console.log(e);
     // yield put({ type: 'HEADLINES_FETCH_FAILED', message: e.message });

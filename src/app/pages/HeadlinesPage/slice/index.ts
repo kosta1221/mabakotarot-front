@@ -6,6 +6,8 @@ import { HeadlinesState } from './types';
 
 export const initialState: HeadlinesState = {
   headlines: [],
+  page: 1,
+  loadMoreHeadlines: true,
 };
 
 const slice = createSlice({
@@ -14,6 +16,12 @@ const slice = createSlice({
   reducers: {
     setHeadlines(state, action: PayloadAction<any>) {
       state.headlines = action.payload;
+    },
+    incrementPageByAmount(state, action: PayloadAction<number>) {
+      state.page += action.payload;
+    },
+    setLoadMoreHeadlines(state, action: PayloadAction<boolean>) {
+      state.loadMoreHeadlines = action.payload;
     },
   },
 });
