@@ -56,18 +56,15 @@ export function HeadlinesPage(props: Props) {
       <span>Headlines</span>
       <Grid>
         {headlines?.map((headline, i) => {
-          if (headlines.length === i + 1) {
-            return (
-              <GridItem ref={lastItem} key={headline._id}>
-                <Image src={headline.imageUrl} alt={`headline-${i}`} />
-              </GridItem>
-            );
-          } else
-            return (
-              <GridItem key={headline._id}>
-                <Image src={headline.imageUrl} alt={`headline-${i}`} />
-              </GridItem>
-            );
+          return (
+            <GridItem
+              ref={headlines.length === i + 1 ? lastItem : null}
+              key={headline._id}
+            >
+              <p>{headline.date}</p>
+              <Image src={headline.imageUrl} alt={`headline-${i}`} />
+            </GridItem>
+          );
         })}
       </Grid>
       {isLoading ? (
