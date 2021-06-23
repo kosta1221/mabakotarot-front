@@ -18,9 +18,13 @@ interface Props {}
 export function HeadlinesPage(props: Props) {
   const { actions } = useHeadlinesSlice();
   const dispatch = useDispatch();
-  const { headlines, page, loadMoreHeadlines, isLoading } = useSelector(
-    selectHeadlines,
-  );
+  const {
+    headlines,
+    page,
+    loadMoreHeadlines,
+    isLoading,
+    isSortAsc,
+  } = useSelector(selectHeadlines);
 
   const observer = useRef<IntersectionObserver>();
 
@@ -53,7 +57,9 @@ export function HeadlinesPage(props: Props) {
 
   return (
     <>
-      <span>Headlines</span>
+      <span>{`Headlines sorted by: ${
+        isSortAsc ? 'ascending' : 'descending'
+      } order`}</span>
       <Grid>
         {headlines?.map((headline, i) => {
           return (
@@ -61,7 +67,7 @@ export function HeadlinesPage(props: Props) {
               ref={headlines.length === i + 1 ? lastItem : null}
               key={headline._id}
             >
-              <p>{headline.date}</p>
+              <p>{`${headline.date} ${headline._id.slice(20)}`}</p>
               <Image src={headline.imageUrl} alt={`headline-${i}`} />
             </GridItem>
           );
