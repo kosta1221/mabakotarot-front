@@ -12,7 +12,7 @@ function* fetchHeadlinesWorkerSaga() {
     );
     yield put(actions.setIsLoading(true));
 
-    const fetchedHeadlines = yield call(fetchHeadlines, page, 5);
+    const fetchedHeadlines = yield call(fetchHeadlines, page, 5, isSortAsc);
 
     const allHeadlinesSorted = isSortAsc
       ? sortByDateAsc([...currentHeadlines, ...fetchedHeadlines])
@@ -34,12 +34,16 @@ export function* headlinesSaga() {
   yield takeLatest(actions.sagaGetHeadlines.type, fetchHeadlinesWorkerSaga);
 }
 
-const fetchHeadlines = async (page: Number, count: Number) => {
+const fetchHeadlines = async (
+  page: Number,
+  count: Number,
+  isSortAsc: boolean,
+) => {
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}`,
   });
   console.log(headlines);
   return headlines;
