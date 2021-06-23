@@ -3,7 +3,6 @@ import { headlinesActions as actions } from '.';
 import axios from 'axios';
 
 import { selectHeadlines } from './selectors';
-import { sortByDateAsc, sortByDateDesc } from './utils';
 
 function* fetchHeadlinesWorkerSaga() {
   try {
@@ -14,14 +13,10 @@ function* fetchHeadlinesWorkerSaga() {
 
     const fetchedHeadlines = yield call(fetchHeadlines, page, 5, isSortAsc);
 
-    const allHeadlinesSorted = isSortAsc
-      ? sortByDateAsc([...currentHeadlines, ...fetchedHeadlines])
-      : sortByDateDesc([...currentHeadlines, ...fetchedHeadlines]);
-
     if (fetchedHeadlines.length === 0) {
       yield put(actions.setLoadMoreHeadlines(false));
     }
-    yield put(actions.setHeadlines(allHeadlinesSorted));
+    yield put(actions.setHeadlines([...currentHeadlines, ...fetchedHeadlines]));
 
     yield put(actions.setIsLoading(false));
   } catch (e) {

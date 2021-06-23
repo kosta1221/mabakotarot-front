@@ -3,6 +3,7 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { headlinesSaga } from './saga';
 import { HeadlinesState } from './types';
+import { sortByDateAsc, sortByDateDesc } from './utils';
 
 export const initialState: HeadlinesState = {
   headlines: [],
@@ -19,6 +20,11 @@ const slice = createSlice({
     setHeadlines(state, action: PayloadAction<any>) {
       state.headlines = action.payload;
     },
+    sortHeadlines(state, action: PayloadAction<boolean>) {
+      action.payload
+        ? sortByDateAsc(state.headlines)
+        : sortByDateDesc(state.headlines);
+    },
     incrementPageByAmount(state, action: PayloadAction<number>) {
       state.page += action.payload;
     },
@@ -30,6 +36,9 @@ const slice = createSlice({
     },
     setIsSortAsc(state, action: PayloadAction<boolean>) {
       state.isSortAsc = action.payload;
+    },
+    toggleIsSortAsc(state) {
+      state.isSortAsc = !state.isSortAsc;
     },
   },
 });

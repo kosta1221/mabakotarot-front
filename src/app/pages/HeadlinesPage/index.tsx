@@ -8,8 +8,7 @@ import styled from 'styled-components/macro';
 import Loader from 'react-loader-spinner';
 
 import { useHeadlinesSlice } from './slice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { selectHeadlines } from './slice/selectors';
 import { useEffect, useCallback, useRef } from 'react';
 
@@ -28,11 +27,13 @@ export function HeadlinesPage(props: Props) {
 
   const observer = useRef<IntersectionObserver>();
 
-  console.log(page);
-
   useEffect(() => {
     dispatch(actions.sagaGetHeadlines());
   }, [dispatch, actions, page]);
+
+  useEffect(() => {
+    dispatch(actions.sortHeadlines(isSortAsc));
+  }, [dispatch, actions, isSortAsc]);
 
   const lastItem = useCallback(
     element => {
@@ -55,9 +56,13 @@ export function HeadlinesPage(props: Props) {
     [dispatch, actions, loadMoreHeadlines],
   );
 
+  const handleToggleSortingorder = e => {
+    dispatch(actions.toggleIsSortAsc());
+  };
+
   return (
     <>
-      <span>{`Headlines sorted by: ${
+      <span onClick={handleToggleSortingorder}>{`Headlines sorted by: ${
         isSortAsc ? 'ascending' : 'descending'
       } order`}</span>
       <Grid>
