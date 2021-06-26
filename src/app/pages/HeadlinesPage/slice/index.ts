@@ -11,6 +11,7 @@ export const initialState: HeadlinesState = {
   loadMoreHeadlines: true,
   isLoading: false,
   isSortAsc: false,
+  site: '',
 };
 
 const slice = createSlice({
@@ -39,6 +40,9 @@ const slice = createSlice({
     },
     toggleIsSortAsc(state) {
       state.isSortAsc = !state.isSortAsc;
+    },
+    setSite(state, action: PayloadAction<string>) {
+      state.site = action.payload;
     },
   },
 });

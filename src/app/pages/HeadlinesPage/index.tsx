@@ -12,7 +12,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { selectHeadlines } from './slice/selectors';
 import { useEffect, useCallback, useRef } from 'react';
 
-interface Props {}
+import { RouteComponentProps } from 'react-router-dom';
+
+interface RouteParams {
+  site: string;
+}
+
+interface Props extends RouteComponentProps<RouteParams> {}
 
 export function HeadlinesPage(props: Props) {
   const { actions } = useHeadlinesSlice();
@@ -26,6 +32,11 @@ export function HeadlinesPage(props: Props) {
   } = useSelector(selectHeadlines);
 
   const observer = useRef<IntersectionObserver>();
+
+  useEffect(() => {
+    props.match.params.site &&
+      dispatch(actions.setSite(props.match.params.site));
+  }, [dispatch, actions, props]);
 
   useEffect(() => {
     dispatch(actions.sagaGetHeadlines());

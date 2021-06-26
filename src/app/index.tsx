@@ -32,6 +32,7 @@ export function App() {
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/headlines" component={HeadlinesPage} />
+        <Route exact path="/headlines/:site" component={HeadlinesPage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

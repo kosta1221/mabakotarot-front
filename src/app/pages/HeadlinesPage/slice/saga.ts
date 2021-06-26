@@ -6,12 +6,18 @@ import { selectHeadlines } from './selectors';
 
 function* fetchHeadlinesWorkerSaga() {
   try {
-    const { page, headlines: currentHeadlines, isSortAsc } = yield select(
+    const { page, headlines: currentHeadlines, isSortAsc, site } = yield select(
       selectHeadlines,
     );
     yield put(actions.setIsLoading(true));
 
-    const fetchedHeadlines = yield call(fetchHeadlines, page, 5, isSortAsc);
+    const fetchedHeadlines = yield call(
+      fetchHeadlines,
+      page,
+      5,
+      isSortAsc,
+      site,
+    );
 
     if (fetchedHeadlines.length === 0) {
       yield put(actions.setLoadMoreHeadlines(false));
@@ -33,12 +39,13 @@ const fetchHeadlines = async (
   page: Number,
   count: Number,
   isSortAsc: boolean,
+  site: string,
 ) => {
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&site=${site}`,
   });
   console.log(headlines);
   return headlines;
