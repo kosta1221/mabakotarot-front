@@ -14,6 +14,8 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
 import { HeadlinesPage } from './pages/HeadlinesPage';
+import { Drawer } from './components/Drawer';
+import { Appbar } from './components/Appbar';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
 import { useTranslation } from 'react-i18next';
 
@@ -29,6 +31,8 @@ export function App() {
         <meta name="description" content="A React Boilerplate application" />
       </Helmet>
 
+      <Drawer />
+      <Appbar />
       <Switch>
         <Route exact path="/" component={HomePage} />
         <Route exact path="/headlines" component={HeadlinesPage} />
