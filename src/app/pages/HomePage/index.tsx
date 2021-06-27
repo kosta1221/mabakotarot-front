@@ -1,7 +1,9 @@
 import * as React from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
+import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
+import { Feed } from '../../components/Feed';
 import { useHomepageSlice } from './slice';
 import { useDispatch } from 'react-redux';
 import { useSelector } from 'react-redux';
@@ -25,7 +27,18 @@ export function HomePage() {
         <title>Home Page</title>
         <meta name="description" content="App for comparing news headlines" />
       </Helmet>
-      <Calendar onChange={onChange} value={new Date(homePage.pickedDate)} />
+      <Content>
+        <Feed />
+        <Calendar onChange={onChange} value={new Date(homePage.pickedDate)} />
+      </Content>
     </>
   );
 }
+
+const Content = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin: auto;
+  width: 80vw;
+  min-height: 100vh;
+`;
