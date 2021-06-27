@@ -1,6 +1,6 @@
 import { HomepageState } from 'app/pages/HomePage/slice/types';
 import { HeadlinesState } from 'app/pages/HeadlinesPage/slice/types';
-import { AppbarState } from 'app/components/Appbar/slice/types';
+// import { AppbarState } from 'app/components/Appbar/slice/types';
 import { DrawerState } from 'app/components/Drawer/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
@@ -11,7 +11,7 @@ import { DrawerState } from 'app/components/Drawer/slice/types';
 export interface RootState {
   homepage?: HomepageState;
   headlines?: HeadlinesState;
-  appbar?: AppbarState;
+  // appbar?: AppbarState;
   drawer?: DrawerState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
