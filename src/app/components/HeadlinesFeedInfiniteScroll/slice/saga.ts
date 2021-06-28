@@ -12,18 +12,19 @@ function* fetchHeadlinesWorkerSaga() {
       isSortAsc,
       site,
       countPerFetch,
+      isSingularFetch,
     } = yield select(selectHeadlinesFeedInfiniteScroll);
     yield put(actions.setIsLoading(true));
 
     const fetchedHeadlines = yield call(
       fetchHeadlines,
-      page,
+      isSingularFetch ? 1 : page,
       countPerFetch,
       isSortAsc,
       site,
     );
 
-    if (fetchedHeadlines.length === 0) {
+    if (isSingularFetch || fetchedHeadlines.length === 0) {
       yield put(actions.setLoadMoreHeadlines(false));
     }
     yield put(actions.setHeadlines([...currentHeadlines, ...fetchedHeadlines]));

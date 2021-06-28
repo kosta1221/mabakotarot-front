@@ -7,4 +7,5 @@ export interface HeadlinesFeedInfiniteScrollState {
   isLoading: boolean;
   isSortAsc: boolean;
   site: string;
+  isSingularFetch: boolean;
 }

@@ -15,10 +15,11 @@ interface Props {
   children?: React.ReactElement<any, any>;
   site?: string;
   countPerFetch?: number;
+  isSingularFetch?: boolean;
 }
 
 export function HeadlinesFeedInfiniteScroll(props: Props) {
-  const { children, site, countPerFetch } = props;
+  const { children, site, countPerFetch, isSingularFetch } = props;
 
   const { actions } = useHeadlinesFeedInfiniteScrollSlice();
   const dispatch = useDispatch();
@@ -39,6 +40,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   useEffect(() => {
     countPerFetch && dispatch(actions.setCountPerFetch(countPerFetch));
   }, [dispatch, actions, countPerFetch]);
+
+  useEffect(() => {
+    isSingularFetch && dispatch(actions.setIsSingularFetch(isSingularFetch));
+  }, [dispatch, actions, isSingularFetch]);
 
   useEffect(() => {
     dispatch(actions.sagaGetHeadlinesInfiniteScroll());

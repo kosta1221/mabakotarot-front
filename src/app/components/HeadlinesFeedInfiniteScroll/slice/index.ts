@@ -13,6 +13,7 @@ export const initialState: HeadlinesFeedInfiniteScrollState = {
   isLoading: false,
   isSortAsc: false,
   site: '',
+  isSingularFetch: false,
 };
 
 const slice = createSlice({
@@ -47,6 +48,9 @@ const slice = createSlice({
     },
     setCountPerFetch(state, action: PayloadAction<number>) {
       state.countPerFetch = action.payload;
+    },
+    setIsSingularFetch(state, action: PayloadAction<boolean>) {
+      state.isSingularFetch = action.payload;
     },
   },
 });
