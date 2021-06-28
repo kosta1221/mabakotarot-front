@@ -14,10 +14,11 @@ import { selectHeadlinesFeedInfiniteScroll } from './slice/selectors';
 interface Props {
   children?: React.ReactElement<any, any>;
   site?: string;
+  countPerFetch?: number;
 }
 
 export function HeadlinesFeedInfiniteScroll(props: Props) {
-  const { children, site } = props;
+  const { children, site, countPerFetch } = props;
 
   const { actions } = useHeadlinesFeedInfiniteScrollSlice();
   const dispatch = useDispatch();
@@ -34,6 +35,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   useEffect(() => {
     site && dispatch(actions.setSite(site));
   }, [dispatch, actions, site]);
+
+  useEffect(() => {
+    countPerFetch && dispatch(actions.setCountPerFetch(countPerFetch));
+  }, [dispatch, actions, countPerFetch]);
 
   useEffect(() => {
     dispatch(actions.sagaGetHeadlinesInfiniteScroll());

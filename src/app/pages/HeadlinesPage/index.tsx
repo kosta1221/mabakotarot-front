@@ -20,7 +20,7 @@ export function HeadlinesPage(props: Props) {
   const { match } = props;
 
   return (
-    <HeadlinesFeedInfiniteScroll site={match.params.site}>
+    <HeadlinesFeedInfiniteScroll site={match.params.site} countPerFetch={10}>
       <GridHeadlinePresentor />
     </HeadlinesFeedInfiniteScroll>
   );

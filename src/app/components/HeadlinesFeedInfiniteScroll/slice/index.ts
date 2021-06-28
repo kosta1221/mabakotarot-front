@@ -8,6 +8,7 @@ import { sortByDateAsc, sortByDateDesc } from './utils';
 export const initialState: HeadlinesFeedInfiniteScrollState = {
   headlines: [],
   page: 1,
+  countPerFetch: 5,
   loadMoreHeadlines: true,
   isLoading: false,
   isSortAsc: false,
@@ -43,6 +44,9 @@ const slice = createSlice({
     },
     setSite(state, action: PayloadAction<string>) {
       state.site = action.payload;
+    },
+    setCountPerFetch(state, action: PayloadAction<number>) {
+      state.countPerFetch = action.payload;
     },
   },
 });

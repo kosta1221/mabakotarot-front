@@ -6,15 +6,19 @@ import { selectHeadlinesFeedInfiniteScroll } from './selectors';
 
 function* fetchHeadlinesWorkerSaga() {
   try {
-    const { page, headlines: currentHeadlines, isSortAsc, site } = yield select(
-      selectHeadlinesFeedInfiniteScroll,
-    );
+    const {
+      page,
+      headlines: currentHeadlines,
+      isSortAsc,
+      site,
+      countPerFetch,
+    } = yield select(selectHeadlinesFeedInfiniteScroll);
     yield put(actions.setIsLoading(true));
 
     const fetchedHeadlines = yield call(
       fetchHeadlines,
       page,
-      5,
+      countPerFetch,
       isSortAsc,
       site,
     );
