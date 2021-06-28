@@ -8,10 +8,12 @@ function* fetchHeadlinesWorkerSaga() {
   try {
     const {
       page,
+      countPerFetch,
       headlines: currentHeadlines,
       isSortAsc,
       site,
-      countPerFetch,
+      startDate,
+      endDate,
       isSingularFetch,
     } = yield select(selectHeadlinesFeedInfiniteScroll);
     yield put(actions.setIsLoading(true));
@@ -22,6 +24,8 @@ function* fetchHeadlinesWorkerSaga() {
       countPerFetch,
       isSortAsc,
       site,
+      startDate,
+      endDate,
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
@@ -48,12 +52,14 @@ const fetchHeadlines = async (
   count: Number,
   isSortAsc: boolean,
   site: string,
+  startDate: string,
+  endDate: string,
 ) => {
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&site=${site}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&site=${site}&startDate=${startDate}&endDate=${endDate}`,
   });
   console.log(headlines);
   return headlines;

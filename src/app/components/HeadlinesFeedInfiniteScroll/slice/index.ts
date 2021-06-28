@@ -13,6 +13,8 @@ export const initialState: HeadlinesFeedInfiniteScrollState = {
   isLoading: false,
   isSortAsc: false,
   site: '',
+  startDate: '',
+  endDate: '',
   isSingularFetch: false,
 };
 
@@ -51,6 +53,12 @@ const slice = createSlice({
     },
     setIsSingularFetch(state, action: PayloadAction<boolean>) {
       state.isSingularFetch = action.payload;
+    },
+    setStartDate(state, action: PayloadAction<string>) {
+      state.startDate = action.payload;
+    },
+    setEndDate(state, action: PayloadAction<string>) {
+      state.endDate = action.payload;
     },
   },
 });
