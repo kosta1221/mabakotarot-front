@@ -9,6 +9,7 @@ import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
+import CalendarIcon from '@material-ui/icons/Today';
 
 import MenuIcon from '@material-ui/icons/Menu';
 
@@ -43,6 +44,14 @@ export function Appbar(props: Props) {
           <Typography className={classes.title} variant="h6" noWrap>
             מה בכותרות
           </Typography>
+
+          <IconButton
+            aria-label="open calendar dialogue"
+            color="inherit"
+            onClick={() => {}}
+          >
+            <CalendarIcon />
+          </IconButton>
         </Toolbar>
       </AppBar>
     </div>
