@@ -24,8 +24,6 @@ export function HeadlinesPage(props: Props) {
   const queryParams = queryString.parse(location.search);
 
   const { startDate, endDate, site } = queryParams;
-  console.log(queryParams);
-  console.log(props);
 
   return (
     <HeadlinesFeedInfiniteScroll

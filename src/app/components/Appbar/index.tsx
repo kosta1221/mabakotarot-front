@@ -10,19 +10,23 @@ import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/Today';
-
 import MenuIcon from '@material-ui/icons/Menu';
+import { useStyles } from './styles';
 
 import { useDispatch } from 'react-redux';
+
 import { drawerActions } from '../Drawer/slice';
 import { useCreateToggleDrawerUtil } from '../Drawer/utils';
-import { useStyles } from './styles';
+import { useAppbarSlice } from './slice';
+import { QueryDialog } from './QueryDialog';
+// import { selectAppbar } from './slice/selectors';
 
 interface Props {}
 
 export function Appbar(props: Props) {
   const classes = useStyles();
 
+  const { actions } = useAppbarSlice();
   const dispatch = useDispatch();
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, drawerActions);
@@ -48,10 +52,13 @@ export function Appbar(props: Props) {
           <IconButton
             aria-label="open calendar dialogue"
             color="inherit"
-            onClick={() => {}}
+            onClick={() => {
+              dispatch(actions.setIsQueryDialogOpen(true));
+            }}
           >
             <CalendarIcon />
           </IconButton>
+          <QueryDialog />
         </Toolbar>
       </AppBar>
     </div>
