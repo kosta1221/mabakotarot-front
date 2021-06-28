@@ -1,13 +1,13 @@
 import { call, put, takeLatest, select } from 'redux-saga/effects';
-import { headlinesActions as actions } from '.';
+import { headlinesFeedInfiniteScrollActions as actions } from '.';
 import axios from 'axios';
 
-import { selectHeadlines } from './selectors';
+import { selectHeadlinesFeedInfiniteScroll } from './selectors';
 
 function* fetchHeadlinesWorkerSaga() {
   try {
     const { page, headlines: currentHeadlines, isSortAsc, site } = yield select(
-      selectHeadlines,
+      selectHeadlinesFeedInfiniteScroll,
     );
     yield put(actions.setIsLoading(true));
 
@@ -31,8 +31,11 @@ function* fetchHeadlinesWorkerSaga() {
   }
 }
 
-export function* headlinesSaga() {
-  yield takeLatest(actions.sagaGetHeadlines.type, fetchHeadlinesWorkerSaga);
+export function* headlinesFeedInfiniteScrollSaga() {
+  yield takeLatest(
+    actions.sagaGetHeadlinesInfiniteScroll.type,
+    fetchHeadlinesWorkerSaga,
+  );
 }
 
 const fetchHeadlines = async (

@@ -1,5 +1,5 @@
 /* --- STATE --- */
-export interface HeadlinesState {
+export interface HeadlinesFeedInfiniteScrollState {
   headlines: Array<any>;
   page: number;
   loadMoreHeadlines: boolean;
