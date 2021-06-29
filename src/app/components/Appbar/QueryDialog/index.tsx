@@ -26,9 +26,12 @@ import { selectAppbar } from '../slice/selectors';
 interface Props {}
 
 export function QueryDialog(props: Props) {
-  const { isQueryDialogOpen, pickedStartDate, pickedEndDate } = useSelector(
-    selectAppbar,
-  );
+  const {
+    isQueryDialogOpen,
+    pickedSites,
+    pickedStartDate,
+    pickedEndDate,
+  } = useSelector(selectAppbar);
   let router = useRouter();
   const dispatch = useDispatch();
 
@@ -48,10 +51,12 @@ export function QueryDialog(props: Props) {
     console.log('form data:');
     console.table(body);
 
+    const pickedSitesString = encodeURIComponent(JSON.stringify(pickedSites));
+
     handleDialogClose();
 
     router.push(
-      `/headlines?startDate=${pickedStartDate}&endDate=${pickedEndDate}`,
+      `/headlines?sites=${pickedSitesString}&startDate=${pickedStartDate}&endDate=${pickedEndDate}`,
     );
     router.history.go(0);
   };
