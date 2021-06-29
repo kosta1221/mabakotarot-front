@@ -4,37 +4,26 @@
  *
  */
 import * as React from 'react';
-import { useEffect } from 'react';
 import styled from 'styled-components/macro';
 import { Container } from '@material-ui/core';
 import { FeedItem } from './FeedItem';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectHomepage } from '../../pages/HomePage/slice/selectors';
-import { homepageActions } from '../../pages/HomePage/slice';
 
-interface Props {}
+interface Props {
+  headlines?: Array<any>;
+}
 
 export function Feed(props: Props) {
-  const dispatch = useDispatch();
-  const { homepageFeedHeadlines } = useSelector(selectHomepage);
+  const { headlines } = props;
 
-  const headlinesDuos = homepageFeedHeadlines.reduce(function (
-    rows,
-    key,
-    index,
-  ) {
+  const headlinesDuos = headlines?.reduce((rows, key, index) => {
     return (
       (index % 2 === 0 ? rows.push([key]) : rows[rows.length - 1].push(key)) &&
       rows
     );
-  },
-  []);
+  }, []);
 
   // console.log(headlinesDuos);
 
-  useEffect(() => {
-    dispatch(homepageActions.sagaGetHomePageHeadlines());
-  }, [dispatch]);
   return (
     <StyledContainer>
       <Title>פיד החדשות:</Title>

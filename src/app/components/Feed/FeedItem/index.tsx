@@ -5,7 +5,7 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-import { Paper } from '@material-ui/core';
+import { Paper, Divider } from '@material-ui/core';
 
 interface Props {
   itemData: any;
@@ -16,7 +16,8 @@ export function FeedItem(props: Props) {
   return (
     <Item>
       <StyledPaper elevation={3}>
-        <PaperTitle>15:00</PaperTitle>
+        <PaperTitle>{props.itemData[0].date}</PaperTitle>
+        <Divider />
         <Images>
           <Image src={props.itemData[0].imageUrl} />
           <Image src={props.itemData[1].imageUrl} />
@@ -34,12 +35,15 @@ const Item = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
+  margin-bottom: 10px;
+  padding-bottom: 3px;
 `;
 
 const Images = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
+  padding: 10px;
 `;
 
 const PaperTitle = styled.h3`
@@ -48,7 +52,6 @@ const PaperTitle = styled.h3`
 
 const Image = styled.img`
   height: auto;
-  width: 30vw;
+  width: 20vw;
   align-self: center;
-  border: 1px solid black;
 `;

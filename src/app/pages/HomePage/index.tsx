@@ -1,26 +1,11 @@
 import * as React from 'react';
-import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
 import { Feed } from '../../components/Feed';
-import { useHomepageSlice } from './slice';
-import { useDispatch } from 'react-redux';
-import { useSelector } from 'react-redux';
-import { selectHomepage } from './slice/selectors';
+import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
 export function HomePage() {
-  const { actions } = useHomepageSlice();
-  const dispatch = useDispatch();
-  const homePage = useSelector(selectHomepage);
-
-  console.log(homePage);
-
-  const onChange = date => {
-    const newDate = new Date(date);
-    dispatch(actions.pick(newDate.toISOString()));
-  };
-
   return (
     <>
       <Helmet>
@@ -28,8 +13,9 @@ export function HomePage() {
         <meta name="description" content="App for comparing news headlines" />
       </Helmet>
       <Content>
-        <Feed />
-        <Calendar onChange={onChange} value={new Date(homePage.pickedDate)} />
+        <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
+          <Feed />
+        </HeadlinesFeedInfiniteScroll>
       </Content>
     </>
   );
