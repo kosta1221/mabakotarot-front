@@ -84,6 +84,8 @@ export function QueryDialog(props: Props) {
           <Calendar
             onChange={onChange}
             value={[new Date(pickedStartDate), new Date(pickedEndDate)]}
+            maxDate={new Date()}
+            minDate={new Date('2021-06-19')}
             selectRange
           />
         </form>
