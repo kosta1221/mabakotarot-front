@@ -3,11 +3,13 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 import { AppbarState } from './types';
 import { DateTime } from 'luxon';
+import { sites } from '../../../../utils/sites';
 
 export const initialState: AppbarState = {
   isQueryDialogOpen: false,
   pickedStartDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
+  pickedSites: sites,
 };
 
 const slice = createSlice({
@@ -22,6 +24,9 @@ const slice = createSlice({
     },
     setPickedEndDate(state, action: PayloadAction<string>) {
       state.pickedEndDate = action.payload;
+    },
+    setPickedSites(state, action: PayloadAction<Array<string>>) {
+      state.pickedSites = action.payload;
     },
   },
 });
