@@ -1,20 +1,25 @@
 import { PayloadAction, createAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { headlinesSaga } from './saga';
-import { HeadlinesState } from './types';
+import { headlinesFeedInfiniteScrollSaga } from './saga';
+import { HeadlinesFeedInfiniteScrollState } from './types';
 import { sortByDateAsc, sortByDateDesc } from './utils';
 
-export const initialState: HeadlinesState = {
+export const initialState: HeadlinesFeedInfiniteScrollState = {
   headlines: [],
   page: 1,
+  countPerFetch: 5,
   loadMoreHeadlines: true,
   isLoading: false,
   isSortAsc: false,
+  sites: [],
+  startDate: '',
+  endDate: '',
+  isSingularFetch: false,
 };
 
 const slice = createSlice({
-  name: 'headlines',
+  name: 'headlinesFeedInfiniteScroll',
   initialState,
   reducers: {
     setHeadlines(state, action: PayloadAction<any>) {
@@ -40,24 +45,44 @@ const slice = createSlice({
     toggleIsSortAsc(state) {
       state.isSortAsc = !state.isSortAsc;
     },
+    setSites(state, action: PayloadAction<string[]>) {
+      state.sites = action.payload;
+    },
+    setCountPerFetch(state, action: PayloadAction<number>) {
+      state.countPerFetch = action.payload;
+    },
+    setIsSingularFetch(state, action: PayloadAction<boolean>) {
+      state.isSingularFetch = action.payload;
+    },
+    setStartDate(state, action: PayloadAction<string>) {
+      state.startDate = action.payload;
+    },
+    setEndDate(state, action: PayloadAction<string>) {
+      state.endDate = action.payload;
+    },
   },
 });
 
-const sagaGetHeadlines = createAction('GET_HEADLINES');
+const sagaGetHeadlinesInfiniteScroll = createAction(
+  'GET_HEADLINES_INFINITE_SCROLL',
+);
 
-export const headlinesActions = { ...slice.actions, sagaGetHeadlines };
+export const headlinesFeedInfiniteScrollActions = {
+  ...slice.actions,
+  sagaGetHeadlinesInfiniteScroll,
+};
 
-export const useHeadlinesSlice = () => {
+export const useHeadlinesFeedInfiniteScrollSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: headlinesSaga });
-  return { actions: headlinesActions };
+  useInjectSaga({ key: slice.name, saga: headlinesFeedInfiniteScrollSaga });
+  return { actions: headlinesFeedInfiniteScrollActions };
 };
 
 /**
  * Example Usage:
  *
  * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useHeadlinesSlice();
+ *  const { actions } = useHeadlinesFeedInfiniteScrollSlice();
  *
  *  const onButtonClick = (evt) => {
  *    dispatch(actions.someAction());

@@ -41,6 +41,7 @@ ReactDOM.render(
   MOUNT_NODE,
 );
 
+document.getElementsByTagName('html')[0].setAttribute('dir', 'rtl');
 // Hot reloadable translation json files
 if (module.hot) {
   module.hot.accept(['./locales/i18n'], () => {

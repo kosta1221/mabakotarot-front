@@ -4,109 +4,43 @@
  *
  */
 import * as React from 'react';
-import styled from 'styled-components/macro';
-import Loader from 'react-loader-spinner';
 
-import { useHeadlinesSlice } from './slice';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectHeadlines } from './slice/selectors';
-import { useEffect, useCallback, useRef } from 'react';
+import { RouteComponentProps, useLocation } from 'react-router-dom';
+import queryString from 'query-string';
 
-interface Props {}
+import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
+import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
-export function HeadlinesPage(props: Props) {
-  const { actions } = useHeadlinesSlice();
-  const dispatch = useDispatch();
-  const {
-    headlines,
-    page,
-    loadMoreHeadlines,
-    isLoading,
-    isSortAsc,
-  } = useSelector(selectHeadlines);
-
-  const observer = useRef<IntersectionObserver>();
-
-  useEffect(() => {
-    dispatch(actions.sagaGetHeadlines());
-  }, [dispatch, actions, page]);
-
-  useEffect(() => {
-    dispatch(actions.sortHeadlines(isSortAsc));
-  }, [dispatch, actions, isSortAsc]);
-
-  const lastItem = useCallback(
-    element => {
-      if (observer.current) {
-        observer.current.disconnect();
-      }
-      observer.current = new IntersectionObserver(
-        entries => {
-          if (entries[0].isIntersecting && loadMoreHeadlines) {
-            dispatch(actions.incrementPageByAmount(1));
-          }
-        },
-        { threshold: 1 },
-      );
-
-      if (element) {
-        observer.current.observe(element);
-      }
-    },
-    [dispatch, actions, loadMoreHeadlines],
-  );
-
-  const handleToggleSortingorder = e => {
-    dispatch(actions.toggleIsSortAsc());
-  };
-
-  return (
-    <>
-      <span onClick={handleToggleSortingorder}>{`Headlines sorted by: ${
-        isSortAsc ? 'ascending' : 'descending'
-      } order`}</span>
-      <Grid>
-        {headlines?.map((headline, i) => {
-          return (
-            <GridItem
-              ref={headlines.length === i + 1 ? lastItem : null}
-              key={headline._id}
-            >
-              <p>{`${headline.date} ${headline._id.slice(20)}`}</p>
-              <Image src={headline.imageUrl} alt={`headline-${i}`} />
-            </GridItem>
-          );
-        })}
-      </Grid>
-      {isLoading ? (
-        <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
-      ) : null}
-    </>
-  );
+interface RouteParams {
+  site: string;
 }
 
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1vw;
-  overflow-y: scroll;
-`;
-const GridItem = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: lightgrey;
-  border: 1.5px solid black;
-  margin: 0.5vw;
-`;
+interface Props extends RouteComponentProps<RouteParams> {}
 
-const Image = styled.img`
-  height: auto;
-  width: 40vw;
-  align-self: center;
-`;
+export function HeadlinesPage(props: Props) {
+  const { params } = props.match;
 
-const CenteredLoader = styled(Loader)`
-  display: flex;
-  justify-content: center;
-`;
+  const location = useLocation();
+  const queryParams = queryString.parse(location.search);
+
+  const { startDate, endDate, site, sites } = queryParams;
+  const parsedSites = JSON.parse(
+    typeof sites === 'string' ? sites.toString() : '',
+  );
+
+  return (
+    <HeadlinesFeedInfiniteScroll
+      countPerFetch={10}
+      sites={
+        (params.site &&
+          (typeof params.site === 'string' ? [params.site] : [])) ||
+        (parsedSites ? parsedSites : sites) ||
+        (typeof site === 'string' ? [site] : null)
+      }
+      startDate={typeof startDate === 'string' ? startDate : null}
+      endDate={typeof endDate === 'string' ? endDate : null}
+    >
+      <GridHeadlinePresentor />
+    </HeadlinesFeedInfiniteScroll>
+  );
+}
