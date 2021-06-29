@@ -18,6 +18,7 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SitesSelectionGroup } from './SitesSelectionGroup';
+import { SingleDateOrRangeToggle } from './SingleDateOrRangeToggle';
 
 import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -87,6 +88,7 @@ export function QueryDialog(props: Props) {
           <DialogContentText>
             בחר תאריך או טווח תאריכים של הכותרות שברצונך לראות:
           </DialogContentText>
+          <SingleDateOrRangeToggle />
 
           <StyledCalendar
             onChange={onChange}

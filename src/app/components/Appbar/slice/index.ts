@@ -7,6 +7,7 @@ import { sites } from '../../../../utils/sites';
 
 export const initialState: AppbarState = {
   isQueryDialogOpen: false,
+  isDateRange: true,
   pickedStartDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedSites: sites,
@@ -18,6 +19,9 @@ const slice = createSlice({
   reducers: {
     setIsQueryDialogOpen(state, action: PayloadAction<boolean>) {
       state.isQueryDialogOpen = action.payload;
+    },
+    setIsDateRange(state, action: PayloadAction<boolean>) {
+      state.isDateRange = action.payload;
     },
     setPickedStartDate(state, action: PayloadAction<string>) {
       state.pickedStartDate = action.payload;
