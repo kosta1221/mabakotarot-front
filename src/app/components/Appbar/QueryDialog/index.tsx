@@ -16,6 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import { SitesSelectionGroup } from './SitesSelectionGroup';
 
 import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -88,6 +89,8 @@ export function QueryDialog(props: Props) {
             minDate={new Date('2021-06-19')}
             selectRange
           />
+
+          <SitesSelectionGroup />
         </form>
       </DialogContent>
       <DialogActions>
