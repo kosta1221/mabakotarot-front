@@ -8,6 +8,7 @@ import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import { DateTime } from 'luxon';
 import { useRouter } from '../../../../utils/useRouter';
+import styled from 'styled-components/macro';
 
 import Button from '@material-ui/core/Button';
 // import TextField from '@material-ui/core/TextField';
@@ -79,10 +80,10 @@ export function QueryDialog(props: Props) {
       <DialogContent>
         <form id="calendar-query-form" onSubmit={onFormSubmit}>
           <DialogContentText>
-            בחר תאריך או טווח תאריכים של הכותרות שברצונך לראות
+            בחר תאריך או טווח תאריכים של הכותרות שברצונך לראות:
           </DialogContentText>
 
-          <Calendar
+          <StyledCalendar
             onChange={onChange}
             value={[new Date(pickedStartDate), new Date(pickedEndDate)]}
             maxDate={new Date()}
@@ -90,6 +91,7 @@ export function QueryDialog(props: Props) {
             selectRange
           />
 
+          <DialogContentText>בחר אילו אתרי חדשות להציג:</DialogContentText>
           <SitesSelectionGroup />
         </form>
       </DialogContent>
@@ -109,3 +111,7 @@ export function QueryDialog(props: Props) {
     </Dialog>
   );
 }
+
+const StyledCalendar = styled(Calendar)`
+  margin-bottom: 10px;
+`;

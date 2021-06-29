@@ -5,12 +5,12 @@
  */
 import * as React from 'react';
 
-import { useStyles } from './styles';
 import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 import Chip from '@material-ui/core/Chip';
 import LabelIcon from '@material-ui/icons/LocalOfferOutlined';
 import LabelIconFilled from '@material-ui/icons/LocalOffer';
+import { useStyles } from './styles';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../../slice';
@@ -37,23 +37,23 @@ export function SitesSelectionGroup(props: Props) {
 
   return (
     <ToggleButtonGroup
-      className={classes.labelGroup}
+      className={classes.sitesGroup}
       value={pickedSites}
       onChange={handlePickedSitesChange}
-      aria-label="text formatting"
+      aria-label="site picker"
     >
       {allSites.map((site, i) => (
         <ToggleButton
-          className={`${classes.labelButton} ${classes.noTransform}`}
-          key={`toggle-button-label-${i}`}
+          className={`${classes.siteButton} ${classes.noTransform}`}
+          key={`toggle-button-site-${i}`}
           value={site}
           aria-label={site}
           onClick={() => {}}
           color="primary"
         >
           <Chip
-            key={`label-${i}`}
-            className={`${classes.labelChip} label`}
+            key={`site-${i}`}
+            className={classes.siteChip}
             label={site}
             onClick={() => {}}
             icon={
