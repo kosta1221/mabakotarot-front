@@ -11,7 +11,7 @@ function* fetchHeadlinesWorkerSaga() {
       countPerFetch,
       headlines: currentHeadlines,
       isSortAsc,
-      site,
+      sites,
       startDate,
       endDate,
       isSingularFetch,
@@ -23,7 +23,7 @@ function* fetchHeadlinesWorkerSaga() {
       isSingularFetch ? 1 : page,
       countPerFetch,
       isSortAsc,
-      site,
+      sites,
       startDate,
       endDate,
     );
@@ -51,15 +51,17 @@ const fetchHeadlines = async (
   page: Number,
   count: Number,
   isSortAsc: boolean,
-  site: string,
+  sites: string[],
   startDate: string,
   endDate: string,
 ) => {
+  const sitesStringEncoded = encodeURIComponent(JSON.stringify(sites));
+
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&site=${site}&startDate=${startDate}&endDate=${endDate}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&sites=${sitesStringEncoded}&startDate=${startDate}&endDate=${endDate}`,
   });
   console.log(headlines);
   return headlines;

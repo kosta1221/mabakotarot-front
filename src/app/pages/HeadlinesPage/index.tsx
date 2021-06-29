@@ -18,17 +18,25 @@ interface RouteParams {
 interface Props extends RouteComponentProps<RouteParams> {}
 
 export function HeadlinesPage(props: Props) {
-  const { match } = props;
+  const { params } = props.match;
 
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
 
-  const { startDate, endDate, site } = queryParams;
+  const { startDate, endDate, site, sites } = queryParams;
+  const parsedSites = JSON.parse(
+    typeof sites === 'string' ? sites.toString() : '',
+  );
 
   return (
     <HeadlinesFeedInfiniteScroll
       countPerFetch={10}
-      site={match.params.site || (typeof site === 'string' ? site : null)}
+      sites={
+        (params.site &&
+          (typeof params.site === 'string' ? [params.site] : [])) ||
+        (parsedSites ? parsedSites : sites) ||
+        (typeof site === 'string' ? [site] : null)
+      }
       startDate={typeof startDate === 'string' ? startDate : null}
       endDate={typeof endDate === 'string' ? endDate : null}
     >

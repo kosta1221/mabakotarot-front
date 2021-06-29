@@ -14,7 +14,7 @@ import { selectHeadlinesFeedInfiniteScroll } from './slice/selectors';
 interface Props {
   children?: React.ReactElement<any, any>;
   countPerFetch?: number;
-  site?: string | null;
+  sites?: string[] | null;
   startDate?: string | null;
   endDate?: string | null;
   isSingularFetch?: boolean;
@@ -23,7 +23,7 @@ interface Props {
 export function HeadlinesFeedInfiniteScroll(props: Props) {
   const {
     children,
-    site,
+    sites,
     countPerFetch,
     startDate,
     endDate,
@@ -43,8 +43,8 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
-    site && dispatch(actions.setSite(site));
-  }, [dispatch, actions, site]);
+    sites && dispatch(actions.setSites(sites));
+  }, [dispatch, actions, sites]);
 
   useEffect(() => {
     startDate && dispatch(actions.setStartDate(startDate));

@@ -12,7 +12,7 @@ export const initialState: HeadlinesFeedInfiniteScrollState = {
   loadMoreHeadlines: true,
   isLoading: false,
   isSortAsc: false,
-  site: '',
+  sites: [],
   startDate: '',
   endDate: '',
   isSingularFetch: false,
@@ -45,8 +45,8 @@ const slice = createSlice({
     toggleIsSortAsc(state) {
       state.isSortAsc = !state.isSortAsc;
     },
-    setSite(state, action: PayloadAction<string>) {
-      state.site = action.payload;
+    setSites(state, action: PayloadAction<string[]>) {
+      state.sites = action.payload;
     },
     setCountPerFetch(state, action: PayloadAction<number>) {
       state.countPerFetch = action.payload;

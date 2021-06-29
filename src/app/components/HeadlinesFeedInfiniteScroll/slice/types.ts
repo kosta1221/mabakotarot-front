@@ -6,7 +6,7 @@ export interface HeadlinesFeedInfiniteScrollState {
   loadMoreHeadlines: boolean;
   isLoading: boolean;
   isSortAsc: boolean;
-  site: string;
+  sites: string[];
   startDate: string;
   endDate: string;
   isSingularFetch: boolean;
