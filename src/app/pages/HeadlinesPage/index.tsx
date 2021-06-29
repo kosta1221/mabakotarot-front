@@ -9,7 +9,7 @@ import { RouteComponentProps, useLocation } from 'react-router-dom';
 import queryString from 'query-string';
 
 import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
-import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
+import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll/Loadable';
 
 interface RouteParams {
   site: string;

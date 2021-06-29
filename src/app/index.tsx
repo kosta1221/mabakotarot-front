@@ -13,7 +13,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
-import { HeadlinesPage } from './pages/HeadlinesPage';
+import { HeadlinesPage } from './pages/HeadlinesPage/Loadable';
 import { Drawer } from './components/Drawer';
 import { Appbar } from './components/Appbar';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
