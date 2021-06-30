@@ -88,7 +88,6 @@ export function QueryDialog(props: Props) {
           <DialogContentText>
             בחר תאריך או טווח תאריכים של הכותרות שברצונך לראות:
           </DialogContentText>
-          <SingleDateOrRangeToggle />
 
           <StyledCalendar
             onChange={onChange}
