@@ -10,4 +10,5 @@ export interface HeadlinesFeedInfiniteScrollState {
   startDate: string;
   endDate: string;
   isSingularFetch: boolean;
+  search: string;
 }

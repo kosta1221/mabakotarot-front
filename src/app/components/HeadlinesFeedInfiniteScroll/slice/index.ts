@@ -16,6 +16,7 @@ export const initialState: HeadlinesFeedInfiniteScrollState = {
   startDate: '',
   endDate: '',
   isSingularFetch: false,
+  search: '',
 };
 
 const slice = createSlice({
@@ -59,6 +60,9 @@ const slice = createSlice({
     },
     setEndDate(state, action: PayloadAction<string>) {
       state.endDate = action.payload;
+    },
+    setSearch(state, action: PayloadAction<string>) {
+      state.search = action.payload;
     },
   },
 });

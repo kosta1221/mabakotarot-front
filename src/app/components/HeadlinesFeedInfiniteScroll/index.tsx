@@ -18,6 +18,7 @@ interface Props {
   startDate?: string | null;
   endDate?: string | null;
   isSingularFetch?: boolean;
+  search?: string | null;
 }
 
 export function HeadlinesFeedInfiniteScroll(props: Props) {
@@ -28,6 +29,7 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     startDate,
     endDate,
     isSingularFetch,
+    search,
   } = props;
 
   const { actions } = useHeadlinesFeedInfiniteScrollSlice();
@@ -61,6 +63,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   useEffect(() => {
     isSingularFetch && dispatch(actions.setIsSingularFetch(isSingularFetch));
   }, [dispatch, actions, isSingularFetch]);
+
+  useEffect(() => {
+    search && dispatch(actions.setSearch(search));
+  }, [dispatch, actions, search]);
 
   useEffect(() => {
     dispatch(actions.sagaGetHeadlinesInfiniteScroll());

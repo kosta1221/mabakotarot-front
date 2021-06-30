@@ -46,7 +46,6 @@ export function QueryDialog(props: Props) {
   const pickedStartDateTime = new DateTime.fromJSDate(startJsDate).setLocale(
     'he',
   );
-  console.log(pickedStartDateTime);
   const pickedEndDateTime = new DateTime.fromJSDate(endJsDate).setLocale('he');
   const pickedStartDatePresentable = pickedStartDateTime.toFormat(
     'dd MMM yyyy HH:mm',

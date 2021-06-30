@@ -15,6 +15,7 @@ function* fetchHeadlinesWorkerSaga() {
       startDate,
       endDate,
       isSingularFetch,
+      search,
     } = yield select(selectHeadlinesFeedInfiniteScroll);
     yield put(actions.setIsLoading(true));
 
@@ -26,6 +27,7 @@ function* fetchHeadlinesWorkerSaga() {
       sites,
       startDate,
       endDate,
+      search,
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
@@ -54,6 +56,7 @@ const fetchHeadlines = async (
   sites: string[],
   startDate: string,
   endDate: string,
+  search: string,
 ) => {
   const sitesStringEncoded = encodeURIComponent(JSON.stringify(sites));
 
@@ -61,8 +64,9 @@ const fetchHeadlines = async (
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&sites=${sitesStringEncoded}&startDate=${startDate}&endDate=${endDate}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&sites=${sitesStringEncoded}&startDate=${startDate}&endDate=${endDate}&search=${search}`,
   });
-  console.log(headlines);
+
+  console.log('headlines fetched: ', headlines);
   return headlines;
 };

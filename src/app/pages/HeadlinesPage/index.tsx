@@ -23,7 +23,7 @@ export function HeadlinesPage(props: Props) {
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
 
-  const { startDate, endDate, site, sites } = queryParams;
+  const { startDate, endDate, site, sites, search } = queryParams;
   const parsedSites =
     typeof sites === 'string' ? JSON.parse(sites.toString()) : '';
   console.log('parsed sites: ', parsedSites);
@@ -39,6 +39,7 @@ export function HeadlinesPage(props: Props) {
       }
       startDate={typeof startDate === 'string' ? startDate : null}
       endDate={typeof endDate === 'string' ? endDate : null}
+      search={typeof search === 'string' ? search : null}
     >
       <GridHeadlinePresentor />
     </HeadlinesFeedInfiniteScroll>
