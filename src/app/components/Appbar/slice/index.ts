@@ -11,6 +11,7 @@ export const initialState: AppbarState = {
   pickedStartDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedSites: sites,
+  searchInput: '',
 };
 
 const slice = createSlice({
@@ -31,6 +32,9 @@ const slice = createSlice({
     },
     setPickedSites(state, action: PayloadAction<Array<string>>) {
       state.pickedSites = action.payload;
+    },
+    setSearchInput(state, action: PayloadAction<string>) {
+      state.searchInput = action.payload;
     },
   },
 });

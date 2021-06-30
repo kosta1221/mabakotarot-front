@@ -5,4 +5,5 @@ export interface AppbarState {
   pickedStartDate: string;
   pickedEndDate: string;
   pickedSites: Array<string>;
+  searchInput: string;
 }
