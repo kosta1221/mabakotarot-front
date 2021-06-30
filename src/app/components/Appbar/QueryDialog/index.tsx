@@ -18,7 +18,6 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SitesSelectionGroup } from './SitesSelectionGroup';
-import { SingleDateOrRangeToggle } from './SingleDateOrRangeToggle';
 
 import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -36,11 +35,20 @@ export function QueryDialog(props: Props) {
   let router = useRouter();
   const dispatch = useDispatch();
 
+  const pickedStartDatePresentable = new DateTime.fromJSDate(
+    new Date(pickedStartDate),
+  )
+    .setLocale('he')
+    .toFormat('dd MMM yyyy HH:mm');
+  const pickedEndDatePresentable = new DateTime.fromJSDate(
+    new Date(pickedEndDate),
+  )
+    .setLocale('he')
+    .toFormat('dd MMM yyyy HH:mm');
+
   const handleDialogClose = () => {
     dispatch(appbarActions.setIsQueryDialogOpen(false));
   };
-  console.log('start date: ', pickedStartDate);
-  console.log('end date: ', pickedEndDate);
 
   const onFormSubmit = event => {
     event.preventDefault();
@@ -63,7 +71,6 @@ export function QueryDialog(props: Props) {
   };
 
   const onChange = date => {
-    console.log(date);
     const pickedStartDateFormatted = new DateTime.fromJSDate(date[0]).toFormat(
       'yyyy-MM-dd HH:mm',
     );
@@ -96,6 +103,10 @@ export function QueryDialog(props: Props) {
             minDate={new Date('2021-06-19')}
             selectRange
           />
+
+          <DialogContentText>
+            {`${pickedStartDatePresentable} - ${pickedEndDatePresentable}`}
+          </DialogContentText>
 
           <DialogContentText>בחר אילו אתרי חדשות להציג:</DialogContentText>
           <SitesSelectionGroup />
