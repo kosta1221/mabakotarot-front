@@ -25,25 +25,29 @@ export function GridHeadlinePresentor(props: Props) {
     handleToggleSortingorder,
   } = props;
 
+  const grid = (
+    <Grid>
+      {headlines?.map((headline, i) => {
+        return (
+          <GridItem
+            ref={headlines.length === i + 1 ? lastItem : null}
+            key={headline._id}
+          >
+            <p>{`${headline.date} ${headline._id.slice(20)}`}</p>
+            <Image src={headline.imageUrl} alt={`headline-${i}`} />
+          </GridItem>
+        );
+      })}
+    </Grid>
+  );
+
   return (
     <>
-      <span onClick={handleToggleSortingorder}>{`Headlines sorted by: ${
-        isSortAsc ? 'ascending' : 'descending'
-      } order`}</span>
+      <span onClick={handleToggleSortingorder}>{`כותרות ממויינות בסדר : ${
+        isSortAsc ? 'עולה' : 'יורד'
+      } `}</span>
 
-      <Grid>
-        {headlines?.map((headline, i) => {
-          return (
-            <GridItem
-              ref={headlines.length === i + 1 ? lastItem : null}
-              key={headline._id}
-            >
-              <p>{`${headline.date} ${headline._id.slice(20)}`}</p>
-              <Image src={headline.imageUrl} alt={`headline-${i}`} />
-            </GridItem>
-          );
-        })}
-      </Grid>
+      {headlines?.length ? grid : <NotFound>לא נמצאו כותרות</NotFound>}
 
       {isLoading ? (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
@@ -76,4 +80,8 @@ const Image = styled.img`
 const CenteredLoader = styled(Loader)`
   display: flex;
   justify-content: center;
+`;
+
+const NotFound = styled.h1`
+  text-align: center;
 `;

@@ -35,14 +35,14 @@ export function Drawer(props: Props) {
 
   const drawerList = [
     {
-      text: 'Headlines',
+      text: 'כותרות',
       icon: <DynamicFeedIcon />,
       onclick: () => {
         router.push('/headlines');
       },
     },
     {
-      text: 'Comparsion',
+      text: 'השוואת כותרות',
       icon: <CompareIcon />,
       onclick: () => {
         router.push('/');
