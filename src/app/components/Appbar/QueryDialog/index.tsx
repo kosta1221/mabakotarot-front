@@ -4,20 +4,25 @@
  *
  */
 import * as React from 'react';
-import Calendar from 'react-calendar';
-import TimePicker from 'react-time-picker';
+
 import 'react-calendar/dist/Calendar.css';
 import { DateTime } from 'luxon';
 import { useRouter } from '../../../../utils/useRouter';
-import styled from 'styled-components/macro';
 
+import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import { SitesSelectionGroup } from './SitesSelectionGroup';
+import {
+  StyledCalendar,
+  FlexForm,
+  FlexDiv,
+  StyledDialogContentText,
+  StyledTimePicker,
+} from './styles';
 
 import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -174,34 +179,3 @@ export function QueryDialog(props: Props) {
     </Dialog>
   );
 }
-
-const StyledCalendar = styled(Calendar)`
-  margin-bottom: 10px;
-`;
-
-const FlexForm = styled.form`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-`;
-
-const FlexDiv = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-evenly;
-  align-items: center;
-  width: 100%;
-`;
-
-const StyledDialogContentText = styled(DialogContentText)`
-  width: 100%;
-  text-align: right;
-`;
-
-const StyledTimePicker = styled(TimePicker)`
-  direction: ltr;
-  & > div {
-    width: 50px;
-  }
-`;
