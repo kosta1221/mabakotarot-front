@@ -5,10 +5,14 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-
 import Loader from 'react-loader-spinner';
+import Divider from '@material-ui/core/Divider';
+import Tooltip from '@material-ui/core/Tooltip';
+import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+
 import { DateTime } from 'luxon';
 
+import { withStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
 import { appbarActions } from '../Appbar/slice';
@@ -20,6 +24,16 @@ interface Props {
   isSortAsc?: boolean;
   handleToggleSortingorder?: any;
 }
+
+const CompareTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'black',
+    maxWidth: 200,
+    fontSize: theme.typography.pxToRem(15),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 export function GridHeadlinePresentor(props: Props) {
   const {
@@ -63,7 +77,17 @@ export function GridHeadlinePresentor(props: Props) {
             ref={headlines.length === i + 1 ? lastItem : null}
             key={headline._id}
           >
-            <p>{`${headline.date} ${headline._id.slice(20)}`}</p>
+            <GridOptions>
+              <GridDate>{`${headline.date} ${headline._id.slice(
+                20,
+              )}`}</GridDate>
+              <Divider orientation="vertical" flexItem />
+              <AddToCompareButton>
+                <CompareTooltip title="הוספה להשוואת כותרות">
+                  <AddCircleOutlineRoundedIcon fontSize="large" />
+                </CompareTooltip>
+              </AddToCompareButton>
+            </GridOptions>
             <Image src={headline.imageUrl} alt={`headline-${i}`} />
           </GridItem>
         );
@@ -97,6 +121,7 @@ const Grid = styled.div`
 `;
 const GridItem = styled.div`
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   background: lightgrey;
@@ -104,9 +129,20 @@ const GridItem = styled.div`
   margin: 0.5vw;
 `;
 
+const GridOptions = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+`;
+
+const AddToCompareButton = styled.div``;
+
+const GridDate = styled.h3``;
+
 const Image = styled.img`
   height: auto;
-  width: 40vw;
+  width: 100%;
   align-self: center;
 `;
 
