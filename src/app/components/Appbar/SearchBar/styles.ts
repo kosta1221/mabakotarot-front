@@ -2,7 +2,6 @@ import { fade, makeStyles } from '@material-ui/core/styles';
 
 export const useStyles = makeStyles(theme => ({
   search: {
-    // direction: 'ltr',
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
     backgroundColor: fade(theme.palette.common.white, 0.15),
@@ -16,14 +15,15 @@ export const useStyles = makeStyles(theme => ({
       width: 'auto',
     },
   },
-  searchIcon: {
+  searchIconButton: {
     padding: theme.spacing(0, 1),
     height: '100%',
     position: 'absolute',
-    pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
+    cursor: 'pointer',
+    zIndex: 10,
   },
   inputRoot: {
     color: 'inherit',
