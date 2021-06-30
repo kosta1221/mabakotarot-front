@@ -118,9 +118,7 @@ export function QueryDialog(props: Props) {
       onClose={handleDialogClose}
       aria-labelledby="form-dialog-title"
     >
-      <DialogTitle id="form-dialog-title">
-        סינון לפי טווח תאריכים ואתרים
-      </DialogTitle>
+      <DialogTitle id="form-dialog-title">בחר תאריך...</DialogTitle>
       <DialogContent>
         <FlexForm id="calendar-query-form" onSubmit={onFormSubmit}>
           <StyledDialogContentText>
