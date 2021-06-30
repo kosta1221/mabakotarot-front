@@ -112,10 +112,12 @@ export function GridHeadlinePresentor(props: Props) {
       <span>{`אתרים: ${sites.toString()}. `}</span>
       <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
 
-      {isLoading ? (
+      {headlines?.length && grid}
+      {(!headlines || headlines.length === 0) && !isLoading && (
+        <NotFound>לא נמצאו כותרות</NotFound>
+      )}
+      {isLoading && (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
-      ) : (
-        [headlines?.length ? grid : <NotFound>לא נמצאו כותרות</NotFound>]
       )}
     </>
   );
