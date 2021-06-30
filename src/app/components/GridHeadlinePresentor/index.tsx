@@ -16,6 +16,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
 import { appbarActions } from '../Appbar/slice';
+import { appActions } from '../../slice';
 
 interface Props {
   headlines?: Array<any>;
@@ -23,6 +24,7 @@ interface Props {
   isLoading?: boolean;
   isSortAsc?: boolean;
   handleToggleSortingorder?: any;
+  comparisonItems?: Array<any>;
 }
 
 const CompareTooltip = withStyles(theme => ({
@@ -42,6 +44,7 @@ export function GridHeadlinePresentor(props: Props) {
     isLoading,
     isSortAsc,
     handleToggleSortingorder,
+    comparisonItems,
   } = props;
 
   const dispatch = useDispatch();
@@ -69,6 +72,11 @@ export function GridHeadlinePresentor(props: Props) {
     dispatch(appbarActions.setIsQueryDialogOpen(true));
   };
 
+  const handleAddToCompare = () => {
+    dispatch(appActions.setComparisonItems(headlines));
+    console.log(comparisonItems);
+  };
+
   const grid = (
     <Grid>
       {headlines?.map((headline, i) => {
@@ -82,7 +90,7 @@ export function GridHeadlinePresentor(props: Props) {
                 20,
               )}`}</GridDate>
               <Divider orientation="vertical" flexItem />
-              <AddToCompareButton>
+              <AddToCompareButton onClick={handleAddToCompare}>
                 <CompareTooltip title="הוספה להשוואת כותרות">
                   <AddCircleOutlineRoundedIcon fontSize="large" />
                 </CompareTooltip>
@@ -104,11 +112,11 @@ export function GridHeadlinePresentor(props: Props) {
       <span>{`אתרים: ${sites.toString()}. `}</span>
       <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
 
-      {headlines?.length ? grid : <NotFound>לא נמצאו כותרות</NotFound>}
-
       {isLoading ? (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
-      ) : null}
+      ) : (
+        [headlines?.length ? grid : <NotFound>לא נמצאו כותרות</NotFound>]
+      )}
     </>
   );
 }
