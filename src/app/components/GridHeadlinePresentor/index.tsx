@@ -7,6 +7,11 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 
 import Loader from 'react-loader-spinner';
+import { DateTime } from 'luxon';
+
+import { useSelector, useDispatch } from 'react-redux';
+import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
+import { appbarActions } from '../Appbar/slice';
 
 interface Props {
   headlines?: Array<any>;
@@ -24,6 +29,31 @@ export function GridHeadlinePresentor(props: Props) {
     isSortAsc,
     handleToggleSortingorder,
   } = props;
+
+  const dispatch = useDispatch();
+  const { startDate, endDate, sites } = useSelector(
+    selectHeadlinesFeedInfiniteScroll,
+  );
+
+  const pickedStartDateTime = new DateTime.fromFormat(
+    startDate,
+    'yyyy-MM-dd HH:mm',
+  ).setLocale('he');
+  const pickedStartDatePresentable = pickedStartDateTime.toFormat(
+    'dd MMM yyyy HH:mm',
+  );
+
+  const pickedEndDateTime = new DateTime.fromFormat(
+    endDate,
+    'yyyy-MM-dd HH:mm',
+  ).setLocale('he');
+  const pickedEndDatePresentable = pickedEndDateTime.toFormat(
+    'dd MMM yyyy HH:mm',
+  );
+
+  const handleOpenQueryDialog = () => {
+    dispatch(appbarActions.setIsQueryDialogOpen(true));
+  };
 
   const grid = (
     <Grid>
@@ -43,9 +73,12 @@ export function GridHeadlinePresentor(props: Props) {
 
   return (
     <>
-      <span onClick={handleToggleSortingorder}>{`כותרות ממויינות בסדר : ${
+      <span onClick={handleToggleSortingorder}>{`סדר  ${
         isSortAsc ? 'עולה' : 'יורד'
       } `}</span>
+      <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
+      <span>{`אתרים: ${sites.toString()}. `}</span>
+      <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
 
       {headlines?.length ? grid : <NotFound>לא נמצאו כותרות</NotFound>}
 
@@ -80,6 +113,12 @@ const Image = styled.img`
 const CenteredLoader = styled(Loader)`
   display: flex;
   justify-content: center;
+`;
+
+const BlueSpan = styled.span`
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
 `;
 
 const NotFound = styled.h1`
