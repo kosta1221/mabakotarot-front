@@ -5,13 +5,13 @@
  */
 import * as React from 'react';
 import Calendar from 'react-calendar';
+import TimePicker from 'react-time-picker';
 import 'react-calendar/dist/Calendar.css';
 import { DateTime } from 'luxon';
 import { useRouter } from '../../../../utils/useRouter';
 import styled from 'styled-components/macro';
 
 import Button from '@material-ui/core/Button';
-// import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
@@ -35,16 +35,20 @@ export function QueryDialog(props: Props) {
   let router = useRouter();
   const dispatch = useDispatch();
 
-  const pickedStartDatePresentable = new DateTime.fromJSDate(
-    new Date(pickedStartDate),
-  )
-    .setLocale('he')
-    .toFormat('dd MMM yyyy HH:mm');
-  const pickedEndDatePresentable = new DateTime.fromJSDate(
-    new Date(pickedEndDate),
-  )
-    .setLocale('he')
-    .toFormat('dd MMM yyyy HH:mm');
+  const startJsDate = new Date(pickedStartDate);
+  const endJsDate = new Date(pickedEndDate);
+
+  const pickedStartDateTime = new DateTime.fromJSDate(startJsDate).setLocale(
+    'he',
+  );
+  console.log(pickedStartDateTime);
+  const pickedEndDateTime = new DateTime.fromJSDate(endJsDate).setLocale('he');
+  const pickedStartDatePresentable = pickedStartDateTime.toFormat(
+    'dd MMM yyyy HH:mm',
+  );
+  const pickedEndDatePresentable = pickedEndDateTime.toFormat(
+    'dd MMM yyyy HH:mm',
+  );
 
   const handleDialogClose = () => {
     dispatch(appbarActions.setIsQueryDialogOpen(false));
@@ -52,13 +56,6 @@ export function QueryDialog(props: Props) {
 
   const onFormSubmit = event => {
     event.preventDefault();
-    const formData = new FormData(event.target);
-
-    const body = {};
-    formData.forEach((value, property) => (body[property] = value));
-
-    console.log('form data:');
-    console.table(body);
 
     const pickedSitesString = encodeURIComponent(JSON.stringify(pickedSites));
 
@@ -70,17 +67,44 @@ export function QueryDialog(props: Props) {
     router.history.go(0);
   };
 
-  const onChange = date => {
-    const pickedStartDateFormatted = new DateTime.fromJSDate(date[0]).toFormat(
+  const onDateRangePick = (dates: Date[]) => {
+    const pickedStartDateFormatted = new DateTime.fromJSDate(dates[0]).toFormat(
       'yyyy-MM-dd HH:mm',
     );
-    const pickedEndDateFormatted = new DateTime.fromJSDate(date[1]).toFormat(
+    const pickedEndDateFormatted = new DateTime.fromJSDate(dates[1]).toFormat(
       'yyyy-MM-dd HH:mm',
     );
-    console.log('pickedStartDateFormatted', pickedStartDateFormatted);
-    console.log('pickedEndDateFormatted', pickedEndDateFormatted);
+
     dispatch(appbarActions.setPickedStartDate(pickedStartDateFormatted));
     dispatch(appbarActions.setPickedEndDate(pickedEndDateFormatted));
+  };
+
+  const onStartHourPick = (hourMinute: string) => {
+    const hour = hourMinute.slice(0, 2);
+    const minute = hourMinute.slice(3);
+
+    console.log(hourMinute);
+    console.log(hour, minute);
+
+    dispatch(
+      appbarActions.setPickedStartDate(
+        pickedStartDateTime.set({ hour, minute }).toFormat('yyyy-MM-dd HH:mm'),
+      ),
+    );
+  };
+
+  const onEndHourPick = (hourMinute: string) => {
+    const hour = hourMinute.slice(0, 2);
+    const minute = hourMinute.slice(3);
+
+    console.log(hourMinute);
+    console.log(hour, minute);
+
+    dispatch(
+      appbarActions.setPickedEndDate(
+        pickedEndDateTime.set({ hour, minute }).toFormat('yyyy-MM-dd HH:mm'),
+      ),
+    );
   };
 
   return (
@@ -91,26 +115,48 @@ export function QueryDialog(props: Props) {
     >
       <DialogTitle id="form-dialog-title">בחר תאריך...</DialogTitle>
       <DialogContent>
-        <form id="calendar-query-form" onSubmit={onFormSubmit}>
-          <DialogContentText>
+        <FlexForm id="calendar-query-form" onSubmit={onFormSubmit}>
+          <StyledDialogContentText>
             בחר תאריך או טווח תאריכים של הכותרות שברצונך לראות:
-          </DialogContentText>
+          </StyledDialogContentText>
 
           <StyledCalendar
-            onChange={onChange}
-            value={[new Date(pickedStartDate), new Date(pickedEndDate)]}
+            onChange={onDateRangePick}
+            value={[startJsDate, endJsDate]}
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
             selectRange
           />
 
+          <FlexDiv>
+            <StyledTimePicker
+              onChange={onStartHourPick}
+              value={pickedStartDateTime.toFormat('HH:mm')}
+              maxDetail="minute"
+              format="HH:mm"
+              clearIcon={null}
+              clockIcon={null}
+            />
+
+            <StyledTimePicker
+              onChange={onEndHourPick}
+              value={pickedEndDateTime.toFormat('HH:mm')}
+              maxDetail="minute"
+              format="HH:mm"
+              clearIcon={null}
+              clockIcon={null}
+            />
+          </FlexDiv>
+
           <DialogContentText>
             {`${pickedStartDatePresentable} - ${pickedEndDatePresentable}`}
           </DialogContentText>
 
-          <DialogContentText>בחר אילו אתרי חדשות להציג:</DialogContentText>
+          <StyledDialogContentText>
+            בחר אילו אתרי חדשות להציג:
+          </StyledDialogContentText>
           <SitesSelectionGroup />
-        </form>
+        </FlexForm>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleDialogClose} color="primary">
@@ -131,4 +177,31 @@ export function QueryDialog(props: Props) {
 
 const StyledCalendar = styled(Calendar)`
   margin-bottom: 10px;
+`;
+
+const FlexForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const FlexDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-evenly;
+  align-items: center;
+  width: 100%;
+`;
+
+const StyledDialogContentText = styled(DialogContentText)`
+  width: 100%;
+  text-align: right;
+`;
+
+const StyledTimePicker = styled(TimePicker)`
+  direction: ltr;
+  & > div {
+    width: 50px;
+  }
 `;
