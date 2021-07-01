@@ -107,9 +107,16 @@ export function GridHeadlinePresentor(props: Props) {
     <>
       <span onClick={handleToggleSortingorder}>{`סדר  ${
         isSortAsc ? 'עולה' : 'יורד'
-      } `}</span>
-      <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
-      <span>{`אתרים: ${sites.toString()}. `}</span>
+      }, `}</span>
+      {startDate && endDate && (
+        <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
+      )}
+      {sites.length > 0 ? (
+        <span>{`אתרים: ${sites.toString()}. `}</span>
+      ) : (
+        <span>{`כל האתרים. `}</span>
+      )}
+
       <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
 
       {isFetchError && <CenteredMessage>אירעה שגיאת רשת</CenteredMessage>}
