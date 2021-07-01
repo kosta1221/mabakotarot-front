@@ -48,7 +48,7 @@ export function GridHeadlinePresentor(props: Props) {
   } = props;
 
   const dispatch = useDispatch();
-  const { startDate, endDate, sites } = useSelector(
+  const { startDate, endDate, sites, isFetchError } = useSelector(
     selectHeadlinesFeedInfiniteScroll,
   );
 
@@ -112,11 +112,13 @@ export function GridHeadlinePresentor(props: Props) {
       <span>{`אתרים: ${sites.toString()}. `}</span>
       <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
 
+      {isFetchError && <CenteredMessage>אירעה שגיאת רשת</CenteredMessage>}
+
       {headlines && headlines.length > 0 && grid}
       {(!headlines || headlines.length === 0) && !isLoading && (
         <CenteredMessage>לא נמצאו כותרות</CenteredMessage>
       )}
-      {isLoading && (
+      {isLoading && !isFetchError && (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
       )}
     </>
