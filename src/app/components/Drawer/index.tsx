@@ -114,7 +114,11 @@ export function Drawer(props: Props) {
                     primary={item.text}
                     className={classes.rightText}
                   />
-                  <EditIcon id={item.id} onClick={e => handleRenameClick(e)} />
+                  <EditIcon
+                    id={item.id}
+                    className={classes.hoverRename}
+                    onClick={e => handleRenameClick(e)}
+                  />
                 </ListItem>
               ))}
             <ListItem

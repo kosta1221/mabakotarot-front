@@ -16,5 +16,12 @@ export const useStyles = makeStyles((theme: Theme) =>
     rightText: {
       textAlign: 'right',
     },
+    hoverRename: {
+      '&:hover': {
+        borderRadius: '50%',
+        outline: '2px solid',
+        outlineOffset: '4px',
+      },
+    },
   }),
 );
