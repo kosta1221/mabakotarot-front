@@ -38,7 +38,7 @@ function* fetchHeadlinesWorkerSaga() {
     yield put(actions.setIsLoading(false));
   } catch (e) {
     console.log(e);
-    // yield put({ type: 'HEADLINES_FETCH_FAILED', message: e.message });
+    yield put(actions.setItFetchError(true));
   }
 }
 
