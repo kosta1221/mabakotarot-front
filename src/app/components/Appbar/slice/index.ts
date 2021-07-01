@@ -8,7 +8,9 @@ import { sites } from '../../../../utils/sites';
 export const initialState: AppbarState = {
   isQueryDialogOpen: false,
   isDateRange: true,
-  pickedStartDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
+  pickedStartDate: new DateTime(
+    DateTime.local().set({ hour: 0, minute: 0 }),
+  ).toFormat('yyyy-MM-dd HH:mm'),
   pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedSites: sites,
   searchInput: '',
