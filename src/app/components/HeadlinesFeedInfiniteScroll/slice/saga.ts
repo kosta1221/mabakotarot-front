@@ -60,11 +60,18 @@ const fetchHeadlines = async (
 ) => {
   const sitesStringEncoded = encodeURIComponent(JSON.stringify(sites));
 
+  const sitesQuery = sites.length > 0 ? `&sites=${sitesStringEncoded}` : '';
+  const startDateQuery = startDate ? `&startDate=${startDate}` : '';
+  const endDateQuery = endDate ? `&endDate=${endDate}` : '';
+  const searchQuery = search ? `&search=${search}` : '';
+
+  console.log(sitesQuery, startDateQuery, endDateQuery, searchQuery);
+
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&sites=${sitesStringEncoded}&startDate=${startDate}&endDate=${endDate}&search=${search}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}`,
   });
 
   console.log('headlines fetched: ', headlines);
