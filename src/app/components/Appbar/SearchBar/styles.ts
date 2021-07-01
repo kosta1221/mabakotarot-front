@@ -17,6 +17,8 @@ export const useStyles = makeStyles(theme => ({
   },
   searchIconButton: {
     padding: theme.spacing(0, 1),
+    top: 0,
+    left: 0,
     height: '100%',
     position: 'absolute',
     display: 'flex',
@@ -31,8 +33,7 @@ export const useStyles = makeStyles(theme => ({
   inputInput: {
     padding: theme.spacing(1, 1, 1, 0),
     // vertical padding + font size from searchIcon
-    paddingLeft: `calc(1em + ${theme.spacing(1)}px)`,
-    paddingRight: `calc(1em + ${theme.spacing(4)}px)`,
+    paddingLeft: `calc(1em + ${theme.spacing(4)}px)`,
     transition: theme.transitions.create('width'),
     width: '100%',
     [theme.breakpoints.up('sm')]: {

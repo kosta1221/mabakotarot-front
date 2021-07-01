@@ -44,14 +44,6 @@ export function SearchBar(props: Props) {
   return (
     <>
       <div className={classes.search}>
-        <IconButton
-          className={classes.searchIconButton}
-          aria-label="search"
-          color="inherit"
-          onClick={handleSearchSubmit}
-        >
-          <SearchIcon />
-        </IconButton>
         <InputBase
           id="searchInput"
           onChange={handleSearchInputChange}
@@ -63,6 +55,14 @@ export function SearchBar(props: Props) {
           }}
           inputProps={{ 'aria-label': 'search' }}
         />
+        <IconButton
+          className={classes.searchIconButton}
+          aria-label="search"
+          color="inherit"
+          onClick={handleSearchSubmit}
+        >
+          <SearchIcon />
+        </IconButton>
       </div>
     </>
   );
