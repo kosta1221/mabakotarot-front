@@ -5,9 +5,11 @@ export interface HeadlinesFeedInfiniteScrollState {
   countPerFetch: number;
   loadMoreHeadlines: boolean;
   isLoading: boolean;
+  isFetchError: boolean;
   isSortAsc: boolean;
   sites: string[];
   startDate: string;
   endDate: string;
   isSingularFetch: boolean;
+  search: string;
 }

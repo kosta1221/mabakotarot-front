@@ -15,6 +15,7 @@ function* fetchHeadlinesWorkerSaga() {
       startDate,
       endDate,
       isSingularFetch,
+      search,
     } = yield select(selectHeadlinesFeedInfiniteScroll);
     yield put(actions.setIsLoading(true));
 
@@ -26,6 +27,7 @@ function* fetchHeadlinesWorkerSaga() {
       sites,
       startDate,
       endDate,
+      search,
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
@@ -36,7 +38,7 @@ function* fetchHeadlinesWorkerSaga() {
     yield put(actions.setIsLoading(false));
   } catch (e) {
     console.log(e);
-    // yield put({ type: 'HEADLINES_FETCH_FAILED', message: e.message });
+    yield put(actions.setItFetchError(true));
   }
 }
 
@@ -54,15 +56,24 @@ const fetchHeadlines = async (
   sites: string[],
   startDate: string,
   endDate: string,
+  search: string,
 ) => {
   const sitesStringEncoded = encodeURIComponent(JSON.stringify(sites));
+
+  const sitesQuery = sites.length > 0 ? `&sites=${sitesStringEncoded}` : '';
+  const startDateQuery = startDate ? `&startDate=${startDate}` : '';
+  const endDateQuery = endDate ? `&endDate=${endDate}` : '';
+  const searchQuery = search ? `&search=${search}` : '';
+
+  console.log(sitesQuery, startDateQuery, endDateQuery, searchQuery);
 
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}&sites=${sitesStringEncoded}&startDate=${startDate}&endDate=${endDate}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}`,
   });
-  console.log(headlines);
+
+  console.log('headlines fetched: ', headlines);
   return headlines;
 };

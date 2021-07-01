@@ -10,8 +10,12 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import Collapse from '@material-ui/core/Collapse';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
+import AddIcon from '@material-ui/icons/Add';
 
 import { useDrawerSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -20,7 +24,11 @@ import { useCreateToggleDrawerUtil } from './utils';
 import { useStyles } from './styles';
 import { useRouter } from '../../../utils/useRouter';
 
-interface Props {}
+interface Props {
+  isDrawerDisplayed?: boolean;
+  isComparisonOpen?: boolean;
+  comparisons?: Array<any>;
+}
 
 export function Drawer(props: Props) {
   const router = useRouter();
@@ -29,26 +37,24 @@ export function Drawer(props: Props) {
   const { actions } = useDrawerSlice();
 
   const dispatch = useDispatch();
-  const { isDrawerDisplayed } = useSelector(selectDrawer);
+  const { isDrawerDisplayed, isComparisonOpen, comparisons } = useSelector(
+    selectDrawer,
+  );
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, actions);
 
-  const drawerList = [
-    {
-      text: 'Headlines',
-      icon: <DynamicFeedIcon />,
-      onclick: () => {
-        router.push('/headlines');
-      },
-    },
-    {
-      text: 'Comparsion',
-      icon: <CompareIcon />,
-      onclick: () => {
-        router.push('/');
-      },
-    },
-  ];
+  const handleClickOnComparison = e => {
+    e.stopPropagation();
+    dispatch(actions.setIsComparisonOpen(!isComparisonOpen));
+  };
+
+  const handleClickOnNewComparison = e => {
+    e.stopPropagation();
+    dispatch(actions.setComparisons([]));
+    console.log(comparisons);
+  };
+
+  // const handleRenameClick = () => {};
 
   const list = () => (
     <div
@@ -57,15 +63,41 @@ export function Drawer(props: Props) {
       onClick={toggleDrawer(false)}
       onKeyDown={toggleDrawer(false)}
     >
-      <List>
-        {drawerList.map((data, index) => (
-          <ListItem button key={data.text} onClick={data.onclick}>
-            <ListItemIcon>
-              {index === 0 ? <DynamicFeedIcon /> : <CompareIcon />}
-            </ListItemIcon>
-            <ListItemText primary={data.text} />
-          </ListItem>
-        ))}
+      <List className={classes.root}>
+        <ListItem button onClick={() => router.push('/headlines')}>
+          <ListItemIcon>
+            <DynamicFeedIcon />
+          </ListItemIcon>
+          <ListItemText primary={'כותרות'} />
+        </ListItem>
+        <ListItem button onClick={e => handleClickOnComparison(e)}>
+          <ListItemIcon>
+            <CompareIcon />
+          </ListItemIcon>
+          <ListItemText primary={'השוואת כותרות'} />
+          {isComparisonOpen ? <ExpandLess /> : <ExpandMore />}
+        </ListItem>
+        <Collapse in={isComparisonOpen} timeout="auto" unmountOnExit>
+          <List component="div" disablePadding>
+            {comparisons?.length > 0 &&
+              comparisons.map((item, i) => (
+                <ListItem button key={i}>
+                  <ListItemText primary={item.text} />
+                  {/* <button onClick={handleRenameClick}>rename</button> */}
+                </ListItem>
+              ))}
+            <ListItem
+              button
+              className={classes.nested}
+              onClick={e => handleClickOnNewComparison(e)}
+            >
+              <ListItemIcon>
+                <AddIcon />
+              </ListItemIcon>
+              <ListItemText primary="הוספת השוואה" />
+            </ListItem>
+          </List>
+        </Collapse>
       </List>
     </div>
   );

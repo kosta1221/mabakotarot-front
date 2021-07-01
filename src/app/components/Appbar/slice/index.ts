@@ -7,9 +7,13 @@ import { sites } from '../../../../utils/sites';
 
 export const initialState: AppbarState = {
   isQueryDialogOpen: false,
-  pickedStartDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
+  isDateRange: true,
+  pickedStartDate: new DateTime(
+    DateTime.local().set({ hour: 0, minute: 0 }),
+  ).toFormat('yyyy-MM-dd HH:mm'),
   pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
   pickedSites: sites,
+  searchInput: '',
 };
 
 const slice = createSlice({
@@ -19,6 +23,9 @@ const slice = createSlice({
     setIsQueryDialogOpen(state, action: PayloadAction<boolean>) {
       state.isQueryDialogOpen = action.payload;
     },
+    setIsDateRange(state, action: PayloadAction<boolean>) {
+      state.isDateRange = action.payload;
+    },
     setPickedStartDate(state, action: PayloadAction<string>) {
       state.pickedStartDate = action.payload;
     },
@@ -27,6 +34,9 @@ const slice = createSlice({
     },
     setPickedSites(state, action: PayloadAction<Array<string>>) {
       state.pickedSites = action.payload;
+    },
+    setSearchInput(state, action: PayloadAction<string>) {
+      state.searchInput = action.payload;
     },
   },
 });

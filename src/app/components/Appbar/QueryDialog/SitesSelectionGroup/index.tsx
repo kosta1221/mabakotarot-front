@@ -16,7 +16,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../../slice';
 import { selectAppbar } from '../../slice/selectors';
 
-import { sites as allSites } from '../../../../../utils/sites';
+import { sites as allSites } from 'utils/sites';
 
 interface Props {}
 

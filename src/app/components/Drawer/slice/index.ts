@@ -5,6 +5,8 @@ import { DrawerState } from './types';
 
 export const initialState: DrawerState = {
   isDrawerDisplayed: false,
+  isComparisonOpen: true,
+  comparisons: [],
 };
 
 const slice = createSlice({
@@ -13,6 +15,12 @@ const slice = createSlice({
   reducers: {
     setIsDrawerDisplayed(state, action: PayloadAction<boolean>) {
       state.isDrawerDisplayed = action.payload;
+    },
+    setIsComparisonOpen(state, action: PayloadAction<boolean>) {
+      state.isComparisonOpen = action.payload;
+    },
+    setComparisons(state, action: PayloadAction<Array<any>>) {
+      state.comparisons.push({ text: 'test' });
     },
   },
 });

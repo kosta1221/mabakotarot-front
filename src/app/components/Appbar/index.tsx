@@ -19,6 +19,7 @@ import { drawerActions } from '../Drawer/slice';
 import { useCreateToggleDrawerUtil } from '../Drawer/utils';
 import { useAppbarSlice } from './slice';
 import { QueryDialog } from './QueryDialog';
+import { SearchBar } from './SearchBar';
 // import { selectAppbar } from './slice/selectors';
 
 interface Props {}
@@ -49,6 +50,8 @@ export function Appbar(props: Props) {
             מה בכותרות
           </Typography>
 
+          <SearchBar />
+
           <IconButton
             aria-label="open calendar dialogue"
             color="inherit"
@@ -58,6 +61,7 @@ export function Appbar(props: Props) {
           >
             <CalendarIcon />
           </IconButton>
+
           <QueryDialog />
         </Toolbar>
       </AppBar>

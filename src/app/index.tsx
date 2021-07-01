@@ -13,7 +13,7 @@ import { Switch, Route, BrowserRouter } from 'react-router-dom';
 import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
-import { HeadlinesPage } from './pages/HeadlinesPage';
+import { HeadlinesPage } from './pages/HeadlinesPage/Loadable';
 import { Drawer } from './components/Drawer';
 import { Appbar } from './components/Appbar';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
@@ -24,8 +24,8 @@ export function App() {
   return (
     <BrowserRouter>
       <Helmet
-        titleTemplate="%s - React Boilerplate"
-        defaultTitle="React Boilerplate"
+        titleTemplate="%s - maBakotarot"
+        defaultTitle="maBakotarot"
         htmlAttributes={{ lang: i18n.language }}
       >
         <meta name="description" content="A React Boilerplate application" />
