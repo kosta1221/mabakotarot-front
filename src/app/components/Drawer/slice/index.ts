@@ -20,7 +20,7 @@ const slice = createSlice({
       state.isComparisonOpen = action.payload;
     },
     setComparisons(state, action: PayloadAction<Array<any>>) {
-      state.comparisons.push({ text: 'test' });
+      state.comparisons = action.payload;
     },
   },
 });

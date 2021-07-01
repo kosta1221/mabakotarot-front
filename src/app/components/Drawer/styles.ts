@@ -1,11 +1,5 @@
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 
-// export const useStyles = makeStyles({
-//   right: {
-//     width: 250,
-//   },
-// });
-
 export const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     right: {
@@ -18,6 +12,9 @@ export const useStyles = makeStyles((theme: Theme) =>
     },
     nested: {
       paddingLeft: theme.spacing(4),
+    },
+    rightText: {
+      textAlign: 'right',
     },
   }),
 );

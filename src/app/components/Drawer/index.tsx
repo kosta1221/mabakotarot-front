@@ -16,6 +16,7 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
 import AddIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Edit';
 
 import { useDrawerSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -50,11 +51,35 @@ export function Drawer(props: Props) {
 
   const handleClickOnNewComparison = e => {
     e.stopPropagation();
-    dispatch(actions.setComparisons([]));
+    console.log(comparisons.length);
+    const newCompare = {
+      id: comparisons.length + 1,
+      text: `השוואה חדשה - ${comparisons.length + 1}`,
+      headlines: [],
+    };
+
+    const newComparisons = [...comparisons, newCompare];
+    dispatch(actions.setComparisons(newComparisons));
     console.log(comparisons);
   };
 
-  // const handleRenameClick = () => {};
+  const handleRenameClick = e => {
+    e.stopPropagation();
+    const id = Number(e.currentTarget.id);
+
+    const editedComparison = comparisons.find(element => element.id === id);
+    const comparisonNewName = {
+      text: 'new name',
+      headlines: editedComparison.headlines,
+    };
+
+    const newComparisons = [
+      ...comparisons.filter(comparison => comparison.id !== id),
+      comparisonNewName,
+    ];
+
+    dispatch(actions.setComparisons(newComparisons));
+  };
 
   const list = () => (
     <div
@@ -68,13 +93,16 @@ export function Drawer(props: Props) {
           <ListItemIcon>
             <DynamicFeedIcon />
           </ListItemIcon>
-          <ListItemText primary={'כותרות'} />
+          <ListItemText primary={'כותרות'} className={classes.rightText} />
         </ListItem>
         <ListItem button onClick={e => handleClickOnComparison(e)}>
           <ListItemIcon>
             <CompareIcon />
           </ListItemIcon>
-          <ListItemText primary={'השוואת כותרות'} />
+          <ListItemText
+            primary={'השוואת כותרות'}
+            className={classes.rightText}
+          />
           {isComparisonOpen ? <ExpandLess /> : <ExpandMore />}
         </ListItem>
         <Collapse in={isComparisonOpen} timeout="auto" unmountOnExit>
@@ -82,8 +110,11 @@ export function Drawer(props: Props) {
             {comparisons?.length > 0 &&
               comparisons.map((item, i) => (
                 <ListItem button key={i}>
-                  <ListItemText primary={item.text} />
-                  {/* <button onClick={handleRenameClick}>rename</button> */}
+                  <ListItemText
+                    primary={item.text}
+                    className={classes.rightText}
+                  />
+                  <EditIcon id={item.id} onClick={e => handleRenameClick(e)} />
                 </ListItem>
               ))}
             <ListItem
