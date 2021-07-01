@@ -30,8 +30,15 @@ export function SearchBar(props: Props) {
   };
 
   const handleSearchSubmit = event => {
-    router.push(`/headlines?search=${searchInput}`);
-    router.history.go(0);
+    if (event && event.type === 'keypress' && event.key === 'Enter') {
+      router.push(`/headlines?search=${searchInput}`);
+      router.history.go(0);
+    }
+
+    if (event && event.type === 'click') {
+      router.push(`/headlines?search=${searchInput}`);
+      router.history.go(0);
+    }
   };
 
   return (
@@ -48,6 +55,7 @@ export function SearchBar(props: Props) {
         <InputBase
           id="searchInput"
           onChange={handleSearchInputChange}
+          onKeyPress={handleSearchSubmit}
           placeholder="חפש בכותרות…"
           classes={{
             root: classes.inputRoot,
