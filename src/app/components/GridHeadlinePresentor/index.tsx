@@ -6,17 +6,14 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import Loader from 'react-loader-spinner';
-import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
+import { GridItem } from './GridItem';
 
 import { DateTime } from 'luxon';
 
-import { withStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
 import { appbarActions } from '../Appbar/slice';
-import { appActions } from '../../slice';
+// import { appActions } from '../../slice';
 
 interface Props {
   headlines?: Array<any>;
@@ -25,17 +22,8 @@ interface Props {
   isSortAsc?: boolean;
   handleToggleSortingorder?: any;
   comparisonItems?: Array<any>;
+  i?: number;
 }
-
-const CompareTooltip = withStyles(theme => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'black',
-    maxWidth: 200,
-    fontSize: theme.typography.pxToRem(15),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip);
 
 export function GridHeadlinePresentor(props: Props) {
   const {
@@ -44,7 +32,6 @@ export function GridHeadlinePresentor(props: Props) {
     isLoading,
     isSortAsc,
     handleToggleSortingorder,
-    comparisonItems,
   } = props;
 
   const dispatch = useDispatch();
@@ -72,32 +59,16 @@ export function GridHeadlinePresentor(props: Props) {
     dispatch(appbarActions.setIsQueryDialogOpen(true));
   };
 
-  const handleAddToCompare = () => {
-    dispatch(appActions.setComparisonItems(headlines));
-    console.log(comparisonItems);
-  };
-
   const grid = (
     <Grid>
       {headlines?.map((headline, i) => {
         return (
           <GridItem
-            ref={headlines.length === i + 1 ? lastItem : null}
-            key={headline._id}
-          >
-            <GridOptions>
-              <GridDate>{`${headline.date} ${headline._id.slice(
-                20,
-              )}`}</GridDate>
-              <Divider orientation="vertical" flexItem />
-              <AddToCompareButton onClick={handleAddToCompare}>
-                <CompareTooltip title="הוספה להשוואת כותרות">
-                  <AddCircleOutlineRoundedIcon fontSize="large" />
-                </CompareTooltip>
-              </AddToCompareButton>
-            </GridOptions>
-            <Image src={headline.imageUrl} alt={`headline-${i}`} />
-          </GridItem>
+            headline={headline}
+            lastItem={lastItem}
+            i={i}
+            key={`GridItem-${i}`}
+          />
         );
       })}
     </Grid>
@@ -137,32 +108,6 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 1vw;
   overflow-y: scroll;
-`;
-const GridItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: lightgrey;
-  border: 1.5px solid black;
-  margin: 0.5vw;
-`;
-
-const GridOptions = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-`;
-
-const AddToCompareButton = styled.div``;
-
-const GridDate = styled.h3``;
-
-const Image = styled.img`
-  height: auto;
-  width: 100%;
-  align-self: center;
 `;
 
 const CenteredLoader = styled(Loader)`

@@ -69,8 +69,9 @@ export function Drawer(props: Props) {
 
     const editedComparison = comparisons.find(element => element.id === id);
     const comparisonNewName = {
+      id: editedComparison?.id,
       text: 'new name',
-      headlines: editedComparison.headlines,
+      headlines: editedComparison?.headlines,
     };
 
     const newComparisons = [
@@ -117,7 +118,7 @@ export function Drawer(props: Props) {
                   <EditIcon
                     id={item.id}
                     className={classes.hoverRename}
-                    onClick={e => handleRenameClick(e)}
+                    onClick={(e: any) => handleRenameClick(e)}
                   />
                 </ListItem>
               ))}
