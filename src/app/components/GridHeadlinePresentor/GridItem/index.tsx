@@ -8,16 +8,21 @@ import styled from 'styled-components/macro';
 import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Tooltip from '@material-ui/core/Tooltip';
+import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
+
 import { withStyles } from '@material-ui/core/styles';
-// import { useSelector, useDispatch } from 'react-redux';
+import { useGridItemStateSlice } from './slice';
+import { useDispatch } from 'react-redux';
 // import { useDrawerSlice } from '../../Drawer/slice';
 // import { selectDrawer } from '../../Drawer/slice/selectors';
+// import { selectGridItemState } from './slice/selectors';
 
 interface Props {
   lastItem?: any;
   headline?: any;
   i?: number;
   comparisons?: Array<any>;
+  isDialogOpen?: boolean;
 }
 
 const CompareTooltip = withStyles(theme => ({
@@ -30,16 +35,21 @@ const CompareTooltip = withStyles(theme => ({
   },
 }))(Tooltip);
 
-// const handleAddToCompare = () => {};
-
 export function GridItem(props: Props) {
   const { headline, lastItem, i } = props;
 
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
 
-  // const { actions } = useDrawerSlice();
+  const { actions } = useGridItemStateSlice();
 
-  // const { comparisons } = useSelector(selectDrawer);
+  const handleClickOpenDialog = () => {
+    dispatch(actions.setIsDialogOpen(true));
+  };
+
+  const handleCloseDialog = (value: number) => {
+    dispatch(actions.setIsDialogOpen(false));
+    dispatch(actions.setSelectedComparison(value));
+  };
 
   return (
     <ItemContainer
@@ -49,11 +59,12 @@ export function GridItem(props: Props) {
       <GridOptions>
         <GridDate>{`${headline.date} ${headline._id.slice(20)}`}</GridDate>
         <Divider orientation="vertical" flexItem />
-        <AddToCompareButton>
+        <AddToCompareButton onClick={handleClickOpenDialog}>
           <CompareTooltip title="הוספה להשוואת כותרות">
             <AddCircleOutlineRoundedIcon fontSize="large" />
           </CompareTooltip>
         </AddToCompareButton>
+        <AddToCompareDialog onClose={handleCloseDialog} />
       </GridOptions>
       <Image src={headline.imageUrl} alt={`headline-${i}`} />
     </ItemContainer>
