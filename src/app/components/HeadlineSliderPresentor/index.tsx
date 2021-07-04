@@ -15,6 +15,7 @@ import { appbarActions } from '../Appbar/slice';
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { numFormatter, getNumFromHHMM } from 'utils/helpers';
 
 interface Props {
   headlines?: Array<any>;
@@ -22,32 +23,6 @@ interface Props {
   isLoading?: boolean;
   isSortAsc?: boolean;
   handleToggleSortingorder?: any;
-}
-
-function pad(n) {
-  return n < 10 ? '0' + n : n;
-}
-
-function numFormatter(value: number) {
-  let mm;
-  switch (value % 4) {
-    case 0:
-      mm = '00';
-      break;
-    case 1:
-      mm = '15';
-      break;
-    case 2:
-      mm = '30';
-      break;
-    case 3:
-      mm = '45';
-      break;
-
-    default:
-      break;
-  }
-  return `${pad(Math.floor(value / 4))}:${mm}`;
 }
 
 export function HeadlineSliderPresentor(props: Props) {
@@ -61,28 +36,8 @@ export function HeadlineSliderPresentor(props: Props) {
 
   const marks = headlines?.map(headline => {
     const hhmm = headline.date.split(' ')[1];
-    const hour = hhmm.split(':')[0];
-    const minute = hhmm.split(':')[1];
 
-    let value = 4 * +hour;
-
-    switch (minute) {
-      case '00':
-        value += 0;
-        break;
-      case '15':
-        value += 1;
-        break;
-      case '30':
-        value += 2;
-        break;
-      case '45':
-        value += 3;
-        break;
-
-      default:
-        break;
-    }
+    const value = getNumFromHHMM(hhmm);
 
     console.log('label: ', hhmm, 'value: ', value);
 
