@@ -3,6 +3,7 @@ import { AppbarState } from 'app/components/Appbar/slice/types';
 import { DrawerState } from 'app/components/Drawer/slice/types';
 import { HeadlinesFeedInfiniteScrollState } from 'app/components/HeadlinesFeedInfiniteScroll/slice/types';
 import { GridItemState } from 'app/components/GridHeadlinePresentor/GridItem/slice/types';
+import { SliderState } from 'app/components/HeadlineSliderPresentor/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -15,5 +16,7 @@ export interface RootState {
   drawer?: DrawerState;
   headlinesFeedInfiniteScroll?: HeadlinesFeedInfiniteScrollState;
   gridItemState?: GridItemState;
+  slider?: SliderState;
+
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }

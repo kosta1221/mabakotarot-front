@@ -9,8 +9,8 @@ import Loader from 'react-loader-spinner';
 import { DateTime } from 'luxon';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
-import { appbarActions } from '../Appbar/slice';
+import { selectSlider } from './slice/selectors';
+import { useSliderSlice } from './slice';
 
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
@@ -33,6 +33,10 @@ export function HeadlineSliderPresentor(props: Props) {
     isSortAsc,
     handleToggleSortingorder,
   } = props;
+
+  const { actions } = useSliderSlice();
+  const dispatch = useDispatch();
+  const { showedHeadline } = useSelector(selectSlider);
 
   const marks = headlines?.map(headline => {
     const hhmm = headline.date.split(' ')[1];
@@ -57,7 +61,11 @@ export function HeadlineSliderPresentor(props: Props) {
         getAriaValueText={numFormatter}
         min={0}
         max={95}
-        value={marks && marks[0]?.value}
+        value={getNumFromHHMM(showedHeadline)}
+        onChange={(e, v) => {
+          if (Array.isArray(v)) return;
+          dispatch(actions.setShowedHeadline(numFormatter(v)));
+        }}
         step={null}
         valueLabelDisplay="on"
         valueLabelFormat={numFormatter}
