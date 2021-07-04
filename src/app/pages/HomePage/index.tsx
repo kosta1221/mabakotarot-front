@@ -18,7 +18,11 @@ export function HomePage() {
         {/* <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
           <Feed />
         </HeadlinesFeedInfiniteScroll> */}
-        <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
+        <HeadlinesFeedInfiniteScroll
+          sites={['n12']}
+          countPerFetch={6}
+          isSingularFetch={true}
+        >
           <HeadlineSliderPresentor />
         </HeadlinesFeedInfiniteScroll>
       </Content>
