@@ -24,8 +24,30 @@ interface Props {
   handleToggleSortingorder?: any;
 }
 
-function valuetext(value: number) {
-  return `${value}:00`;
+function pad(n) {
+  return n < 10 ? '0' + n : n;
+}
+
+function numFormatter(value: number) {
+  let mm;
+  switch (value % 4) {
+    case 0:
+      mm = '00';
+      break;
+    case 1:
+      mm = '15';
+      break;
+    case 2:
+      mm = '30';
+      break;
+    case 3:
+      mm = '45';
+      break;
+
+    default:
+      break;
+  }
+  return `${pad(Math.floor(value / 4))}:${mm}`;
 }
 
 export function HeadlineSliderPresentor(props: Props) {
@@ -41,8 +63,9 @@ export function HeadlineSliderPresentor(props: Props) {
   //   const marks = headlines?.map((headline) => {value: headline.date.slice(1, 5), label: headline.date.slice(1, 3)})
 
   let marks: any[] = [];
-  for (let i = 0; i <= 23; i += 3) {
-    marks.push({ value: i, label: `${i}:00` });
+  for (let i = 0; i <= 95; i += 12) {
+    const formatted = numFormatter(i);
+    marks.push({ value: i, label: formatted });
   }
 
   return (
@@ -51,13 +74,14 @@ export function HeadlineSliderPresentor(props: Props) {
         Custom marks
       </Typography>
       <Slider
+        aria-labelledby="time-slider"
+        getAriaValueText={numFormatter}
         min={0}
-        max={24}
+        max={95}
         defaultValue={10}
-        getAriaValueText={valuetext}
-        aria-labelledby="discrete-slider-custom"
         step={null}
         valueLabelDisplay="on"
+        valueLabelFormat={numFormatter}
         marks={marks}
       />
       <Image
