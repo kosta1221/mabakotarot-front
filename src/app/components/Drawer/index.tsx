@@ -46,7 +46,13 @@ export function Drawer(props: Props) {
 
   const handleClickOnComparison = e => {
     e.stopPropagation();
+    const id = Number(e.currentTarget.id);
+
     dispatch(actions.setIsComparisonOpen(!isComparisonOpen));
+
+    console.log(`id is: ${id}`);
+    router.push(`/compare?id=${id}`);
+    router.history.go(0);
   };
 
   const handleClickOnNewComparison = e => {
@@ -90,7 +96,13 @@ export function Drawer(props: Props) {
       onKeyDown={toggleDrawer(false)}
     >
       <List className={classes.root}>
-        <ListItem button onClick={() => router.push('/headlines')}>
+        <ListItem
+          button
+          onClick={() => {
+            router.push('/headlines');
+            router.history.go(0);
+          }}
+        >
           <ListItemIcon>
             <DynamicFeedIcon />
           </ListItemIcon>
@@ -110,7 +122,11 @@ export function Drawer(props: Props) {
           <List component="div" disablePadding>
             {comparisons?.length > 0 &&
               comparisons.map((item, i) => (
-                <ListItem button key={i}>
+                <ListItem
+                  button
+                  key={i}
+                  onClick={e => handleClickOnComparison(e)}
+                >
                   <ListItemText
                     primary={item.text}
                     className={classes.rightText}
