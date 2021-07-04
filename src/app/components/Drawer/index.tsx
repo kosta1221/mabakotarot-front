@@ -44,20 +44,19 @@ export function Drawer(props: Props) {
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, actions);
 
-  const handleClickOnComparison = e => {
+  const handleClickOnCollapse = e => {
     e.stopPropagation();
-    const id = Number(e.currentTarget.id);
-
     dispatch(actions.setIsComparisonOpen(!isComparisonOpen));
+  };
 
-    console.log(`id is: ${id}`);
+  const handleClickOnComparison = id => {
     router.push(`/compare?id=${id}`);
     router.history.go(0);
   };
 
   const handleClickOnNewComparison = e => {
     e.stopPropagation();
-    console.log(comparisons.length);
+
     const newCompare = {
       id: comparisons.length + 1,
       text: `השוואה חדשה - ${comparisons.length + 1}`,
@@ -108,7 +107,7 @@ export function Drawer(props: Props) {
           </ListItemIcon>
           <ListItemText primary={'כותרות'} className={classes.rightText} />
         </ListItem>
-        <ListItem button onClick={e => handleClickOnComparison(e)}>
+        <ListItem button onClick={e => handleClickOnCollapse(e)}>
           <ListItemIcon>
             <CompareIcon />
           </ListItemIcon>
@@ -125,7 +124,8 @@ export function Drawer(props: Props) {
                 <ListItem
                   button
                   key={i}
-                  onClick={e => handleClickOnComparison(e)}
+                  id={item.id}
+                  onClick={e => handleClickOnComparison(item.id)}
                 >
                   <ListItemText
                     primary={item.text}
@@ -146,7 +146,10 @@ export function Drawer(props: Props) {
               <ListItemIcon>
                 <AddIcon />
               </ListItemIcon>
-              <ListItemText primary="הוספת השוואה" />
+              <ListItemText
+                primary="הוספת השוואה"
+                className={classes.rightText}
+              />
             </ListItem>
           </List>
         </Collapse>

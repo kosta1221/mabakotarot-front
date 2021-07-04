@@ -22,7 +22,12 @@ export function ComparePage(props: Props) {
 
   const id = Number(queryParams.id);
   console.log(id);
-  const comparisonData = comparisons?.length > 0 ? comparisons[id] : null;
+  const comparisonData =
+    comparisons?.length > 0
+      ? comparisons.find(comparison => {
+          return comparison.id === id;
+        })
+      : null;
   console.log(comparisonData);
 
   const compareDisplay = (
