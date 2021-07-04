@@ -6,6 +6,7 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { loadState } from './localStorage';
+import { RootState } from 'types';
 
 import { createReducer } from './reducers';
 
@@ -17,7 +18,13 @@ export function configureAppStore() {
   // Create the store with saga middleware
   const middlewares = [sagaMiddleware];
 
-  const preloadedState = loadState();
+  const preloadedState: RootState = {
+    drawer: {
+      comparisons: loadState(),
+      isComparisonOpen: false,
+      isDrawerDisplayed: false,
+    },
+  };
 
   const enhancers = [
     createInjectorsEnhancer({

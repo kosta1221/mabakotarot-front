@@ -30,7 +30,7 @@ import { saveState } from 'store/localStorage';
 
 const store = configureAppStore();
 store.subscribe(() => {
-  saveState(store.getState());
+  saveState(store.getState().drawer.comparisons);
 });
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
