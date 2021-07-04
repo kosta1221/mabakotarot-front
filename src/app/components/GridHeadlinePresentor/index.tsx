@@ -13,7 +13,6 @@ import { DateTime } from 'luxon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
 import { appbarActions } from '../Appbar/slice';
-// import { appActions } from '../../slice';
 
 interface Props {
   headlines?: Array<any>;

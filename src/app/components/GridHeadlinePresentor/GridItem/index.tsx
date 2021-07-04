@@ -12,9 +12,9 @@ import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 
 import { withStyles } from '@material-ui/core/styles';
 import { useGridItemStateSlice } from './slice';
-import { useDispatch } from 'react-redux';
-// import { useDrawerSlice } from '../../Drawer/slice';
-// import { selectDrawer } from '../../Drawer/slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
+import { useDrawerSlice } from '../../Drawer/slice';
+import { selectDrawer } from '../../Drawer/slice/selectors';
 // import { selectGridItemState } from './slice/selectors';
 
 interface Props {
@@ -40,15 +40,45 @@ export function GridItem(props: Props) {
 
   const dispatch = useDispatch();
 
+  const { comparisons } = useSelector(selectDrawer);
+
   const { actions } = useGridItemStateSlice();
+  const { actions: drawerActions } = useDrawerSlice();
 
   const handleClickOpenDialog = () => {
     dispatch(actions.setIsDialogOpen(true));
   };
 
   const handleCloseDialog = (value: number) => {
+    // if user pressed on new comparison button
+    if (value === 99) {
+      console.log(comparisons.length);
+      const newCompare = {
+        id: comparisons.length + 1,
+        text: `השוואה חדשה - ${comparisons.length + 1}`,
+        headlines: [],
+      };
+
+      const newComparisons = [...comparisons, newCompare];
+      return dispatch(drawerActions.setComparisons(newComparisons));
+    }
     dispatch(actions.setIsDialogOpen(false));
-    dispatch(actions.setSelectedComparison(value));
+    const id = value;
+
+    const editedComparison = comparisons.find(element => element.id === id);
+    const comparisonWithNewHeadline = {
+      id: editedComparison?.id,
+      text: editedComparison?.text,
+      headlines: [...editedComparison?.headlines, headline],
+    };
+
+    const newComparisons = [
+      ...comparisons.filter(comparison => comparison.id !== id),
+      comparisonWithNewHeadline,
+    ];
+
+    dispatch(drawerActions.setComparisons(newComparisons));
+    console.log(comparisons);
   };
 
   return (

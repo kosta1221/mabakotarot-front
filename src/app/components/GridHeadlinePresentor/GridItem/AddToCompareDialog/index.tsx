@@ -4,6 +4,7 @@
  *
  */
 import * as React from 'react';
+import styled from 'styled-components/macro';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import Dialog from '@material-ui/core/Dialog';
 import List from '@material-ui/core/List';
@@ -23,22 +24,18 @@ interface Props {
 export function AddToCompareDialog(props: Props) {
   const { onClose } = props;
 
-  const { isDialogOpen, selectedComparison } = useSelector(selectGridItemState);
+  const { isDialogOpen } = useSelector(selectGridItemState);
   const { comparisons } = useSelector(selectDrawer);
-
-  const handleClose = () => {
-    onClose(selectedComparison);
-  };
 
   const handleListItemClick = (value: number) => {
     onClose(value);
   };
 
   return (
-    <Dialog
-      onClose={handleClose}
+    <StyledDialog
       aria-labelledby="add-to-comparisons-dialog-title"
       open={isDialogOpen}
+      style={{ backgroundColor: 'transparent' }}
     >
       <DialogTitle id="add-to-comparisons-dialog-title">בחר השוואה</DialogTitle>
       <List>
@@ -58,6 +55,12 @@ export function AddToCompareDialog(props: Props) {
           <ListItemText primary="הוספת השוואה" />
         </ListItem>
       </List>
-    </Dialog>
+    </StyledDialog>
   );
 }
+
+const StyledDialog = styled(Dialog)`
+  .MuiBackdrop-root {
+    background-color: rgba(0, 0, 0, 0.17);
+  }
+`;
