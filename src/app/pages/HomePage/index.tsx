@@ -3,6 +3,8 @@ import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
 import { Feed } from '../../components/Feed';
+import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
+
 import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
 export function HomePage() {
@@ -13,8 +15,11 @@ export function HomePage() {
         <meta name="description" content="App for comparing news headlines" />
       </Helmet>
       <Content>
-        <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
+        {/* <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
           <Feed />
+        </HeadlinesFeedInfiniteScroll> */}
+        <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
+          <HeadlineSliderPresentor />
         </HeadlinesFeedInfiniteScroll>
       </Content>
     </>
