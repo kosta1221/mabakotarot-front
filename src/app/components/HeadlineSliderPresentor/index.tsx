@@ -59,14 +59,38 @@ export function HeadlineSliderPresentor(props: Props) {
     handleToggleSortingorder,
   } = props;
 
-  //   const marks = headlines?.map((headline) => {value: headline.date.slice(1, 5), label: headline.date.slice(1, 3)})
-  //   const marks = headlines?.map((headline) => {value: headline.date.slice(1, 5), label: headline.date.slice(1, 3)})
+  const marks = headlines?.map(headline => {
+    const hhmm = headline.date.split(' ')[1];
+    const hour = hhmm.split(':')[0];
+    const minute = hhmm.split(':')[1];
 
-  let marks: any[] = [];
-  for (let i = 0; i <= 95; i += 12) {
-    const formatted = numFormatter(i);
-    marks.push({ value: i, label: formatted });
-  }
+    let value = 4 * +hour;
+
+    switch (minute) {
+      case '00':
+        value += 0;
+        break;
+      case '15':
+        value += 1;
+        break;
+      case '30':
+        value += 2;
+        break;
+      case '45':
+        value += 3;
+        break;
+
+      default:
+        break;
+    }
+
+    console.log('label: ', hhmm, 'value: ', value);
+
+    return {
+      value,
+      label: hhmm,
+    };
+  });
 
   return (
     <div>
@@ -78,7 +102,7 @@ export function HeadlineSliderPresentor(props: Props) {
         getAriaValueText={numFormatter}
         min={0}
         max={95}
-        defaultValue={10}
+        value={marks && marks[0]?.value}
         step={null}
         valueLabelDisplay="on"
         valueLabelFormat={numFormatter}
