@@ -26,8 +26,12 @@ import reportWebVitals from 'reportWebVitals';
 
 // Initialize languages
 import './locales/i18n';
+import { saveState } from 'store/localStorage';
 
 const store = configureAppStore();
+store.subscribe(() => {
+  saveState(store.getState());
+});
 const MOUNT_NODE = document.getElementById('root') as HTMLElement;
 
 ReactDOM.render(
