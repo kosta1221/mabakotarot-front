@@ -6,6 +6,7 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import queryString from 'query-string';
+import CloseIcon from '@material-ui/icons/Close';
 
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
@@ -18,35 +19,36 @@ export function ComparePage(props: Props) {
   console.log(comparisons);
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
-  console.log(location);
 
   const id = Number(queryParams.id);
-  console.log(id);
   const comparisonData =
     comparisons?.length > 0
       ? comparisons.find(comparison => {
           return comparison.id === id;
         })
       : null;
-  console.log(comparisonData);
 
   const compareDisplay = (
     <CompareContainer>
       <Title>{comparisonData?.text}</Title>
-      {comparisonData?.headlines.map((headline, i) => {
-        return (
-          <HeadlinesContainer>
-            <ItemContainer key={headline?._id}>
-              <HeadlineOptions>
-                <HeadlineTitle>{`${headline.date} ${headline._id.slice(
-                  20,
-                )}`}</HeadlineTitle>
-              </HeadlineOptions>
+      <HeadlinesContainer>
+        {comparisonData?.headlines.map((headline, i) => {
+          return (
+            <ItemContainer key={`${headline.id}-${i}`}>
+              <CloseButton>
+                <CloseIcon fontSize="large" />
+              </CloseButton>
+              <HeadlineText>{headline.date}</HeadlineText>
               <Image src={headline.imageUrl} alt={`headline-${i}`} />
+              <Divider />
+              <HeadlineText>{headline.titleText}</HeadlineText>
+              <ArticleLink href={headline.titleArticleLink} target="_blank">
+                קישור לכתבה
+              </ArticleLink>
             </ItemContainer>
-          </HeadlinesContainer>
-        );
-      })}
+          );
+        })}
+      </HeadlinesContainer>
     </CompareContainer>
   );
 
@@ -67,7 +69,11 @@ const Title = styled.h1`
 
 const HeadlinesContainer = styled.div`
   display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: center;
+  width: 100%;
+  height: 100%;
 `;
 
 const ItemContainer = styled.div`
@@ -75,22 +81,24 @@ const ItemContainer = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: lightgrey;
-  border: 1.5px solid black;
+  border: 1px solid black;
   margin: 0.5vw;
+  flex: 0 1 25%;
 `;
 
-const HeadlineOptions = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
+const CloseButton = styled.div`
+  align-self: flex-start;
+`;
+
+const ArticleLink = styled.a``;
+
+const HeadlineText = styled.h3``;
+
+const Divider = styled.hr`
+  margin-top: 30px;
   width: 100%;
 `;
 
-const HeadlineTitle = styled.h3``;
-
 const Image = styled.img`
-  height: auto;
-  max-width: 50%;
-  align-self: center;
+  max-width: 100%;
 `;
