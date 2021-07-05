@@ -38,12 +38,23 @@ export function HeadlineSliderPresentor(props: Props) {
   const dispatch = useDispatch();
   const { showedHeadline } = useSelector(selectSlider);
 
+  React.useEffect(() => {
+    if (
+      headlines &&
+      headlines[headlines.length - 1] &&
+      headlines[headlines.length - 1].date
+    ) {
+      // When headlines get fetched, set the showed headline to the first one fetched (most recent)
+      dispatch(actions.setShowedHeadline(headlines[0].date.split(' ')[1]));
+    }
+  }, [dispatch, actions, headlines]);
+
   const marks = headlines?.map(headline => {
     const hhmm = headline.date.split(' ')[1];
 
     const value = getNumFromHHMM(hhmm);
 
-    console.log('label: ', hhmm, 'value: ', value);
+    // console.log('label: ', hhmm, 'value: ', value);
 
     return {
       value,
