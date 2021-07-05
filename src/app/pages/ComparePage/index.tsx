@@ -10,12 +10,15 @@ import CloseIcon from '@material-ui/icons/Close';
 
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
+import { drawerActions } from '../../components/Drawer/slice';
 import { useLocation } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 
 interface Props {}
 
 export function ComparePage(props: Props) {
   const { comparisons } = useSelector(selectDrawer);
+  const dispatch = useDispatch();
   console.log(comparisons);
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
@@ -28,6 +31,28 @@ export function ComparePage(props: Props) {
         })
       : null;
 
+  const handleRemoveClick = headline => event => {
+    console.log(headline);
+    console.log(event.currentTarget.id);
+    const idToRemove = event.currentTarget.id;
+
+    const headlinesUpdated = comparisonData.headlines.filter(
+      item => item._id !== idToRemove,
+    );
+
+    const comparisonNewHeadlines = {
+      id: comparisonData?.id,
+      text: comparisonData?.text,
+      headlines: headlinesUpdated,
+    };
+
+    const newComparisons = [
+      ...comparisons.filter(comparison => comparison.id !== id),
+      comparisonNewHeadlines,
+    ];
+    dispatch(drawerActions.setComparisons(newComparisons));
+  };
+
   const compareDisplay = (
     <CompareContainer>
       <Title>{comparisonData?.text}</Title>
@@ -35,7 +60,10 @@ export function ComparePage(props: Props) {
         {comparisonData?.headlines.map((headline, i) => {
           return (
             <ItemContainer key={`${headline.id}-${i}`}>
-              <CloseButton>
+              <CloseButton
+                id={headline._id}
+                onClick={handleRemoveClick(headline)}
+              >
                 <CloseIcon fontSize="large" />
               </CloseButton>
               <HeadlineText>{headline.date}</HeadlineText>
@@ -88,6 +116,11 @@ const ItemContainer = styled.div`
 
 const CloseButton = styled.div`
   align-self: flex-start;
+  margin: 5px;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const ArticleLink = styled.a``;
