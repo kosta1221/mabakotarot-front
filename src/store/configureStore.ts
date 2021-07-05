@@ -5,8 +5,9 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { loadState } from './localStorage';
+import { loadState, saveState } from '../utils/localStorage';
 import { RootState } from 'types';
+import throttle from 'lodash/throttle';
 
 import { createReducer } from './reducers';
 
@@ -21,7 +22,7 @@ export function configureAppStore() {
   const preloadedState: RootState = {
     drawer: {
       comparisons: loadState() || [],
-      isComparisonOpen: false,
+      isComparisonOpen: true,
       isDrawerDisplayed: false,
     },
   };
@@ -40,6 +41,12 @@ export function configureAppStore() {
     preloadedState,
     enhancers,
   });
+
+  store.subscribe(
+    throttle(() => {
+      saveState(store.getState().drawer.comparisons);
+    }, 1000),
+  );
 
   return store;
 }
