@@ -9,6 +9,7 @@ export const initialState: DrawerState = {
   isDrawerDisplayed: false,
   isComparisonOpen: true,
   comparisons: getComparisonsFromLocalStorage() || [],
+  editing: false,
 };
 
 const slice = createSlice({
@@ -23,6 +24,9 @@ const slice = createSlice({
     },
     setComparisons(state, action: PayloadAction<Array<any>>) {
       state.comparisons = action.payload;
+    },
+    setEditing(state, action: PayloadAction<boolean>) {
+      state.editing = action.payload;
     },
   },
 });

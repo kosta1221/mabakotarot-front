@@ -16,8 +16,8 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
 import AddIcon from '@material-ui/icons/Add';
-import EditIcon from '@material-ui/icons/Edit';
-import HomeIcon from '@material-ui/icons/Home';
+// import EditIcon from '@material-ui/icons/Edit';
+import EdiText from 'react-editext';
 
 import { useDrawerSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -39,9 +39,12 @@ export function Drawer(props: Props) {
   const { actions } = useDrawerSlice();
 
   const dispatch = useDispatch();
-  const { isDrawerDisplayed, isComparisonOpen, comparisons } = useSelector(
-    selectDrawer,
-  );
+  const {
+    isDrawerDisplayed,
+    isComparisonOpen,
+    comparisons,
+    editing,
+  } = useSelector(selectDrawer);
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, actions);
 
@@ -50,7 +53,12 @@ export function Drawer(props: Props) {
     dispatch(actions.setIsComparisonOpen(!isComparisonOpen));
   };
 
-  const handleClickOnComparison = id => {
+  const handleClickOnComparison = (event, id) => {
+    event.stopPropagation();
+    console.log(event.target.type);
+    if (event.target.type === 'button' || event.target.type === 'text') {
+      return;
+    }
     router.push(`/compare?id=${id}`);
     router.history.go(0);
   };
@@ -69,14 +77,13 @@ export function Drawer(props: Props) {
     console.log(comparisons);
   };
 
-  const handleRenameClick = e => {
-    e.stopPropagation();
-    const id = Number(e.currentTarget.id);
+  const handleSave = (value, inputProps) => {
+    const id = Number(inputProps.id);
 
     const editedComparison = comparisons.find(element => element.id === id);
     const comparisonNewName = {
       id: editedComparison?.id,
-      text: 'new name',
+      text: value,
       headlines: editedComparison?.headlines,
     };
 
@@ -96,18 +103,6 @@ export function Drawer(props: Props) {
       onKeyDown={toggleDrawer(false)}
     >
       <List className={classes.root}>
-      <ListItem
-          button
-          onClick={() => {
-            router.push('/');
-            router.history.go(0);
-          }}
-        >
-          <ListItemIcon>
-            <HomeIcon />
-          </ListItemIcon>
-          <ListItemText primary={'דף הבית'} className={classes.rightText} />
-        </ListItem>
         <ListItem
           button
           onClick={() => {
@@ -133,22 +128,24 @@ export function Drawer(props: Props) {
         <Collapse in={isComparisonOpen} timeout="auto" unmountOnExit>
           <List component="div" disablePadding>
             {comparisons?.length > 0 &&
-              comparisons.map((item, i) => (
+              comparisons.map((comparison, i) => (
                 <ListItem
                   button
                   key={i}
-                  id={item.id}
-                  onClick={e => handleClickOnComparison(item.id)}
+                  id={comparison.id}
+                  onClick={event =>
+                    handleClickOnComparison(event, comparison.id)
+                  }
                 >
-                  <ListItemText
-                    primary={item.text}
-                    className={classes.rightText}
-                  />
-                  <EditIcon
-                    id={item.id}
-                    className={classes.hoverRename}
-                    onClick={(e: any) => handleRenameClick(e)}
-                  />
+                  <ListItemText>
+                    <EdiText
+                      value={comparison.text}
+                      type="text"
+                      onSave={handleSave}
+                      editing={editing}
+                      inputProps={{ id: comparison.id }}
+                    />
+                  </ListItemText>
                 </ListItem>
               ))}
             <ListItem

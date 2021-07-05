@@ -3,8 +3,8 @@ export const useCreateToggleDrawerUtil = (dispatch, actions) => (
 ) => event => {
   if (
     event &&
-    event.type === 'keydown' &&
-    (event.key === 'Tab' || event.key === 'Shift')
+    event.type === 'keydown'
+    // (event.key === 'Tab' || event.key === 'Shift')
   ) {
     return;
   }

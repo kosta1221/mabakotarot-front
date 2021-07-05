@@ -47,6 +47,7 @@
     "react-app-polyfill": "1.0.6",
     "react-calendar": "3.4.0",
     "react-dom": "16.13.1",
+    "react-editext": "4.1.5",
     "react-helmet-async": "1.0.6",
     "react-i18next": "11.7.2",
     "react-loader-spinner": "4.0.0",
