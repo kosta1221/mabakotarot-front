@@ -1,15 +1,15 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
-import { GridItemState } from './types';
+import { GridHeadlinePresentorState } from './types';
 
-export const initialState: GridItemState = {
+export const initialState: GridHeadlinePresentorState = {
   isDialogOpen: false,
   selectedComparison: 1,
 };
 
 const slice = createSlice({
-  name: 'gridItemState',
+  name: 'gridHeadlinePresentorState',
   initialState,
   reducers: {
     setIsDialogOpen(state, action: PayloadAction<boolean>) {
@@ -21,7 +21,7 @@ const slice = createSlice({
   },
 });
 
-export const { actions: gridItemStateActions } = slice;
+export const { actions: gridHeadlinePresentorActions } = slice;
 
 export const useGridItemStateSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });

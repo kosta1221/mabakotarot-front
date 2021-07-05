@@ -6,7 +6,6 @@ import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
 import { saveComparisonsToLocalStorage } from '../utils/localStorage';
-import throttle from 'lodash/throttle';
 
 import { drawerActions } from 'app/components/Drawer/slice';
 

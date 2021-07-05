@@ -1,5 +1,5 @@
 /* --- STATE --- */
-export interface GridItemState {
+export interface GridHeadlinePresentorState {
   isDialogOpen: boolean;
   selectedComparison: number;
 }

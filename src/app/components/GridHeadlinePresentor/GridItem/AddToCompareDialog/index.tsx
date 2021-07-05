@@ -13,7 +13,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import AddIcon from '@material-ui/icons/Add';
 
-import { selectGridItemState } from '../slice/selectors';
+import { selectGridHeadlinePresentorState } from '../../slice/selectors';
 import { selectDrawer } from '../../../Drawer/slice/selectors';
 import { useSelector } from 'react-redux';
 
@@ -24,7 +24,7 @@ interface Props {
 export function AddToCompareDialog(props: Props) {
   const { onClose } = props;
 
-  const { isDialogOpen } = useSelector(selectGridItemState);
+  const { isDialogOpen } = useSelector(selectGridHeadlinePresentorState);
   const { comparisons } = useSelector(selectDrawer);
 
   const handleListItemClick = (value: number) => {

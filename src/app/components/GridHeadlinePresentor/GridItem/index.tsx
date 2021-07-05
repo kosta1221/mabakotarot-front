@@ -11,8 +11,8 @@ import Tooltip from '@material-ui/core/Tooltip';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 
 import { withStyles } from '@material-ui/core/styles';
-import { useGridItemStateSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { gridHeadlinePresentorActions as actions } from '../slice';
 import { drawerActions } from '../../Drawer/slice';
 import { selectDrawer } from '../../Drawer/slice/selectors';
 
@@ -40,8 +40,6 @@ export function GridItem(props: Props) {
   const dispatch = useDispatch();
 
   const { comparisons } = useSelector(selectDrawer);
-
-  const { actions } = useGridItemStateSlice();
 
   const handleClickOpenDialog = () => {
     dispatch(actions.setIsDialogOpen(true));
