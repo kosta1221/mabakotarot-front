@@ -21,7 +21,6 @@ interface Props {
   isSortAsc?: boolean;
   handleToggleSortingorder?: any;
   comparisonItems?: Array<any>;
-  i?: number;
 }
 
 export function GridHeadlinePresentor(props: Props) {
@@ -60,13 +59,13 @@ export function GridHeadlinePresentor(props: Props) {
 
   const grid = (
     <Grid>
-      {headlines?.map((headline, i) => {
+      {headlines?.map((headline, index) => {
         return (
           <GridItem
             headline={headline}
             lastItem={lastItem}
-            i={i}
-            key={`GridItem-${i}`}
+            index={index}
+            key={`GridItem-${index}`}
           />
         );
       })}

@@ -13,14 +13,13 @@ import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { withStyles } from '@material-ui/core/styles';
 import { useGridItemStateSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { useDrawerSlice } from '../../Drawer/slice';
+import { drawerActions } from '../../Drawer/slice';
 import { selectDrawer } from '../../Drawer/slice/selectors';
-// import { selectGridItemState } from './slice/selectors';
 
 interface Props {
   lastItem?: any;
   headline?: any;
-  i?: number;
+  index?: number;
   comparisons?: Array<any>;
   isDialogOpen?: boolean;
 }
@@ -36,14 +35,13 @@ const CompareTooltip = withStyles(theme => ({
 }))(Tooltip);
 
 export function GridItem(props: Props) {
-  const { headline, lastItem, i } = props;
+  const { headline, lastItem, index } = props;
 
   const dispatch = useDispatch();
 
   const { comparisons } = useSelector(selectDrawer);
 
   const { actions } = useGridItemStateSlice();
-  const { actions: drawerActions } = useDrawerSlice();
 
   const handleClickOpenDialog = () => {
     dispatch(actions.setIsDialogOpen(true));
@@ -83,7 +81,7 @@ export function GridItem(props: Props) {
 
   return (
     <ItemContainer
-      ref={headline?.length === i || 0 + 1 ? lastItem : null}
+      ref={headline?.length === index || 0 + 1 ? lastItem : null}
       key={headline?._id}
     >
       <GridOptions>
@@ -96,7 +94,7 @@ export function GridItem(props: Props) {
         </AddToCompareButton>
         <AddToCompareDialog onClose={handleCloseDialog} />
       </GridOptions>
-      <Image src={headline.imageUrl} alt={`headline-${i}`} />
+      <Image src={headline.imageUrl} alt={`headline-${index}`} />
     </ItemContainer>
   );
 }
