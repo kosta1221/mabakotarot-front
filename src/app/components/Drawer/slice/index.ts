@@ -3,10 +3,12 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 import { DrawerState } from './types';
 
+import { getComparisonsFromLocalStorage } from 'utils/localStorage';
+
 export const initialState: DrawerState = {
   isDrawerDisplayed: false,
   isComparisonOpen: true,
-  comparisons: [],
+  comparisons: getComparisonsFromLocalStorage() || [],
 };
 
 const slice = createSlice({

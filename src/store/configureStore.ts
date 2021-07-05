@@ -5,8 +5,7 @@
 import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
 import { createInjectorsEnhancer } from 'redux-injectors';
 import createSagaMiddleware from 'redux-saga';
-import { loadState, saveState } from '../utils/localStorage';
-import { RootState } from 'types';
+import { saveComparisonsToLocalStorage } from '../utils/localStorage';
 import throttle from 'lodash/throttle';
 
 import { createReducer } from './reducers';
@@ -19,14 +18,6 @@ export function configureAppStore() {
   // Create the store with saga middleware
   const middlewares = [sagaMiddleware];
 
-  const preloadedState: RootState = {
-    drawer: {
-      comparisons: loadState() || [],
-      isComparisonOpen: true,
-      isDrawerDisplayed: false,
-    },
-  };
-
   const enhancers = [
     createInjectorsEnhancer({
       createReducer,
@@ -38,13 +29,13 @@ export function configureAppStore() {
     reducer: createReducer(),
     middleware: [...getDefaultMiddleware(), ...middlewares],
     devTools: process.env.NODE_ENV !== 'production',
-    preloadedState,
     enhancers,
   });
 
   store.subscribe(
     throttle(() => {
-      saveState(store.getState().drawer.comparisons);
+      console.log('Shows every time state is saved to localstorage!');
+      saveComparisonsToLocalStorage(store.getState().drawer.comparisons);
     }, 1000),
   );
 

@@ -1,4 +1,4 @@
-export const loadState = () => {
+export const getComparisonsFromLocalStorage = () => {
   try {
     const serializedComparisons = localStorage.getItem('comparisons');
     if (serializedComparisons === null) {
@@ -10,7 +10,7 @@ export const loadState = () => {
   }
 };
 
-export const saveState = comparisons => {
+export const saveComparisonsToLocalStorage = comparisons => {
   try {
     const serializedComparisons = JSON.stringify(comparisons);
     localStorage.setItem('comparisons', serializedComparisons);
