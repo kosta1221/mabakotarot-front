@@ -23,6 +23,7 @@ interface Props {
   lastItem?: any;
   isLoading?: boolean;
   isSortAsc?: boolean;
+  sites?: string[] | null;
   handleToggleSortingorder?: any;
 }
 
@@ -30,6 +31,7 @@ export function HeadlineSliderPresentor(props: Props) {
   const {
     index,
     headlines,
+    sites,
     // lastItem,
     // isLoading,
     // isSortAsc,
@@ -71,8 +73,8 @@ export function HeadlineSliderPresentor(props: Props) {
 
   return (
     <div>
-      <Typography id="discrete-slider-custom" gutterBottom>
-        Custom marks
+      <Typography id="time-slider" gutterBottom>
+        {`היום ב- ${sites && sites[0]}:`}
       </Typography>
       <Slider
         aria-labelledby="time-slider"
