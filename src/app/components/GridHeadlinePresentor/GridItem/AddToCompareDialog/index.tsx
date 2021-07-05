@@ -15,7 +15,8 @@ import AddIcon from '@material-ui/icons/Add';
 
 import { selectGridHeadlinePresentorState } from '../../slice/selectors';
 import { selectDrawer } from '../../../Drawer/slice/selectors';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
+import { gridHeadlinePresentorActions as actions } from '../../slice';
 
 interface Props {
   onClose: (value: number) => void;
@@ -26,6 +27,7 @@ export function AddToCompareDialog(props: Props) {
 
   const { isDialogOpen } = useSelector(selectGridHeadlinePresentorState);
   const { comparisons } = useSelector(selectDrawer);
+  const dispatch = useDispatch();
 
   const handleListItemClick = (value: number) => {
     onClose(value);
@@ -36,6 +38,7 @@ export function AddToCompareDialog(props: Props) {
       aria-labelledby="add-to-comparisons-dialog-title"
       open={isDialogOpen}
       style={{ backgroundColor: 'transparent' }}
+      onBackdropClick={() => dispatch(actions.setIsDialogOpen(false))}
     >
       <DialogTitle id="add-to-comparisons-dialog-title">בחר השוואה</DialogTitle>
       <List>
