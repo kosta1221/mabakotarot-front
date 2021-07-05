@@ -20,7 +20,7 @@ export function HomePage() {
         </HeadlinesFeedInfiniteScroll> */}
         <HeadlinesFeedInfiniteScroll
           sites={['n12']}
-          countPerFetch={6}
+          countPerFetch={30}
           isSingularFetch={true}
         >
           <HeadlineSliderPresentor />

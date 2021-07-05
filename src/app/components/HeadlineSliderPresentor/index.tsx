@@ -47,7 +47,7 @@ export function HeadlineSliderPresentor(props: Props) {
 
     return {
       value,
-      label: hhmm,
+      label: null, // hhmm
     };
   });
 
@@ -72,8 +72,12 @@ export function HeadlineSliderPresentor(props: Props) {
         marks={marks}
       />
       <Image
-        src="https://mabakotarot.s3.amazonaws.com/haaretz/2021-07-04_18-45.webp"
-        alt={`headline-`}
+        src={
+          headlines?.filter(
+            headline => headline.date.split(' ')[1] === showedHeadline,
+          )[0]?.imageUrl
+        }
+        alt={'headline-image'}
       />
     </div>
   );
