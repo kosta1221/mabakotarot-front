@@ -20,6 +20,7 @@ import { useCreateToggleDrawerUtil } from '../Drawer/utils';
 import { useAppbarSlice } from './slice';
 import { QueryDialog } from './QueryDialog';
 import { SearchBar } from './SearchBar';
+import { useRouter } from '../../../utils/useRouter';
 // import { selectAppbar } from './slice/selectors';
 
 interface Props {}
@@ -29,8 +30,14 @@ export function Appbar(props: Props) {
 
   const { actions } = useAppbarSlice();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, drawerActions);
+
+  const handleHomePageClick = () => {
+    router.push('/');
+    router.history.go(0);
+  };
 
   return (
     <div className={`${classes.root} search-app-bar`}>
@@ -46,7 +53,12 @@ export function Appbar(props: Props) {
             <MenuIcon />
           </IconButton>
 
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            onClick={handleHomePageClick}
+            className={classes.title}
+            variant="h6"
+            noWrap
+          >
             מה בכותרות
           </Typography>
 

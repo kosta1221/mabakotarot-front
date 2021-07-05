@@ -17,6 +17,7 @@ import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
 import AddIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Edit';
+import HomeIcon from '@material-ui/icons/Home';
 
 import { useDrawerSlice } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
@@ -95,6 +96,18 @@ export function Drawer(props: Props) {
       onKeyDown={toggleDrawer(false)}
     >
       <List className={classes.root}>
+      <ListItem
+          button
+          onClick={() => {
+            router.push('/');
+            router.history.go(0);
+          }}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary={'דף הבית'} className={classes.rightText} />
+        </ListItem>
         <ListItem
           button
           onClick={() => {
