@@ -13,6 +13,7 @@ import { DateTime } from 'luxon';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
 import { appbarActions } from '../Appbar/slice';
+import { useGridHeadlinePresentorSlice } from './slice';
 
 interface Props {
   headlines?: Array<any>;
@@ -33,6 +34,8 @@ export function GridHeadlinePresentor(props: Props) {
   } = props;
 
   const dispatch = useDispatch();
+
+  const { actions } = useGridHeadlinePresentorSlice();
   const { startDate, endDate, sites, isFetchError } = useSelector(
     selectHeadlinesFeedInfiniteScroll,
   );

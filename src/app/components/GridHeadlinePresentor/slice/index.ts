@@ -23,7 +23,7 @@ const slice = createSlice({
 
 export const { actions: gridHeadlinePresentorActions } = slice;
 
-export const useGridItemStateSlice = () => {
+export const useGridHeadlinePresentorSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions };
 };

@@ -20,8 +20,6 @@ interface Props {
   lastItem?: any;
   headline?: any;
   index?: number;
-  comparisons?: Array<any>;
-  isDialogOpen?: boolean;
 }
 
 const CompareTooltip = withStyles(theme => ({
@@ -46,6 +44,7 @@ export function GridItem(props: Props) {
   };
 
   const handleCloseDialog = (value: number) => {
+    console.log(value);
     // if user pressed on new comparison button
     if (value === 99) {
       console.log(comparisons.length);
@@ -58,8 +57,10 @@ export function GridItem(props: Props) {
       const newComparisons = [...comparisons, newCompare];
       return dispatch(drawerActions.setComparisons(newComparisons));
     }
+
     dispatch(actions.setIsDialogOpen(false));
     const id = value;
+    console.log(headline);
 
     const editedComparison = comparisons.find(element => element.id === id);
     const comparisonWithNewHeadline = {
@@ -90,7 +91,7 @@ export function GridItem(props: Props) {
             <AddCircleOutlineRoundedIcon fontSize="large" />
           </CompareTooltip>
         </AddToCompareButton>
-        <AddToCompareDialog onClose={handleCloseDialog} />
+        <AddToCompareDialog onClose={value => handleCloseDialog(value)} />
       </GridOptions>
       <Image src={headline.imageUrl} alt={`headline-${index}`} />
     </ItemContainer>
