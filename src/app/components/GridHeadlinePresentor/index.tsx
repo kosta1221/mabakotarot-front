@@ -25,6 +25,7 @@ interface Props {
   isFetchError?: boolean;
   handleToggleSortingorder?: any;
   comparisonItems?: Array<any>;
+  cols?: number;
 }
 
 export function GridHeadlinePresentor(props: Props) {
@@ -38,6 +39,7 @@ export function GridHeadlinePresentor(props: Props) {
     endDate,
     sites,
     isFetchError,
+    cols,
   } = props;
 
   const dispatch = useDispatch();
@@ -64,6 +66,14 @@ export function GridHeadlinePresentor(props: Props) {
   const handleOpenQueryDialog = () => {
     dispatch(appbarActions.setIsQueryDialogOpen(true));
   };
+
+  const gridCols = '1fr '.repeat(cols || 2);
+  const Grid = styled.div`
+    display: grid;
+    grid-template-columns: ${gridCols};
+    grid-gap: 1vw;
+    /* overflow-y: scroll; */
+  `;
 
   const grid = (
     <Grid>
@@ -108,13 +118,6 @@ export function GridHeadlinePresentor(props: Props) {
     </>
   );
 }
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1vw;
-  overflow-y: scroll;
-`;
 
 const CenteredLoader = styled(Loader)`
   display: flex;

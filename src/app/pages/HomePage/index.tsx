@@ -4,6 +4,7 @@ import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
 // import { Feed } from '../../components/Feed';
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
+import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
 
 import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
@@ -51,6 +52,19 @@ export function HomePage() {
           >
             <HeadlineSliderPresentor index={2} />
           </HeadlinesFeedInfiniteScroll>
+
+          <FrameForFeed>
+            <HeadlinesFeedInfiniteScroll
+              index={3}
+              sites={['haaretz']}
+              startDate={''}
+              endDate={''}
+              countPerFetch={5}
+              isSingularFetch={true}
+            >
+              <GridHeadlinePresentor cols={1} />
+            </HeadlinesFeedInfiniteScroll>
+          </FrameForFeed>
         </Grid>
       </Content>
     </>
@@ -70,4 +84,9 @@ const Grid = styled.div`
   grid-template-columns: 1fr 1fr;
   grid-gap: 1vw;
   /* overflow-y: scroll; */
+`;
+
+const FrameForFeed = styled.div`
+  height: 30vw;
+  overflow-y: scroll;
 `;
