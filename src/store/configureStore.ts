@@ -20,7 +20,7 @@ export function configureAppStore() {
 
   const preloadedState: RootState = {
     drawer: {
-      comparisons: loadState(),
+      comparisons: loadState() || [],
       isComparisonOpen: false,
       isDrawerDisplayed: false,
     },
