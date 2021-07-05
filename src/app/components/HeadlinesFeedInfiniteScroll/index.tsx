@@ -7,11 +7,12 @@ import * as React from 'react';
 
 import { useEffect, useCallback, useRef } from 'react';
 
-import { useHeadlinesFeedInfiniteScrollSlice } from './slice';
+import { headlinesFeedsActions, initialSingleHeadlineFeedState } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectHeadlinesFeedInfiniteScroll } from './slice/selectors';
+import { selectHeadlinesFeeds } from './slice/selectors';
 
 interface Props {
+  index: number;
   children?: React.ReactElement<any, any>;
   countPerFetch?: number;
   sites?: string[] | null;
@@ -23,6 +24,7 @@ interface Props {
 
 export function HeadlinesFeedInfiniteScroll(props: Props) {
   const {
+    index,
     children,
     sites,
     countPerFetch,
@@ -32,49 +34,75 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     search,
   } = props;
 
-  const { actions } = useHeadlinesFeedInfiniteScrollSlice();
   const dispatch = useDispatch();
+  const allHeadlineFeeds = useSelector(selectHeadlinesFeeds).headlineFeeds;
+
+  if (index > allHeadlineFeeds.length - 1) {
+    console.log('ayo');
+    dispatch(
+      headlinesFeedsActions.addHeadlineFeed(initialSingleHeadlineFeedState),
+    );
+  }
+
   const {
     headlines,
     page,
     loadMoreHeadlines,
     isLoading,
     isSortAsc,
-  } = useSelector(selectHeadlinesFeedInfiniteScroll);
+    isFetchError,
+  } = useSelector(selectHeadlinesFeeds).headlineFeeds[index];
 
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
-    sites && dispatch(actions.setSites(sites));
-  }, [dispatch, actions, sites]);
+    sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
+  }, [index, dispatch, sites]);
 
   useEffect(() => {
-    startDate && dispatch(actions.setStartDate(startDate));
-  }, [dispatch, actions, startDate]);
+    startDate &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsStartDate({ index, startDate }),
+      );
+  }, [index, dispatch, startDate]);
 
   useEffect(() => {
-    endDate && dispatch(actions.setEndDate(endDate));
-  }, [dispatch, actions, endDate]);
+    endDate &&
+      dispatch(headlinesFeedsActions.setOneFeedsEndDate({ index, endDate }));
+  }, [index, dispatch, endDate]);
 
   useEffect(() => {
-    countPerFetch && dispatch(actions.setCountPerFetch(countPerFetch));
-  }, [dispatch, actions, countPerFetch]);
+    countPerFetch &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsCountPerFetch({
+          index,
+          countPerFetch,
+        }),
+      );
+  }, [index, dispatch, countPerFetch]);
 
   useEffect(() => {
-    isSingularFetch && dispatch(actions.setIsSingularFetch(isSingularFetch));
-  }, [dispatch, actions, isSingularFetch]);
+    isSingularFetch &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsIsSingularFetch({
+          index,
+          isSingularFetch,
+        }),
+      );
+  }, [index, dispatch, isSingularFetch]);
 
   useEffect(() => {
-    search && dispatch(actions.setSearch(search));
-  }, [dispatch, actions, search]);
+    search &&
+      dispatch(headlinesFeedsActions.setOneFeedsSearch({ index, search }));
+  }, [index, dispatch, search]);
 
   useEffect(() => {
-    dispatch(actions.sagaGetHeadlinesInfiniteScroll());
-  }, [dispatch, actions, page]);
+    dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
+  }, [index, dispatch, page]);
 
   useEffect(() => {
-    dispatch(actions.sortHeadlines(isSortAsc));
-  }, [dispatch, actions, isSortAsc]);
+    dispatch(headlinesFeedsActions.sortOneFeedsHeadlines({ index, isSortAsc }));
+  }, [index, dispatch, isSortAsc]);
 
   const lastItem = useCallback(
     element => {
@@ -84,7 +112,12 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting && loadMoreHeadlines) {
-            dispatch(actions.incrementPageByAmount(1));
+            dispatch(
+              headlinesFeedsActions.incrementOneFeedsPageByAmount({
+                index,
+                amount: 1,
+              }),
+            );
           }
         },
         { threshold: 1 },
@@ -94,11 +127,11 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
         observer.current.observe(element);
       }
     },
-    [dispatch, actions, loadMoreHeadlines],
+    [index, dispatch, loadMoreHeadlines],
   );
 
   const handleToggleSortingorder = e => {
-    dispatch(actions.toggleIsSortAsc());
+    dispatch(headlinesFeedsActions.toggleOneFeedsIsSortAsc(index));
   };
 
   if (!children) {
@@ -112,6 +145,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
         lastItem,
         isLoading,
         isSortAsc,
+        startDate,
+        endDate,
+        sites,
+        isFetchError,
         handleToggleSortingorder,
       })}
     </>

@@ -6,11 +6,13 @@ import { Feed } from '../../components/Feed';
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
 
 import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
+import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
 
 import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
 export function HomePage() {
   useSlidersSlice();
+  useHeadlinesFeedsSlice();
 
   return (
     <>
@@ -23,11 +25,21 @@ export function HomePage() {
           <Feed />
         </HeadlinesFeedInfiniteScroll> */}
         <HeadlinesFeedInfiniteScroll
+          index={0}
           sites={['n12']}
-          countPerFetch={30}
+          countPerFetch={3}
           isSingularFetch={true}
         >
           <HeadlineSliderPresentor index={0} />
+        </HeadlinesFeedInfiniteScroll>
+
+        <HeadlinesFeedInfiniteScroll
+          index={1}
+          sites={['ynet']}
+          countPerFetch={3}
+          isSingularFetch={true}
+        >
+          <HeadlineSliderPresentor index={1} />
         </HeadlinesFeedInfiniteScroll>
       </Content>
     </>

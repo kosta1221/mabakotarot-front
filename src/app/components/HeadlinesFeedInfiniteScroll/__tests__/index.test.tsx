@@ -5,7 +5,7 @@ import { HeadlinesFeedInfiniteScroll } from '..';
 
 describe('<HeadlinesFeedInfiniteScroll  />', () => {
   it('should match snapshot', () => {
-    const loadingIndicator = render(<HeadlinesFeedInfiniteScroll />);
+    const loadingIndicator = render(<HeadlinesFeedInfiniteScroll index={0} />);
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });
 });

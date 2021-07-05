@@ -1,6 +1,13 @@
 /* --- STATE --- */
-export interface HeadlinesFeedInfiniteScrollState {
-  headlines: Array<any>;
+
+import { Headline } from 'types/Headline';
+export interface HeadlinesFeedsState {
+  headlineFeeds: HeadlinesFeedInfiniteScroll[];
+}
+
+export interface HeadlinesFeedInfiniteScroll {
+  index: number;
+  headlines: Array<Headline>;
   page: number;
   countPerFetch: number;
   loadMoreHeadlines: boolean;

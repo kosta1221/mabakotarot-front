@@ -1,11 +1,15 @@
-import { call, put, takeLatest, select } from 'redux-saga/effects';
-import { headlinesFeedInfiniteScrollActions as actions } from '.';
+import { call, put, takeEvery, select } from 'redux-saga/effects';
+import { headlinesFeedsActions as actions } from '.';
 import axios from 'axios';
 
-import { selectHeadlinesFeedInfiniteScroll } from './selectors';
+import { selectHeadlinesFeeds } from './selectors';
 
-function* fetchHeadlinesWorkerSaga() {
+function* fetchHeadlinesWorkerSaga(action) {
+  const index = action.payload;
+
   try {
+    const allHeadlineFeeds = yield select(selectHeadlinesFeeds);
+
     const {
       page,
       countPerFetch,
@@ -16,8 +20,9 @@ function* fetchHeadlinesWorkerSaga() {
       endDate,
       isSingularFetch,
       search,
-    } = yield select(selectHeadlinesFeedInfiniteScroll);
-    yield put(actions.setIsLoading(true));
+    } = yield allHeadlineFeeds.headlineFeeds[index];
+
+    yield put(actions.setOneFeedsIsLoading({ index, isLoading: true }));
 
     const fetchedHeadlines = yield call(
       fetchHeadlines,
@@ -31,19 +36,33 @@ function* fetchHeadlinesWorkerSaga() {
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
-      yield put(actions.setLoadMoreHeadlines(false));
+      yield put(
+        actions.setOneFeedsLoadMoreHeadlines({
+          index,
+          loadMoreHeadlines: false,
+        }),
+      );
     }
-    yield put(actions.setHeadlines([...currentHeadlines, ...fetchedHeadlines]));
 
-    yield put(actions.setIsLoading(false));
+    // console.log('current headlines: ', currentHeadlines);
+    // console.log('fetched headlines: ', fetchedHeadlines);
+
+    yield put(
+      actions.setOneFeedsHeadlines({
+        index,
+        headlines: [...currentHeadlines, ...fetchedHeadlines],
+      }),
+    );
+
+    yield put(actions.setOneFeedsIsLoading({ index, isLoading: false }));
   } catch (e) {
     console.log(e);
-    yield put(actions.setItFetchError(true));
+    yield put(actions.setOneFeedsIsFetchError({ index, isFetchError: true }));
   }
 }
 
 export function* headlinesFeedInfiniteScrollSaga() {
-  yield takeLatest(
+  yield takeEvery(
     actions.sagaGetHeadlinesInfiniteScroll.type,
     fetchHeadlinesWorkerSaga,
   );

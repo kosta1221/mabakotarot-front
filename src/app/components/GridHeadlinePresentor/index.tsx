@@ -10,8 +10,7 @@ import { GridItem } from './GridItem';
 
 import { DateTime } from 'luxon';
 
-import { useSelector, useDispatch } from 'react-redux';
-import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
+import { useDispatch } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
 import { useGridHeadlinePresentorSlice } from './slice';
 
@@ -20,6 +19,10 @@ interface Props {
   lastItem?: any;
   isLoading?: boolean;
   isSortAsc?: boolean;
+  startDate?: string;
+  endDate?: string;
+  sites?: any[];
+  isFetchError?: boolean;
   handleToggleSortingorder?: any;
   comparisonItems?: Array<any>;
 }
@@ -31,14 +34,16 @@ export function GridHeadlinePresentor(props: Props) {
     isLoading,
     isSortAsc,
     handleToggleSortingorder,
+    startDate,
+    endDate,
+    sites,
+    isFetchError,
   } = props;
 
   const dispatch = useDispatch();
 
-  const { actions } = useGridHeadlinePresentorSlice();
-  const { startDate, endDate, sites, isFetchError } = useSelector(
-    selectHeadlinesFeedInfiniteScroll,
-  );
+  // NEED TO FIGURE OUT WHY WE ARE USING THIS
+  useGridHeadlinePresentorSlice();
 
   const pickedStartDateTime = new DateTime.fromFormat(
     startDate,
@@ -83,7 +88,7 @@ export function GridHeadlinePresentor(props: Props) {
       {startDate && endDate && (
         <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
       )}
-      {sites.length > 0 ? (
+      {sites && sites.length > 0 ? (
         <span>{`אתרים: ${sites.toString()}. `}</span>
       ) : (
         <span>{`כל האתרים. `}</span>

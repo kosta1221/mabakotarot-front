@@ -4,9 +4,9 @@
  *
  */
 import * as React from 'react';
-import Loader from 'react-loader-spinner';
+// import Loader from 'react-loader-spinner';
 
-import { DateTime } from 'luxon';
+// import { DateTime } from 'luxon';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSliders } from './slice/selectors';
@@ -30,14 +30,19 @@ export function HeadlineSliderPresentor(props: Props) {
   const {
     index,
     headlines,
-    lastItem,
-    isLoading,
-    isSortAsc,
-    handleToggleSortingorder,
+    // lastItem,
+    // isLoading,
+    // isSortAsc,
+    // handleToggleSortingorder,
   } = props;
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
+
+  const thisSlider =
+    sliders && sliders.filter(slider => slider.index === index)[0];
+
+  //   console.log(thisSlider);
 
   React.useEffect(() => {
     if (
@@ -74,7 +79,7 @@ export function HeadlineSliderPresentor(props: Props) {
         getAriaValueText={numFormatter}
         min={0}
         max={95}
-        value={getNumFromHHMM(sliders[index].showedHeadline)}
+        value={getNumFromHHMM((thisSlider && thisSlider.showedHeadline) || '')}
         onChange={(e, v) => {
           if (Array.isArray(v)) return;
           dispatch(
@@ -93,7 +98,7 @@ export function HeadlineSliderPresentor(props: Props) {
         src={
           headlines?.filter(
             headline =>
-              headline.date.split(' ')[1] === sliders[index].showedHeadline,
+              headline.date.split(' ')[1] === thisSlider?.showedHeadline,
           )[0]?.imageUrl
         }
         alt={'headline-image'}

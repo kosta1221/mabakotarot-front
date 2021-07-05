@@ -10,6 +10,7 @@ import queryString from 'query-string';
 
 import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
 import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll/Loadable';
+import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
 
 interface RouteParams {
   site: string;
@@ -19,6 +20,7 @@ interface Props extends RouteComponentProps<RouteParams> {}
 
 export function HeadlinesPage(props: Props) {
   const { params } = props.match;
+  useHeadlinesFeedsSlice();
 
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
@@ -30,6 +32,7 @@ export function HeadlinesPage(props: Props) {
 
   return (
     <HeadlinesFeedInfiniteScroll
+      index={0}
       countPerFetch={10}
       sites={
         (params.site &&

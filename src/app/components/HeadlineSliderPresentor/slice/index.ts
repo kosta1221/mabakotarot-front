@@ -16,10 +16,10 @@ const slice = createSlice({
     },
     setSlider(state, action: PayloadAction<Slider>) {
       state.sliders = [
+        action.payload,
         ...state.sliders.filter(
           slider => slider.index !== action.payload.index,
         ),
-        action.payload,
       ];
     },
     removeSlider(state, action: PayloadAction<number>) {
