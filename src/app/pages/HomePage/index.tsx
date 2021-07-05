@@ -5,9 +5,13 @@ import { Helmet } from 'react-helmet-async';
 import { Feed } from '../../components/Feed';
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
 
+import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
+
 import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
 export function HomePage() {
+  useSlidersSlice();
+
   return (
     <>
       <Helmet>
@@ -23,7 +27,7 @@ export function HomePage() {
           countPerFetch={30}
           isSingularFetch={true}
         >
-          <HeadlineSliderPresentor />
+          <HeadlineSliderPresentor index={0} />
         </HeadlinesFeedInfiniteScroll>
       </Content>
     </>

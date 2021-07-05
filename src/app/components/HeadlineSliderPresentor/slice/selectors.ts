@@ -3,6 +3,6 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'types';
 import { initialState } from '.';
 
-const selectSlice = (state: RootState) => state.slider || initialState;
+const selectSlice = (state: RootState) => state.sliders || initialState;
 
-export const selectSlider = createSelector([selectSlice], state => state);
+export const selectSliders = createSelector([selectSlice], state => state);

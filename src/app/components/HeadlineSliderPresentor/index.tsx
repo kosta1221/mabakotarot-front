@@ -9,8 +9,8 @@ import Loader from 'react-loader-spinner';
 import { DateTime } from 'luxon';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { selectSlider } from './slice/selectors';
-import { useSliderSlice } from './slice';
+import { selectSliders } from './slice/selectors';
+import { slidersActions } from './slice';
 
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
@@ -18,6 +18,7 @@ import Slider from '@material-ui/core/Slider';
 import { numFormatter, getNumFromHHMM } from 'utils/helpers';
 
 interface Props {
+  index: number;
   headlines?: Array<any>;
   lastItem?: any;
   isLoading?: boolean;
@@ -27,6 +28,7 @@ interface Props {
 
 export function HeadlineSliderPresentor(props: Props) {
   const {
+    index,
     headlines,
     lastItem,
     isLoading,
@@ -34,9 +36,8 @@ export function HeadlineSliderPresentor(props: Props) {
     handleToggleSortingorder,
   } = props;
 
-  const { actions } = useSliderSlice();
   const dispatch = useDispatch();
-  const { showedHeadline } = useSelector(selectSlider);
+  const { sliders } = useSelector(selectSliders);
 
   React.useEffect(() => {
     if (
@@ -45,9 +46,10 @@ export function HeadlineSliderPresentor(props: Props) {
       headlines[headlines.length - 1].date
     ) {
       // When headlines get fetched, set the showed headline to the first one fetched (most recent)
-      dispatch(actions.setShowedHeadline(headlines[0].date.split(' ')[1]));
+      const showedHeadline = headlines[0].date.split(' ')[1];
+      dispatch(slidersActions.setSlider({ index, showedHeadline }));
     }
-  }, [dispatch, actions, headlines]);
+  }, [dispatch, headlines, index]);
 
   const marks = headlines?.map(headline => {
     const hhmm = headline.date.split(' ')[1];
@@ -72,10 +74,15 @@ export function HeadlineSliderPresentor(props: Props) {
         getAriaValueText={numFormatter}
         min={0}
         max={95}
-        value={getNumFromHHMM(showedHeadline)}
+        value={getNumFromHHMM(sliders[index].showedHeadline)}
         onChange={(e, v) => {
           if (Array.isArray(v)) return;
-          dispatch(actions.setShowedHeadline(numFormatter(v)));
+          dispatch(
+            slidersActions.setSlider({
+              index,
+              showedHeadline: numFormatter(v),
+            }),
+          );
         }}
         step={null}
         valueLabelDisplay="on"
@@ -85,7 +92,8 @@ export function HeadlineSliderPresentor(props: Props) {
       <Image
         src={
           headlines?.filter(
-            headline => headline.date.split(' ')[1] === showedHeadline,
+            headline =>
+              headline.date.split(' ')[1] === sliders[index].showedHeadline,
           )[0]?.imageUrl
         }
         alt={'headline-image'}

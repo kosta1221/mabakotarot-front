@@ -5,7 +5,7 @@ import { HeadlineSliderPresentor } from '..';
 
 describe('<HeadlineSliderPresentor  />', () => {
   it('should match snapshot', () => {
-    const loadingIndicator = render(<HeadlineSliderPresentor />);
+    const loadingIndicator = render(<HeadlineSliderPresentor index={0} />);
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });
 });

@@ -1,25 +1,38 @@
 import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
-import { SliderState } from './types';
+import { Slider, SlidersState } from './types';
 
-export const initialState: SliderState = {
-  showedHeadline: '',
+export const initialState: SlidersState = {
+  sliders: [{ index: 0, showedHeadline: '' }],
 };
 
 const slice = createSlice({
-  name: 'slider',
+  name: 'sliders',
   initialState,
   reducers: {
-    setShowedHeadline(state, action: PayloadAction<string>) {
-      state.showedHeadline = action.payload;
+    setSliders(state, action: PayloadAction<Slider[]>) {
+      state.sliders = action.payload;
+    },
+    setSlider(state, action: PayloadAction<Slider>) {
+      state.sliders = [
+        ...state.sliders.filter(
+          slider => slider.index !== action.payload.index,
+        ),
+        action.payload,
+      ];
+    },
+    removeSlider(state, action: PayloadAction<number>) {
+      state.sliders = [
+        ...state.sliders.filter(slider => slider.index !== action.payload),
+      ];
     },
   },
 });
 
-export const { actions: sliderActions } = slice;
+export const { actions: slidersActions } = slice;
 
-export const useSliderSlice = () => {
+export const useSlidersSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions };
 };

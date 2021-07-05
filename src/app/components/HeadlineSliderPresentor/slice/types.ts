@@ -1,4 +1,9 @@
 /* --- STATE --- */
-export interface SliderState {
+export interface SlidersState {
+  sliders: Slider[];
+}
+
+export interface Slider {
+  index: number;
   showedHeadline: string;
 }
