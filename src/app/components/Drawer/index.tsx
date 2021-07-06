@@ -5,6 +5,7 @@
  */
 import * as React from 'react';
 
+import styled from 'styled-components/macro';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
@@ -17,6 +18,7 @@ import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
 import AddIcon from '@material-ui/icons/Add';
 // import EditIcon from '@material-ui/icons/Edit';
+import HomeIcon from '@material-ui/icons/Home';
 import EdiText from 'react-editext';
 
 import { useDrawerSlice } from './slice';
@@ -106,6 +108,18 @@ export function Drawer(props: Props) {
         <ListItem
           button
           onClick={() => {
+            router.push('/');
+            router.history.go(0);
+          }}
+        >
+          <ListItemIcon>
+            <HomeIcon />
+          </ListItemIcon>
+          <ListItemText primary={'דף הבית'} className={classes.rightText} />
+        </ListItem>
+        <ListItem
+          button
+          onClick={() => {
             router.push('/headlines');
             router.history.go(0);
           }}
@@ -138,7 +152,7 @@ export function Drawer(props: Props) {
                   }
                 >
                   <ListItemText>
-                    <EdiText
+                    <StyledEdiText
                       value={comparison.text}
                       type="text"
                       onSave={handleSave}
@@ -180,3 +194,45 @@ export function Drawer(props: Props) {
     </React.Fragment>
   );
 }
+
+const StyledEdiText = styled(EdiText)`
+  div[editext='view-container'],
+  div[editext='edit-container'] {
+    justify-content: space-between;
+  }
+  button {
+    background: none;
+    color: inherit;
+    border: none;
+    padding: 0;
+    font: inherit;
+    outline: inherit;
+    font-size: 1.4rem;
+    border-radius: 0;
+  }
+
+  button[editext='edit-button'] {
+    &:hover {
+      color: orange;
+    }
+  }
+
+  button[editext='save-button'] {
+    width: 50px;
+    color: green;
+    border-radius: 60%;
+
+    &:hover {
+      background: greenyellow;
+    }
+  }
+  button[editext='cancel-button'] {
+    color: red;
+    border-radius: 60%;
+    &:hover {
+      background: crimson;
+
+      color: #fff;
+    }
+  }
+`;
