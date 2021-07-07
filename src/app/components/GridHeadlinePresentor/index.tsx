@@ -6,13 +6,18 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import Loader from 'react-loader-spinner';
+
+import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
 
 import { DateTime } from 'luxon';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
 import { useGridHeadlinePresentorSlice } from './slice';
+import { selectDrawer } from '../Drawer/slice/selectors';
+import { drawerActions } from '../Drawer/slice';
+import { selectGridHeadlinePresentorState } from './slice/selectors';
 
 interface Props {
   headlines?: Array<any>;
@@ -43,22 +48,25 @@ export function GridHeadlinePresentor(props: Props) {
   } = props;
 
   const dispatch = useDispatch();
+  const { comparisons } = useSelector(selectDrawer);
+  const { selectedHeadline } = useSelector(selectGridHeadlinePresentorState);
 
   // NEED TO FIGURE OUT WHY WE ARE USING THIS
-  useGridHeadlinePresentorSlice();
+  const { actions } = useGridHeadlinePresentorSlice();
+
   const pickedStartDateTime = startDate
     ? new DateTime.fromFormat(startDate, 'yyyy-MM-dd HH:mm').setLocale('he')
-    : new DateTime.fromFormat('2017-01-01 12:50', 'yyyy-MM-dd HH:mm');
-  const pickedStartDatePresentable = pickedStartDateTime.toFormat(
-    'dd MMM yyyy HH:mm',
-  );
+    : null;
+  const pickedStartDatePresentable = pickedStartDateTime
+    ? pickedStartDateTime.toFormat('dd MMM yyyy HH:mm')
+    : null;
 
   const pickedEndDateTime = endDate
     ? new DateTime.fromFormat(endDate, 'yyyy-MM-dd HH:mm').setLocale('he')
-    : new DateTime.fromFormat('2025-01-01 12:50', 'yyyy-MM-dd HH:mm');
-  const pickedEndDatePresentable = pickedEndDateTime.toFormat(
-    'dd MMM yyyy HH:mm',
-  );
+    : null;
+  const pickedEndDatePresentable = pickedEndDateTime
+    ? pickedEndDateTime.toFormat('dd MMM yyyy HH:mm')
+    : null;
 
   const handleOpenQueryDialog = () => {
     dispatch(appbarActions.setIsQueryDialogOpen(true));
@@ -71,6 +79,50 @@ export function GridHeadlinePresentor(props: Props) {
     grid-gap: 1vw;
     /* overflow-y: scroll; */
   `;
+
+  const handleCloseDialog = (comparisonId: number) => {
+    // if user pressed on new comparison button
+    if (comparisonId === 99) {
+      if (comparisons.length > 8) {
+        alert('מותר עד 9 השוואות!');
+        return;
+      }
+      const newCompare = {
+        id: comparisons.length + 1,
+        text: `השוואה חדשה - ${comparisons.length + 1}`,
+        headlines: [],
+      };
+
+      const newComparisons = [...comparisons, newCompare];
+      return dispatch(drawerActions.setComparisons(newComparisons));
+    }
+
+    dispatch(actions.setIsDialogOpen(false));
+    console.log(comparisonId);
+    console.log(
+      headlines?.filter(headline => headline._id === selectedHeadline),
+    );
+
+    const editedComparison = comparisons.find(
+      element => element.id === comparisonId,
+    );
+    const comparisonWithNewHeadline = {
+      id: editedComparison?.id,
+      text: editedComparison?.text,
+      headlines: [
+        ...editedComparison?.headlines,
+        headlines?.filter(headline => headline._id === selectedHeadline)[0],
+      ],
+    };
+
+    const newComparisons = [
+      ...comparisons.filter(comparison => comparison.id !== comparisonId),
+      comparisonWithNewHeadline,
+    ];
+
+    dispatch(drawerActions.setComparisons(newComparisons));
+    console.log(comparisons);
+  };
 
   const grid = (
     <Grid>
@@ -89,6 +141,9 @@ export function GridHeadlinePresentor(props: Props) {
 
   return (
     <>
+      <AddToCompareDialog
+        onClose={comparisonId => handleCloseDialog(comparisonId)}
+      />
       <span onClick={handleToggleSortingorder}>{`סדר  ${
         isSortAsc ? 'עולה' : 'יורד'
       }, `}</span>

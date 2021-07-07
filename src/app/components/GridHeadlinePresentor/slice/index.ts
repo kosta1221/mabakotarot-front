@@ -5,7 +5,7 @@ import { GridHeadlinePresentorState } from './types';
 
 export const initialState: GridHeadlinePresentorState = {
   isDialogOpen: false,
-  selectedComparison: 1,
+  selectedHeadline: '',
 };
 
 const slice = createSlice({
@@ -15,8 +15,8 @@ const slice = createSlice({
     setIsDialogOpen(state, action: PayloadAction<boolean>) {
       state.isDialogOpen = action.payload;
     },
-    setSelectedComparison(state, action: PayloadAction<number>) {
-      state.selectedComparison = action.payload;
+    setSelectedHeadline(state, action: PayloadAction<string>) {
+      state.selectedHeadline = action.payload;
     },
   },
 });
