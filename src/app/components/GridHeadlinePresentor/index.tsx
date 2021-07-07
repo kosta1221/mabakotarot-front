@@ -46,19 +46,16 @@ export function GridHeadlinePresentor(props: Props) {
 
   // NEED TO FIGURE OUT WHY WE ARE USING THIS
   useGridHeadlinePresentorSlice();
-
-  const pickedStartDateTime = new DateTime.fromFormat(
-    startDate,
-    'yyyy-MM-dd HH:mm',
-  ).setLocale('he');
+  const pickedStartDateTime = startDate
+    ? new DateTime.fromFormat(startDate, 'yyyy-MM-dd HH:mm').setLocale('he')
+    : new DateTime.fromFormat('2017-01-01 12:50', 'yyyy-MM-dd HH:mm');
   const pickedStartDatePresentable = pickedStartDateTime.toFormat(
     'dd MMM yyyy HH:mm',
   );
 
-  const pickedEndDateTime = new DateTime.fromFormat(
-    endDate,
-    'yyyy-MM-dd HH:mm',
-  ).setLocale('he');
+  const pickedEndDateTime = endDate
+    ? new DateTime.fromFormat(endDate, 'yyyy-MM-dd HH:mm').setLocale('he')
+    : new DateTime.fromFormat('2025-01-01 12:50', 'yyyy-MM-dd HH:mm');
   const pickedEndDatePresentable = pickedEndDateTime.toFormat(
     'dd MMM yyyy HH:mm',
   );
