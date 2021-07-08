@@ -4,13 +4,20 @@
  *
  */
 import * as React from 'react';
+import { useRef } from 'react';
 import styled from 'styled-components/macro';
 import queryString from 'query-string';
 import CloseIcon from '@material-ui/icons/Close';
+import CompareIcon from '@material-ui/icons/Compare';
+import FullscreenIcon from '@material-ui/icons/Fullscreen';
+import Popover from '@material-ui/core/Popover';
+import ReactCompareImage from 'react-compare-image';
 
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
+import { selectComparePage } from './slice/selectors';
 import { drawerActions } from '../../components/Drawer/slice';
+import { useSideBySideComparisonSlice } from './slice';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 
@@ -18,8 +25,14 @@ interface Props {}
 
 export function ComparePage(props: Props) {
   const { comparisons } = useSelector(selectDrawer);
+  const { isSideBySideComparisonOpen, chosenImages } = useSelector(
+    selectComparePage,
+  );
+
+  const { actions } = useSideBySideComparisonSlice();
   const dispatch = useDispatch();
-  console.log(comparisons);
+
+  const anchorRef = useRef(null);
   const location = useLocation();
   const queryParams = queryString.parse(location.search);
 
@@ -32,8 +45,6 @@ export function ComparePage(props: Props) {
       : null;
 
   const handleRemoveClick = headline => event => {
-    console.log(headline);
-    console.log(event.currentTarget.id);
     const idToRemove = event.currentTarget.id;
 
     const headlinesUpdated = comparisonData.headlines.filter(
@@ -53,10 +64,61 @@ export function ComparePage(props: Props) {
     dispatch(drawerActions.setComparisons(newComparisons));
   };
 
+  const handleCompareClick = () => {
+    if (comparisonData?.headlines.length < 2) {
+      alert('צריך לפחות 2 כותרות על מנת להשוות תמונות צד לצד זו');
+    }
+    if (comparisonData?.headlines.length === 2) {
+      dispatch(
+        actions.setChosenImages([
+          comparisonData.headlines[0].imageUrl,
+          comparisonData.headlines[1].imageUrl,
+        ]),
+      );
+      dispatch(actions.setIsSideBySideComparisonOpen(true));
+      console.log('here');
+      console.log(anchorRef);
+    }
+  };
+
+  const handleClose = () => {
+    dispatch(actions.setIsSideBySideComparisonOpen(false));
+  };
+
   const compareDisplay = (
     <CompareContainer>
       <Title>{comparisonData?.text}</Title>
-      <HeadlinesContainer>
+      <CompareTools>
+        <ToolButton onClick={handleCompareClick}>
+          <CompareIcon />
+        </ToolButton>
+        <ToolButton>
+          <FullscreenIcon />
+        </ToolButton>
+        <ToolButton></ToolButton>
+        <ToolButton></ToolButton>
+      </CompareTools>
+      <Popover
+        open={isSideBySideComparisonOpen}
+        onClose={handleClose}
+        anchorEl={anchorRef.current}
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+        transformOrigin={{
+          vertical: 'top',
+          horizontal: 'center',
+        }}
+      >
+        <SideBySideContainer>
+          <StyledReactCompareImage
+            leftImage={chosenImages[0]}
+            rightImage={chosenImages[1]}
+          />
+        </SideBySideContainer>
+      </Popover>
+      <HeadlinesContainer ref={anchorRef}>
         {comparisonData?.headlines.map((headline, i) => {
           return (
             <ItemContainer key={`${headline.id}-${i}`}>
@@ -111,7 +173,8 @@ const ItemContainer = styled.div`
   justify-content: center;
   border: 1px solid black;
   margin: 0.5vw;
-  flex: 0 1 25%;
+  flex: 1 1 25%;
+  max-width: 33%;
 `;
 
 const CloseButton = styled.div`
@@ -134,4 +197,27 @@ const Divider = styled.hr`
 
 const Image = styled.img`
   max-width: 100%;
+`;
+
+const CompareTools = styled.div`
+  display: flex;
+  width: 35vw;
+  margin: auto;
+  justify-content: space-around;
+`;
+
+const ToolButton = styled.button`
+  width: 4vw;
+  height: 4vh;
+`;
+
+const SideBySideContainer = styled.div`
+  width: 1536px;
+  height: 754px;
+`;
+
+const StyledReactCompareImage = styled(ReactCompareImage)`
+  box-sizing: border-box;
+  width: 100%;
+  display: inline-block;
 `;
