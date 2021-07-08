@@ -17,10 +17,10 @@ const slice = createSlice({
       state.headlineOneChecked = action.payload;
     },
     setHeadlineTwoChecked(state, action: PayloadAction<boolean>) {
-      state.headlineOneChecked = action.payload;
+      state.headlineTwoChecked = action.payload;
     },
     setHeadlineThreeChecked(state, action: PayloadAction<boolean>) {
-      state.headlineOneChecked = action.payload;
+      state.headlineThreeChecked = action.payload;
     },
   },
 });
@@ -31,15 +31,3 @@ export const useComparisonTableSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   return { actions: slice.actions };
 };
-
-/**
- * Example Usage:
- *
- * export function MyComponentNeedingThisSlice() {
- *  const { actions } = useComparisonTableSlice();
- *
- *  const onButtonClick = (evt) => {
- *    dispatch(actions.someAction());
- *   };
- * }
- */

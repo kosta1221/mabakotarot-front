@@ -12,9 +12,12 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
-// import Checkbox from '@material-ui/core/Checkbox';
+import Checkbox from '@material-ui/core/Checkbox';
 
 import { makeStyles } from '@material-ui/core/styles';
+import { useSelector, useDispatch } from 'react-redux';
+import { useComparisonTableSlice } from './slice';
+import { selectComparisonTable } from './slice/selectors';
 
 interface Props {
   comparisonData: any;
@@ -52,27 +55,51 @@ function createData(
 export function ComaprisonTable(props: Props) {
   const { comparisonData } = props;
   const { headlines } = comparisonData;
+  const dispatch = useDispatch();
+  const { actions } = useComparisonTableSlice();
+
+  const {
+    headlineOneChecked,
+    headlineTwoChecked,
+    headlineThreeChecked,
+  } = useSelector(selectComparisonTable);
   const classes = useStyles();
 
+  const handleCheckboxChange = event => {
+    console.log(event?.currentTarget?.id);
+    if (event?.currentTarget?.id === '1') {
+      dispatch(actions.setHeadlineOneChecked(!headlineOneChecked));
+      return;
+    } else if (event?.currentTarget?.id === '2') {
+      dispatch(actions.setHeadlineTwoChecked(!headlineTwoChecked));
+      return;
+    }
+    dispatch(actions.setHeadlineThreeChecked(!headlineThreeChecked));
+    return;
+  };
+
   const rows = [
-    // createData(
-    //   'סמן כותרת',
-    //   <Checkbox
-    //     checked={headlineOneChecked}
-    //     onChange={handleChange}
-    //     inputProps={{ 'aria-label': 'primary checkbox' }}
-    //   />,
-    //   <Checkbox
-    //     checked={headlineTwoChecked}
-    //     onChange={handleChange}
-    //     inputProps={{ 'aria-label': 'primary checkbox' }}
-    //   />,
-    //   <Checkbox
-    //     checked={headlineThreeChecked}
-    //     onChange={handleChange}
-    //     inputProps={{ 'aria-label': 'primary checkbox' }}
-    //   />,
-    // ),
+    createData(
+      'סמן כותרת',
+      <Checkbox
+        id="1"
+        checked={headlineOneChecked}
+        onChange={event => handleCheckboxChange(event)}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />,
+      <Checkbox
+        id="2"
+        checked={headlineTwoChecked}
+        onChange={event => handleCheckboxChange(event)}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />,
+      <Checkbox
+        id="3"
+        checked={headlineThreeChecked}
+        onChange={event => handleCheckboxChange(event)}
+        inputProps={{ 'aria-label': 'primary checkbox' }}
+      />,
+    ),
     createData(
       'אתר',
       headlines[0].site,
@@ -117,8 +144,6 @@ export function ComaprisonTable(props: Props) {
     ),
   ];
 
-  console.log(rows);
-
   return (
     <TableContainer component={Paper}>
       <Table className={classes.table} aria-label="simple table">
@@ -154,12 +179,3 @@ const Image = styled.img`
 `;
 
 const ArticleLink = styled.a``;
-
-// const CloseButton = styled.div`
-//   align-self: flex-start;
-//   margin: 5px;
-
-//   &:hover {
-//     cursor: pointer;
-//   }
-// `;
