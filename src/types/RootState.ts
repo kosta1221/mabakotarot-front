@@ -5,6 +5,7 @@ import { HeadlinesFeedsState } from 'app/components/HeadlinesFeedInfiniteScroll/
 import { GridHeadlinePresentorState } from 'app/components/GridHeadlinePresentor/slice/types';
 import { SlidersState } from 'app/components/HeadlineSliderPresentor/slice/types';
 import { ComparePageState } from 'app/pages/ComparePage/slice/types';
+import { ComparisonTableState } from 'app/components/ComaprisonTable/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 
@@ -19,5 +20,6 @@ export interface RootState {
   gridHeadlinePresentorState?: GridHeadlinePresentorState;
   sliders?: SlidersState;
   comparePage?: ComparePageState;
+  comparisonTable?: ComparisonTableState;
   // [INSERT NEW REDUCER KEY ABOVE] < Needed for generating containers seamlessly
 }
