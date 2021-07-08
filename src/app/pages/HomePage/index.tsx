@@ -2,13 +2,15 @@ import * as React from 'react';
 import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
-import { DateTime } from 'luxon';
+
 // import { Feed } from '../../components/Feed';
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
 import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
 
 import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
+
+import { currentLocalTime, startOfLocalDay } from 'utils/times';
 
 import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfiniteScroll';
 
@@ -31,12 +33,8 @@ export function HomePage() {
             index={0}
             sites={['n12']}
             countPerFetch={0}
-            startDate={new DateTime(
-              DateTime.local().set({ hour: 0, minute: 0 }),
-            ).toFormat('yyyy-MM-dd HH:mm')}
-            endDate={new DateTime(DateTime.local()).toFormat(
-              'yyyy-MM-dd HH:mm',
-            )}
+            startDate={startOfLocalDay}
+            endDate={currentLocalTime}
             isSingularFetch={true}
           >
             <HeadlineSliderPresentor index={0} />
@@ -45,12 +43,8 @@ export function HomePage() {
           <HeadlinesFeedInfiniteScroll
             index={1}
             sites={['ynet']}
-            startDate={new DateTime(
-              DateTime.local().set({ hour: 0, minute: 0 }),
-            ).toFormat('yyyy-MM-dd HH:mm')}
-            endDate={new DateTime(DateTime.local()).toFormat(
-              'yyyy-MM-dd HH:mm',
-            )}
+            startDate={startOfLocalDay}
+            endDate={currentLocalTime}
             countPerFetch={0}
             isSingularFetch={true}
           >
@@ -61,12 +55,8 @@ export function HomePage() {
             index={2}
             sites={['walla']}
             countPerFetch={0}
-            startDate={new DateTime(
-              DateTime.local().set({ hour: 0, minute: 0 }),
-            ).toFormat('yyyy-MM-dd HH:mm')}
-            endDate={new DateTime(DateTime.local()).toFormat(
-              'yyyy-MM-dd HH:mm',
-            )}
+            startDate={startOfLocalDay}
+            endDate={currentLocalTime}
             isSingularFetch={true}
           >
             <HeadlineSliderPresentor index={2} />
