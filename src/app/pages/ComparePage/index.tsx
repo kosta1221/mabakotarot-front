@@ -7,12 +7,13 @@ import * as React from 'react';
 import { useRef } from 'react';
 import styled from 'styled-components/macro';
 import queryString from 'query-string';
-import CloseIcon from '@material-ui/icons/Close';
+
 import CompareIcon from '@material-ui/icons/Compare';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import Popover from '@material-ui/core/Popover';
 import ReactCompareImage from 'react-compare-image';
 
+import { ComaprisonTable } from '../../components/ComaprisonTable';
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
 import { selectComparePage } from './slice/selectors';
@@ -86,7 +87,7 @@ export function ComparePage(props: Props) {
   };
 
   const compareDisplay = (
-    <CompareContainer>
+    <CompareContainer ref={anchorRef}>
       <Title>{comparisonData?.text}</Title>
       <CompareTools>
         <ToolButton onClick={handleCompareClick}>
@@ -118,27 +119,7 @@ export function ComparePage(props: Props) {
           />
         </SideBySideContainer>
       </Popover>
-      <HeadlinesContainer ref={anchorRef}>
-        {comparisonData?.headlines.map((headline, i) => {
-          return (
-            <ItemContainer key={`${headline.id}-${i}`}>
-              <CloseButton
-                id={headline._id}
-                onClick={handleRemoveClick(headline)}
-              >
-                <CloseIcon fontSize="large" />
-              </CloseButton>
-              <HeadlineText>{headline.date}</HeadlineText>
-              <Image src={headline.imageUrl} alt={`headline-${i}`} />
-              <Divider />
-              <HeadlineText>{headline.titleText}</HeadlineText>
-              <ArticleLink href={headline.titleArticleLink} target="_blank">
-                קישור לכתבה
-              </ArticleLink>
-            </ItemContainer>
-          );
-        })}
-      </HeadlinesContainer>
+      <ComaprisonTable comparisonData={comparisonData} />
     </CompareContainer>
   );
 
@@ -155,48 +136,6 @@ const CompareContainer = styled.div`
 
 const Title = styled.h1`
   text-align: center;
-`;
-
-const HeadlinesContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-`;
-
-const ItemContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid black;
-  margin: 0.5vw;
-  flex: 1 1 25%;
-  max-width: 33%;
-`;
-
-const CloseButton = styled.div`
-  align-self: flex-start;
-  margin: 5px;
-
-  &:hover {
-    cursor: pointer;
-  }
-`;
-
-const ArticleLink = styled.a``;
-
-const HeadlineText = styled.h3``;
-
-const Divider = styled.hr`
-  margin-top: 30px;
-  width: 100%;
-`;
-
-const Image = styled.img`
-  max-width: 100%;
 `;
 
 const CompareTools = styled.div`
