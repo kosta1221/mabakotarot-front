@@ -12,12 +12,14 @@ import CompareIcon from '@material-ui/icons/Compare';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import Popover from '@material-ui/core/Popover';
 import ReactCompareImage from 'react-compare-image';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 import { ComaprisonTable } from '../../components/ComaprisonTable';
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
 import { selectComparePage } from './slice/selectors';
 import { drawerActions } from '../../components/Drawer/slice';
+import { selectComparisonTable } from '../../components/ComaprisonTable/slice/selectors';
 import { useSideBySideComparisonSlice } from './slice';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -29,6 +31,11 @@ export function ComparePage(props: Props) {
   const { isSideBySideComparisonOpen, chosenImages } = useSelector(
     selectComparePage,
   );
+  const {
+    headlineOneChecked,
+    headlineTwoChecked,
+    headlineThreeChecked,
+  } = useSelector(selectComparisonTable);
 
   const { actions } = useSideBySideComparisonSlice();
   const dispatch = useDispatch();
@@ -45,11 +52,15 @@ export function ComparePage(props: Props) {
         })
       : null;
 
-  const handleRemoveClick = headline => event => {
-    const idToRemove = event.currentTarget.id;
+  const handleRemoveClick = () => {
+    const headlinesToRemoveNum = [
+      headlineOneChecked ? 1 : null,
+      headlineTwoChecked ? 2 : null,
+      headlineThreeChecked ? 3 : null,
+    ];
 
     const headlinesUpdated = comparisonData.headlines.filter(
-      item => item._id !== idToRemove,
+      (headline, i) => !headlinesToRemoveNum.includes(i + 1),
     );
 
     const comparisonNewHeadlines = {
@@ -77,8 +88,6 @@ export function ComparePage(props: Props) {
         ]),
       );
       dispatch(actions.setIsSideBySideComparisonOpen(true));
-      console.log('here');
-      console.log(anchorRef);
     }
   };
 
@@ -88,7 +97,7 @@ export function ComparePage(props: Props) {
 
   const compareDisplay = (
     <CompareContainer ref={anchorRef}>
-      <Title>{comparisonData?.text}</Title>
+      <CenteredMessage>{comparisonData?.text}</CenteredMessage>
       <CompareTools>
         <ToolButton onClick={handleCompareClick}>
           <CompareIcon />
@@ -96,7 +105,9 @@ export function ComparePage(props: Props) {
         <ToolButton>
           <FullscreenIcon />
         </ToolButton>
-        <ToolButton></ToolButton>
+        <ToolButton onClick={handleRemoveClick}>
+          <DeleteIcon />
+        </ToolButton>
         <ToolButton></ToolButton>
       </CompareTools>
       <Popover
@@ -119,12 +130,22 @@ export function ComparePage(props: Props) {
           />
         </SideBySideContainer>
       </Popover>
-      <ComaprisonTable comparisonData={comparisonData} />
+      {comparisonData?.headlines.length > 0 ? (
+        <ComaprisonTable comparisonData={comparisonData} />
+      ) : (
+        <CenteredMessage>אין כותרות להציג</CenteredMessage>
+      )}
     </CompareContainer>
   );
 
   return (
-    <>{comparisonData ? compareDisplay : <Title>השוואה לא נמצאה</Title>}</>
+    <>
+      {comparisonData ? (
+        compareDisplay
+      ) : (
+        <CenteredMessage>השוואה לא נמצאה</CenteredMessage>
+      )}
+    </>
   );
 }
 
@@ -132,10 +153,6 @@ const CompareContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
-`;
-
-const Title = styled.h1`
-  text-align: center;
 `;
 
 const CompareTools = styled.div`
@@ -159,4 +176,8 @@ const StyledReactCompareImage = styled(ReactCompareImage)`
   box-sizing: border-box;
   width: 100%;
   display: inline-block;
+`;
+
+const CenteredMessage = styled.h1`
+  text-align: center;
 `;

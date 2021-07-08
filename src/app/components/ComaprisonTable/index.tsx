@@ -109,8 +109,8 @@ export function ComaprisonTable(props: Props) {
     createData(
       'תמונה',
       <Image src={headlines[0].imageUrl} />,
-      <Image src={headlines[1].imageUrl} />,
-      <Image src={headlines[2].imageUrl} />,
+      <Image src={headlines[1]?.imageUrl} />,
+      <Image src={headlines[2]?.imageUrl} />,
     ),
     createData(
       'תאריך',
@@ -135,10 +135,10 @@ export function ComaprisonTable(props: Props) {
       <ArticleLink href={headlines[0].titleArticleLink} target="_blank">
         קישור לכתבה
       </ArticleLink>,
-      <ArticleLink href={headlines[1].titleArticleLink} target="_blank">
+      <ArticleLink href={headlines[1]?.titleArticleLink} target="_blank">
         קישור לכתבה
       </ArticleLink>,
-      <ArticleLink href={headlines[2].titleArticleLink} target="_blank">
+      <ArticleLink href={headlines[2]?.titleArticleLink} target="_blank">
         קישור לכתבה
       </ArticleLink>,
     ),
@@ -156,12 +156,12 @@ export function ComaprisonTable(props: Props) {
               <TableCell className={classes.cell} align="center">
                 {row.headline1}
               </TableCell>
-              {row?.headline2 && (
+              {row?.headline2 && headlines[1] && (
                 <TableCell className={classes.cell} align="center">
                   {row.headline2}
                 </TableCell>
               )}
-              {row?.headline3 && (
+              {row?.headline3 && headlines[2] && (
                 <TableCell className={classes.cell} align="center">
                   {row.headline3}
                 </TableCell>
