@@ -60,10 +60,9 @@ export function HeadlineSliderPresentor(props: Props) {
 
   const marks = headlines?.map(headline => {
     const hhmm = headline.date.split(' ')[1];
+    // console.log('index: ', index, 'hhmm: ', hhmm);
 
     const value = getNumFromHHMM(hhmm);
-
-    // console.log('label: ', hhmm, 'value: ', value);
 
     return {
       value,
@@ -76,6 +75,15 @@ export function HeadlineSliderPresentor(props: Props) {
       <Typography id="time-slider" gutterBottom>
         {`היום ב- ${sites && sites[0]}:`}
       </Typography>
+      <Image
+        src={
+          headlines?.filter(
+            headline =>
+              headline.date.split(' ')[1] === thisSlider?.showedHeadline,
+          )[0]?.imageUrl
+        }
+        alt={'headline-image'}
+      />
       <Slider
         aria-labelledby="time-slider"
         getAriaValueText={numFormatter}
@@ -96,15 +104,6 @@ export function HeadlineSliderPresentor(props: Props) {
         valueLabelFormat={numFormatter}
         marks={marks}
       />
-      <Image
-        src={
-          headlines?.filter(
-            headline =>
-              headline.date.split(' ')[1] === thisSlider?.showedHeadline,
-          )[0]?.imageUrl
-        }
-        alt={'headline-image'}
-      />
     </div>
   );
 }
@@ -113,4 +112,5 @@ const Image = styled.img`
   height: auto;
   width: 100%;
   align-self: center;
+  border: 2px solid black;
 `;
