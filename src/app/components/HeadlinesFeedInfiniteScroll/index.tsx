@@ -72,7 +72,7 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   }, [index, dispatch, endDate]);
 
   useEffect(() => {
-    countPerFetch &&
+    countPerFetch != null &&
       dispatch(
         headlinesFeedsActions.setOneFeedsCountPerFetch({
           index,
