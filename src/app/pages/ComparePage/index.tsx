@@ -77,8 +77,22 @@ export function ComparePage(props: Props) {
   };
 
   const handleCompareClick = () => {
+    const selectedHeadlinesBool = [
+      headlineOneChecked,
+      headlineTwoChecked,
+      headlineThreeChecked,
+    ];
+
+    //converts the boolean array to the correct selected indices
+    const selectedHeadlinesIndices = selectedHeadlinesBool.flatMap(
+      (bool, index) => (bool ? index : []),
+    );
+    console.log(selectedHeadlinesBool);
+
+    console.log(selectedHeadlinesIndices);
     if (comparisonData?.headlines.length < 2) {
       alert('צריך לפחות 2 כותרות על מנת להשוות תמונות צד לצד זו');
+      return;
     }
     if (comparisonData?.headlines.length === 2) {
       dispatch(
@@ -89,6 +103,21 @@ export function ComparePage(props: Props) {
       );
       dispatch(actions.setIsSideBySideComparisonOpen(true));
     }
+    if (selectedHeadlinesIndices.length > 2) {
+      alert('ניתן להשוות רק 2 תמונות זו לצד זו! הורד סימון מאחת הכותרות');
+      return;
+    } else if (selectedHeadlinesIndices.length === 1) {
+      alert('ניתן להשוות רק 2 תמונות זו לצד זו! סמן עוד כותרת אחת');
+      return;
+    }
+
+    dispatch(
+      actions.setChosenImages([
+        comparisonData.headlines[selectedHeadlinesIndices[0]].imageUrl,
+        comparisonData.headlines[selectedHeadlinesIndices[1]].imageUrl,
+      ]),
+    );
+    dispatch(actions.setIsSideBySideComparisonOpen(true));
   };
 
   const handleClose = () => {
