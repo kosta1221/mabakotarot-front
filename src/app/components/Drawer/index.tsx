@@ -4,7 +4,6 @@
  *
  */
 import * as React from 'react';
-
 import styled from 'styled-components/macro';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import List from '@material-ui/core/List';
@@ -17,7 +16,6 @@ import ExpandMore from '@material-ui/icons/ExpandMore';
 import DynamicFeedIcon from '@material-ui/icons/DynamicFeed';
 import CompareIcon from '@material-ui/icons/Compare';
 import AddIcon from '@material-ui/icons/Add';
-// import EditIcon from '@material-ui/icons/Edit';
 import HomeIcon from '@material-ui/icons/Home';
 import EdiText from 'react-editext';
 
@@ -57,7 +55,6 @@ export function Drawer(props: Props) {
 
   const handleClickOnComparison = (event, id) => {
     event.stopPropagation();
-    console.log(event.target.type);
     if (event.target.type === 'button' || event.target.type === 'text') {
       return;
     }
@@ -65,8 +62,13 @@ export function Drawer(props: Props) {
     router.history.go(0);
   };
 
-  const handleClickOnNewComparison = e => {
-    e.stopPropagation();
+  const handleClickOnNewComparison = event => {
+    event.stopPropagation();
+
+    if (comparisons.length > 8) {
+      alert('מותר עד 9 השוואות!');
+      return;
+    }
 
     const newCompare = {
       id: comparisons.length + 1,
@@ -76,7 +78,6 @@ export function Drawer(props: Props) {
 
     const newComparisons = [...comparisons, newCompare];
     dispatch(actions.setComparisons(newComparisons));
-    console.log(comparisons);
   };
 
   const handleSave = (value, inputProps) => {
@@ -165,7 +166,7 @@ export function Drawer(props: Props) {
             <ListItem
               button
               className={classes.nested}
-              onClick={e => handleClickOnNewComparison(e)}
+              onClick={event => handleClickOnNewComparison(event)}
             >
               <ListItemIcon>
                 <AddIcon />
