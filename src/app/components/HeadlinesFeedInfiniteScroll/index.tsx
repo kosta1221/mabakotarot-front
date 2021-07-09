@@ -51,12 +51,16 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     isLoading,
     isSortAsc,
     isFetchError,
+    sites: sitesInState,
   } = useSelector(selectHeadlinesFeeds).headlineFeeds[index];
 
   const observer = useRef<IntersectionObserver>();
 
   useEffect(() => {
     sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
+    if (sitesInState.length > 0 && sites && sites[0] !== sitesInState[0]) {
+      dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+    }
   }, [index, dispatch, sites]);
 
   useEffect(() => {

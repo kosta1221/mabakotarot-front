@@ -11,7 +11,11 @@ import * as React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSliders } from './slice/selectors';
 import { slidersActions, initialSliderState } from './slice';
+import { homepageActions } from 'app/pages/HomePage/slice';
+
+import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
+import Fade from '@material-ui/core/Fade';
 import { sites as allSites } from 'utils/sites';
 import MenuItem from '@material-ui/core/MenuItem';
 
@@ -35,14 +39,14 @@ export function HeadlineSliderPresentor(props: Props) {
     index,
     headlines,
     sites,
-    // lastItem,
     // isLoading,
-    // isSortAsc,
-    // handleToggleSortingorder,
   } = props;
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
+
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
   if (index > sliders.length - 1) {
     dispatch(slidersActions.setSliders([...sliders, initialSliderState]));
@@ -75,42 +79,65 @@ export function HeadlineSliderPresentor(props: Props) {
       );
   }, [dispatch, index, sites]);
 
-  const marks = headlines?.map(headline => {
-    const hhmm = headline.date.split(' ')[1];
-    // console.log('index: ', index, 'hhmm: ', hhmm);
+  const marks = headlines
+    ?.filter(
+      (headline, i) =>
+        headlines.indexOf(headline) === i &&
+        sites &&
+        headline.site === sites[0],
+    )
+    .map(headline => {
+      const hhmm = headline.date.split(' ')[1];
+      // console.log('index: ', index, 'hhmm: ', hhmm);
 
-    const value = getNumFromHHMM(hhmm);
+      const value = getNumFromHHMM(hhmm);
 
-    return {
-      value,
-      label: null, // hhmm
-    };
-  });
+      return {
+        value,
+        label: null, // hhmm
+      };
+    });
 
-  //   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-  //     setAnchorEl(event.currentTarget);
-  //   };
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  //   const handleClose = () => {
-  //     setAnchorEl(null);
-  //   };
+  const handleClose = site => {
+    setAnchorEl(null);
+    if (site && typeof site === 'string') {
+      dispatch(homepageActions.setSliderByIndex({ index, site }));
+    }
+  };
 
   return (
     <div>
-      <Typography id="time-slider" gutterBottom>
-        {`היום ב- ${sliders[index] && sliders[index].pickedSite}:`}
+      <Typography id="time-slider" onClick={handleClick} gutterBottom>
+        {`היום ב- `}
+        <Button
+          style={{ textTransform: 'none' }}
+          aria-controls="fade-menu"
+          aria-haspopup="true"
+          onClick={handleClick}
+        >
+          {`${sliders[index] && sliders[index].pickedSite}:`}
+        </Button>
       </Typography>
-      {/* <Menu
+
+      <Menu
         id="fade-menu"
         anchorEl={anchorEl}
         keepMounted
         open={open}
         onClose={handleClose}
         TransitionComponent={Fade}
-      ></Menu>
-      {allSites.map(site => (
-        <MenuItem key={site} onClick={handleClose}>{site}</MenuItem>
-      ))} */}
+      >
+        {allSites.map(site => (
+          <MenuItem key={site} onClick={e => handleClose(site)}>
+            {site}
+          </MenuItem>
+        ))}
+      </Menu>
+
       <Image
         src={
           headlines?.filter(
