@@ -11,7 +11,7 @@ import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
 import { useHomepageSlice } from './slice';
 import { selectHomepage } from './slice/selectors';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import { currentLocalTime, startOfLocalDay } from 'utils/times';
 
@@ -21,8 +21,8 @@ export function HomePage() {
   useSlidersSlice();
   useHeadlinesFeedsSlice();
 
-  const { actions } = useHomepageSlice();
-  const dispatch = useDispatch();
+  useHomepageSlice();
+  //   const dispatch = useDispatch();
   const { slider1, slider2, slider3 } = useSelector(selectHomepage);
   console.log(slider1, slider2, slider3);
 
@@ -92,8 +92,8 @@ const Content = styled.div`
   display: flex;
   flex-direction: column;
   margin: auto;
-  width: 80vw;
-  min-height: 100vh;
+  width: 93vw;
+  min-height: 90vh;
 `;
 
 const Grid = styled.div`
