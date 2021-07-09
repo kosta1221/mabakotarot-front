@@ -8,6 +8,8 @@ import styled from 'styled-components/macro';
 import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Tooltip from '@material-ui/core/Tooltip';
+import { DateTime } from 'luxon';
+import { sitesHebrew } from 'utils/sites';
 
 import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
@@ -33,6 +35,14 @@ const CompareTooltip = withStyles(theme => ({
 export function GridItem(props: Props) {
   const { headline, lastItem, index } = props;
 
+  const headlineDateTime = new DateTime.fromFormat(
+    headline.date,
+    'yyyy-MM-dd HH:mm',
+  ).setLocale('he');
+  const headlineDateTimePresentable = headlineDateTime.toFormat(
+    'dd בMMM yyyy HH:mm',
+  );
+
   const dispatch = useDispatch();
 
   const handleClickOpenDialog = pickedHeadlineId => {
@@ -47,7 +57,9 @@ export function GridItem(props: Props) {
       key={headline?._id}
     >
       <GridOptions>
-        <GridDate>{`${headline.date} ${headline._id.slice(20)}`}</GridDate>
+        <GridDate>{`${headlineDateTimePresentable} ${
+          sitesHebrew[headline.site]
+        }`}</GridDate>
         <Divider orientation="vertical" flexItem />
         <AddToCompareButton onClick={() => handleClickOpenDialog(headline._id)}>
           <CompareTooltip title="הוספה להשוואת כותרות">
