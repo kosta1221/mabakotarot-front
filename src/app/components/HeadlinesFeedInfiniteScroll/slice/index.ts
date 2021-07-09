@@ -135,9 +135,14 @@ const sagaGetHeadlinesInfiniteScroll = createAction<number | undefined>(
   'GET_HEADLINES_INFINITE_SCROLL',
 );
 
+const sagaFetchNewHeadlines = createAction<number | undefined>(
+  'FETCH_NEW_HEADLINES',
+);
+
 export const headlinesFeedsActions = {
   ...slice.actions,
   sagaGetHeadlinesInfiniteScroll,
+  sagaFetchNewHeadlines,
 };
 
 export const useHeadlinesFeedsSlice = () => {
