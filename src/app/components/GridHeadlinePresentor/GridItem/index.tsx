@@ -9,6 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 
+import Card from '@material-ui/core/Card';
 import { withStyles } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
 import { gridHeadlinePresentorActions as actions } from '../slice';
@@ -40,7 +41,8 @@ export function GridItem(props: Props) {
   };
 
   return (
-    <ItemContainer
+    <StyledCard
+      elevation={6}
       ref={headline?.length === index || 0 + 1 ? lastItem : null}
       key={headline?._id}
     >
@@ -54,18 +56,17 @@ export function GridItem(props: Props) {
         </AddToCompareButton>
       </GridOptions>
       <Image src={headline.imageUrl} alt={`headline-${index}`} />
-    </ItemContainer>
+    </StyledCard>
   );
 }
 
-const ItemContainer = styled.div`
+const StyledCard = styled(Card)`
+  border: 1.5px solid black;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  margin: 0.8vw;
   background: lightgrey;
-  border: 1.5px solid black;
-  margin: 0.5vw;
 `;
 
 const GridOptions = styled.div`
