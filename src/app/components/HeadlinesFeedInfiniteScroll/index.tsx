@@ -61,7 +61,7 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     if (sitesInState.length > 0 && sites && sites[0] !== sitesInState[0]) {
       dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
     }
-  }, [index, dispatch, sites]);
+  }, [index, dispatch, sites, sitesInState]);
 
   useEffect(() => {
     startDate &&
