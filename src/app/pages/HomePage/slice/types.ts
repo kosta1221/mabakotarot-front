@@ -1,5 +1,6 @@
 /* --- STATE --- */
 export interface HomepageState {
-  pickedDate: string;
-  homepageFeedHeadlines: Array<any>;
+  slider1: string;
+  slider2: string;
+  slider3: string;
 }

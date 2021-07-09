@@ -1,33 +1,39 @@
-import { PayloadAction, createAction } from '@reduxjs/toolkit';
+import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
-import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
-import { homePageSaga } from './saga';
+import { useInjectReducer } from 'utils/redux-injectors';
 import { HomepageState } from './types';
 
 export const initialState: HomepageState = {
-  pickedDate: new Date().toISOString(),
-  homepageFeedHeadlines: [],
+  slider1: 'n12',
+  slider2: 'ynet',
+  slider3: 'walla',
 };
 
 const slice = createSlice({
   name: 'homepage',
   initialState,
   reducers: {
-    pick(state, action: PayloadAction<string>) {
-      state.pickedDate = action.payload;
+    setSlider1(state, action: PayloadAction<string>) {
+      state.slider1 = action.payload;
     },
-    setHomePageHeadlines(state, action: PayloadAction<any>) {
-      state.homepageFeedHeadlines = action.payload;
+    setSlider2(state, action: PayloadAction<string>) {
+      state.slider2 = action.payload;
+    },
+    setSlider3(state, action: PayloadAction<string>) {
+      state.slider3 = action.payload;
+    },
+    setSliderByIndex(
+      state,
+      action: PayloadAction<{ index: number; site: string }>,
+    ) {
+      state[`slider${action.payload.index + 1}`] = action.payload.site;
     },
   },
 });
 
-const sagaGetHomePageHeadlines = createAction('GET_HOMEPAGE_HEADLINES');
-
-export const homepageActions = { ...slice.actions, sagaGetHomePageHeadlines };
+export const homepageActions = slice.actions;
 
 export const useHomepageSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
-  useInjectSaga({ key: slice.name, saga: homePageSaga });
   return { actions: slice.actions };
 };

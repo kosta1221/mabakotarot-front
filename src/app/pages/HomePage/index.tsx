@@ -9,6 +9,9 @@ import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
 
 import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
+import { useHomepageSlice } from './slice';
+import { selectHomepage } from './slice/selectors';
+import { useSelector, useDispatch } from 'react-redux';
 
 import { currentLocalTime, startOfLocalDay } from 'utils/times';
 
@@ -17,6 +20,11 @@ import { HeadlinesFeedInfiniteScroll } from '../../components/HeadlinesFeedInfin
 export function HomePage() {
   useSlidersSlice();
   useHeadlinesFeedsSlice();
+
+  const { actions } = useHomepageSlice();
+  const dispatch = useDispatch();
+  const { slider1, slider2, slider3 } = useSelector(selectHomepage);
+  console.log(slider1, slider2, slider3);
 
   return (
     <>
@@ -31,7 +39,7 @@ export function HomePage() {
         <Grid>
           <HeadlinesFeedInfiniteScroll
             index={0}
-            sites={['n12']}
+            sites={[slider1]}
             countPerFetch={0}
             startDate={startOfLocalDay}
             endDate={currentLocalTime}
@@ -42,7 +50,7 @@ export function HomePage() {
 
           <HeadlinesFeedInfiniteScroll
             index={1}
-            sites={['ynet']}
+            sites={[slider2]}
             startDate={startOfLocalDay}
             endDate={currentLocalTime}
             countPerFetch={0}
@@ -53,7 +61,7 @@ export function HomePage() {
 
           <HeadlinesFeedInfiniteScroll
             index={2}
-            sites={['walla']}
+            sites={[slider3]}
             countPerFetch={0}
             startDate={startOfLocalDay}
             endDate={currentLocalTime}
