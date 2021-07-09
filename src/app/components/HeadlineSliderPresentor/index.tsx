@@ -18,6 +18,7 @@ import Menu from '@material-ui/core/Menu';
 import Fade from '@material-ui/core/Fade';
 import { sites as allSites } from 'utils/sites';
 import MenuItem from '@material-ui/core/MenuItem';
+import Card from '@material-ui/core/Card';
 
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
@@ -138,37 +139,40 @@ export function HeadlineSliderPresentor(props: Props) {
         ))}
       </Menu>
 
-      <Image
-        src={
-          headlines?.filter(
-            headline =>
-              headline.date.split(' ')[1] === sliders[index]?.showedHeadline,
-          )[0]?.imageUrl
-        }
-        alt={'headline-image'}
-      />
-      <Slider
-        aria-labelledby="time-slider"
-        getAriaValueText={numFormatter}
-        min={0}
-        max={95}
-        value={getNumFromHHMM(
-          (sliders[index] && sliders[index].showedHeadline) || '',
-        )}
-        onChange={(e, v) => {
-          if (Array.isArray(v)) return;
-          dispatch(
-            slidersActions.setOneSlidersShowedHeadline({
-              index,
-              showedHeadline: numFormatter(v),
-            }),
-          );
-        }}
-        step={null}
-        valueLabelDisplay="on"
-        valueLabelFormat={numFormatter}
-        marks={marks}
-      />
+      <StyledCard elevation={6}>
+        <Image
+          src={
+            headlines?.filter(
+              headline =>
+                headline.date.split(' ')[1] === sliders[index]?.showedHeadline,
+            )[0]?.imageUrl
+          }
+          alt={'headline-image'}
+        />
+
+        <StyledSlider
+          aria-labelledby="time-slider"
+          getAriaValueText={numFormatter}
+          min={0}
+          max={95}
+          value={getNumFromHHMM(
+            (sliders[index] && sliders[index].showedHeadline) || '',
+          )}
+          onChange={(e, v) => {
+            if (Array.isArray(v)) return;
+            dispatch(
+              slidersActions.setOneSlidersShowedHeadline({
+                index,
+                showedHeadline: numFormatter(v),
+              }),
+            );
+          }}
+          step={null}
+          valueLabelDisplay="on"
+          valueLabelFormat={numFormatter}
+          marks={marks}
+        />
+      </StyledCard>
     </div>
   );
 }
@@ -177,5 +181,16 @@ const Image = styled.img`
   height: auto;
   width: 100%;
   align-self: center;
-  border: 2px solid black;
+`;
+
+const StyledCard = styled(Card)`
+  border: 1.5px solid black;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const StyledSlider = styled(Slider)`
+  padding: 30px 0 10px 0;
+  width: 95%;
 `;
