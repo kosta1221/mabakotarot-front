@@ -104,6 +104,7 @@ export function ComparePage(props: Props) {
         ]),
       );
       dispatch(actions.setIsSideBySideComparisonOpen(true));
+      return;
     }
     if (selectedHeadlinesIndices.length > 2) {
       alert('ניתן להשוות רק 2 תמונות זו לצד זו! הורד סימון מאחת הכותרות');
