@@ -6,6 +6,7 @@ import { ComparePageState } from './types';
 export const initialState: ComparePageState = {
   isSideBySideComparisonOpen: false,
   chosenImages: [],
+  isImageGalleryOpen: false,
 };
 
 const slice = createSlice({
@@ -17,6 +18,9 @@ const slice = createSlice({
     },
     setChosenImages(state, action: PayloadAction<Array<string>>) {
       state.chosenImages = action.payload;
+    },
+    setIsImageGalleryOpen(state, action: PayloadAction<boolean>) {
+      state.isImageGalleryOpen = action.payload;
     },
   },
 });

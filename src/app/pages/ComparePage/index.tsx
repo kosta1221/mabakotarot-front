@@ -13,6 +13,8 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import Popover from '@material-ui/core/Popover';
 import ReactCompareImage from 'react-compare-image';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Lightbox from 'react-awesome-lightbox';
+import 'react-awesome-lightbox/build/style.css';
 
 import { ComaprisonTable } from '../../components/ComaprisonTable';
 import { useSelector } from 'react-redux';
@@ -28,9 +30,11 @@ interface Props {}
 
 export function ComparePage(props: Props) {
   const { comparisons } = useSelector(selectDrawer);
-  const { isSideBySideComparisonOpen, chosenImages } = useSelector(
-    selectComparePage,
-  );
+  const {
+    isSideBySideComparisonOpen,
+    chosenImages,
+    isImageGalleryOpen,
+  } = useSelector(selectComparePage);
   const {
     headlineOneChecked,
     headlineTwoChecked,
@@ -87,9 +91,7 @@ export function ComparePage(props: Props) {
     const selectedHeadlinesIndices = selectedHeadlinesBool.flatMap(
       (bool, index) => (bool ? index : []),
     );
-    console.log(selectedHeadlinesBool);
 
-    console.log(selectedHeadlinesIndices);
     if (comparisonData?.headlines.length < 2) {
       alert('צריך לפחות 2 כותרות על מנת להשוות תמונות צד לצד זו');
       return;
@@ -124,6 +126,35 @@ export function ComparePage(props: Props) {
     dispatch(actions.setIsSideBySideComparisonOpen(false));
   };
 
+  const handleGalleryClick = () => {
+    dispatch(actions.setIsImageGalleryOpen(true));
+  };
+
+  const images = [
+    {
+      url: comparisonData.headlines[0].imageUrl,
+      title: comparisonData.headlines[0].titleText,
+    },
+    comparisonData.headlines[1]
+      ? {
+          url: comparisonData.headlines[1].imageUrl,
+          title: comparisonData.headlines[1].titleText,
+        }
+      : {
+          url: '',
+          title: '',
+        },
+    comparisonData.headlines[2]
+      ? {
+          url: comparisonData.headlines[2].imageUrl,
+          title: comparisonData.headlines[2].titleText,
+        }
+      : {
+          url: '',
+          title: '',
+        },
+  ].filter(item => item.url !== '');
+
   const compareDisplay = (
     <CompareContainer ref={anchorRef}>
       <CenteredMessage>{comparisonData?.text}</CenteredMessage>
@@ -131,7 +162,7 @@ export function ComparePage(props: Props) {
         <ToolButton onClick={handleCompareClick}>
           <CompareIcon />
         </ToolButton>
-        <ToolButton>
+        <ToolButton onClick={handleGalleryClick}>
           <FullscreenIcon />
         </ToolButton>
         <ToolButton onClick={handleRemoveClick}>
@@ -139,6 +170,14 @@ export function ComparePage(props: Props) {
         </ToolButton>
         <ToolButton></ToolButton>
       </CompareTools>
+
+      {isImageGalleryOpen && (
+        <Lightbox
+          images={images}
+          onClose={() => dispatch(actions.setIsImageGalleryOpen(false))}
+        />
+      )}
+
       <Popover
         open={isSideBySideComparisonOpen}
         onClose={handleClose}
