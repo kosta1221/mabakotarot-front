@@ -133,27 +133,17 @@ export function ComparePage(props: Props) {
 
   const images = [
     {
-      url: comparisonData.headlines[0].imageUrl,
-      title: comparisonData.headlines[0].titleText,
+      url: comparisonData?.headlines[0]?.imageUrl || '',
+      title: comparisonData?.headlines[0]?.titleText || '',
     },
-    comparisonData.headlines[1]
-      ? {
-          url: comparisonData.headlines[1].imageUrl,
-          title: comparisonData.headlines[1].titleText,
-        }
-      : {
-          url: '',
-          title: '',
-        },
-    comparisonData.headlines[2]
-      ? {
-          url: comparisonData.headlines[2].imageUrl,
-          title: comparisonData.headlines[2].titleText,
-        }
-      : {
-          url: '',
-          title: '',
-        },
+    {
+      url: comparisonData?.headlines[1]?.imageUrl || '',
+      title: comparisonData?.headlines[1]?.titleText || '',
+    },
+    {
+      url: comparisonData?.headlines[2]?.imageUrl || '',
+      title: comparisonData?.headlines[2]?.titleText || '',
+    },
   ].filter(item => item.url !== '');
 
   const compareDisplay = (
