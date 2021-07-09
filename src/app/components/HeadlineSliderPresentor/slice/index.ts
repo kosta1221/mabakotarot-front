@@ -3,8 +3,14 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 import { Slider, SlidersState } from './types';
 
+export const initialSliderState: Slider = {
+  index: 0,
+  showedHeadline: '',
+  pickedSite: '',
+};
+
 export const initialState: SlidersState = {
-  sliders: [{ index: 0, showedHeadline: '' }],
+  sliders: [initialSliderState],
 };
 
 const slice = createSlice({
@@ -14,13 +20,19 @@ const slice = createSlice({
     setSliders(state, action: PayloadAction<Slider[]>) {
       state.sliders = action.payload;
     },
-    setSlider(state, action: PayloadAction<Slider>) {
-      state.sliders = [
-        action.payload,
-        ...state.sliders.filter(
-          slider => slider.index !== action.payload.index,
-        ),
-      ];
+    setOneSlidersPickedSite(
+      state,
+      action: PayloadAction<{ index: number; pickedSite: string }>,
+    ) {
+      state.sliders[action.payload.index].pickedSite =
+        action.payload.pickedSite;
+    },
+    setOneSlidersShowedHeadline(
+      state,
+      action: PayloadAction<{ index: number; showedHeadline: string }>,
+    ) {
+      state.sliders[action.payload.index].showedHeadline =
+        action.payload.showedHeadline;
     },
     removeSlider(state, action: PayloadAction<number>) {
       state.sliders = [

@@ -6,4 +6,5 @@ export interface SlidersState {
 export interface Slider {
   index: number;
   showedHeadline: string;
+  pickedSite: string;
 }
