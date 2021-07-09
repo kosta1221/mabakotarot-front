@@ -5,7 +5,6 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-// import CloseIcon from '@material-ui/icons/Close';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -66,7 +65,6 @@ export function ComaprisonTable(props: Props) {
   const classes = useStyles();
 
   const handleCheckboxChange = event => {
-    console.log(event?.currentTarget?.id);
     if (event?.currentTarget?.id === '1') {
       dispatch(actions.setHeadlineOneChecked(!headlineOneChecked));
       return;

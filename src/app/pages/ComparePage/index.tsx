@@ -106,8 +106,8 @@ export function ComparePage(props: Props) {
     if (selectedHeadlinesIndices.length > 2) {
       alert('ניתן להשוות רק 2 תמונות זו לצד זו! הורד סימון מאחת הכותרות');
       return;
-    } else if (selectedHeadlinesIndices.length === 1) {
-      alert('ניתן להשוות רק 2 תמונות זו לצד זו! סמן עוד כותרת אחת');
+    } else if (selectedHeadlinesIndices.length < 2) {
+      alert('על מנת ליצור השוואת תמונות זו לצד זו, סמן 2 כותרות');
       return;
     }
 
