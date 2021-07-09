@@ -13,9 +13,12 @@ import FullscreenIcon from '@material-ui/icons/Fullscreen';
 import Popover from '@material-ui/core/Popover';
 import ReactCompareImage from 'react-compare-image';
 import DeleteIcon from '@material-ui/icons/Delete';
+import Divider from '@material-ui/core/Divider';
+import Button from '@material-ui/core/Button';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 
+import { useRouter } from '../../../utils/useRouter';
 import { ComaprisonTable } from '../../components/ComaprisonTable';
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
@@ -41,6 +44,7 @@ export function ComparePage(props: Props) {
     headlineThreeChecked,
   } = useSelector(selectComparisonTable);
 
+  const router = useRouter();
   const { actions } = useSideBySideComparisonSlice();
   const dispatch = useDispatch();
 
@@ -131,6 +135,16 @@ export function ComparePage(props: Props) {
     dispatch(actions.setIsImageGalleryOpen(true));
   };
 
+  const handleDeleteComparison = () => {
+    const newComparisons = comparisons.filter(
+      comparison => comparison !== comparisonData,
+    );
+
+    dispatch(drawerActions.setComparisons(newComparisons));
+    router.push('/');
+    router.history.go(0);
+  };
+
   const images = [
     {
       url: comparisonData?.headlines[0]?.imageUrl || '',
@@ -148,18 +162,24 @@ export function ComparePage(props: Props) {
 
   const compareDisplay = (
     <CompareContainer ref={anchorRef}>
-      <CenteredMessage>{comparisonData?.text}</CenteredMessage>
+      <TitleAndDeleteArea>
+        <CenteredMessage>{comparisonData?.text}</CenteredMessage>
+        <DeleteComparisonButton onClick={handleDeleteComparison}>
+          מחק השוואה
+        </DeleteComparisonButton>
+      </TitleAndDeleteArea>
       <CompareTools>
         <ToolButton onClick={handleCompareClick}>
           <CompareIcon />
         </ToolButton>
+        <Divider light={false} orientation="vertical" flexItem />
         <ToolButton onClick={handleGalleryClick}>
           <FullscreenIcon />
         </ToolButton>
+        <Divider light={false} orientation="vertical" flexItem />
         <ToolButton onClick={handleRemoveClick}>
           <DeleteIcon />
         </ToolButton>
-        <ToolButton></ToolButton>
       </CompareTools>
 
       {isImageGalleryOpen && (
@@ -216,12 +236,14 @@ const CompareContainer = styled.div`
 
 const CompareTools = styled.div`
   display: flex;
-  width: 35vw;
+  width: 30vw;
   margin: auto;
   justify-content: space-around;
+  background: #d3d3d3;
+  text-align: center;
 `;
 
-const ToolButton = styled.button`
+const ToolButton = styled(Button)`
   width: 4vw;
   height: 4vh;
 `;
@@ -237,6 +259,23 @@ const StyledReactCompareImage = styled(ReactCompareImage)`
   display: inline-block;
 `;
 
-const CenteredMessage = styled.h1`
-  text-align: center;
+const TitleAndDeleteArea = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;
+
+const CenteredMessage = styled.h1``;
+
+const DeleteComparisonButton = styled(Button)`
+  background: red;
+  color: white;
+  height: 4vh;
+  font-size: 1rem;
+  font-weight: 900;
+  border: 0.5px solid black;
+
+  &:hover {
+    background: black;
+  }
 `;
