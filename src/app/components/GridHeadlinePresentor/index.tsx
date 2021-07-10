@@ -7,6 +7,8 @@ import * as React from 'react';
 import styled from 'styled-components/macro';
 import Loader from 'react-loader-spinner';
 
+import 'react-awesome-lightbox/build/style.css';
+import Lightbox from 'react-awesome-lightbox';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
 
@@ -14,6 +16,7 @@ import { DateTime } from 'luxon';
 
 import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
+import { selectAppbar } from '../Appbar/slice/selectors';
 import { useGridHeadlinePresentorSlice } from './slice';
 import { selectDrawer } from '../Drawer/slice/selectors';
 import { drawerActions } from '../Drawer/slice';
@@ -50,6 +53,7 @@ export function GridHeadlinePresentor(props: Props) {
   const dispatch = useDispatch();
   const { comparisons } = useSelector(selectDrawer);
   const { selectedHeadline } = useSelector(selectGridHeadlinePresentorState);
+  const { indexOfImageToShow, isImageGalleryOpen } = useSelector(selectAppbar);
 
   // NEED TO FIGURE OUT WHY WE ARE USING THIS
   const { actions } = useGridHeadlinePresentorSlice();
@@ -124,6 +128,17 @@ export function GridHeadlinePresentor(props: Props) {
     console.log(comparisons);
   };
 
+  const images = headlines?.map(headline => ({
+    url: headline.imageUrl || '',
+    title: headline.titleText || '',
+  }));
+
+  const handleImageClick = (indexOfImage: number | undefined) => {
+    console.log(indexOfImage);
+    indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
+    dispatch(appbarActions.setIsImageGalleryOpen(true));
+  };
+
   const grid = (
     <Grid>
       {headlines?.map((headline, index) => {
@@ -133,6 +148,7 @@ export function GridHeadlinePresentor(props: Props) {
             lastItem={lastItem}
             index={index}
             key={`GridItem-${index}`}
+            handleImageClick={handleImageClick}
           />
         );
       })}
@@ -141,6 +157,13 @@ export function GridHeadlinePresentor(props: Props) {
 
   return (
     <>
+      {isImageGalleryOpen && (
+        <Lightbox
+          images={images}
+          startIndex={indexOfImageToShow}
+          onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
+        />
+      )}
       <AddToCompareDialog
         onClose={comparisonId => handleCloseDialog(comparisonId)}
       />

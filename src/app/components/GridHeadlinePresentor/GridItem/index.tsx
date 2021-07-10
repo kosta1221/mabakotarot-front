@@ -20,6 +20,7 @@ interface Props {
   lastItem?: any;
   headline?: any;
   index?: number;
+  handleImageClick?: any;
 }
 
 const CompareTooltip = withStyles(theme => ({
@@ -33,7 +34,7 @@ const CompareTooltip = withStyles(theme => ({
 }))(Tooltip);
 
 export function GridItem(props: Props) {
-  const { headline, lastItem, index } = props;
+  const { headline, lastItem, index, handleImageClick } = props;
 
   const headlineDateTime = new DateTime.fromFormat(
     headline.date,
@@ -67,7 +68,11 @@ export function GridItem(props: Props) {
           </CompareTooltip>
         </AddToCompareButton>
       </GridOptions>
-      <Image src={headline.imageUrl} alt={`headline-${index}`} />
+      <Image
+        onClick={e => handleImageClick(index)}
+        src={headline.imageUrl}
+        alt={`headline-${index}`}
+      />
     </StyledCard>
   );
 }
