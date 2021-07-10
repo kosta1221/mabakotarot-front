@@ -5,7 +5,6 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-import Divider from '@material-ui/core/Divider';
 import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 import Tooltip from '@material-ui/core/Tooltip';
 import { DateTime } from 'luxon';
@@ -62,7 +61,6 @@ export function GridItem(props: Props) {
         <GridDate>{`${headlineDateTimePresentable} ${
           sitesHebrew[headline.site]
         }`}</GridDate>
-        <Divider orientation="vertical" flexItem />
         <AddToCompareButton onClick={() => handleClickOpenDialog(headline._id)}>
           <CompareTooltip title="הוספה להשוואת כותרות">
             <AddCircleOutlineRoundedIcon fontSize="large" />
@@ -84,7 +82,8 @@ const StyledCard = styled(Card)`
   flex-direction: column;
   align-items: center;
   margin: 0.8vw;
-  background: lightgrey;
+  background: #020403;
+  color: white;
 `;
 
 const GridOptions = styled.div`
