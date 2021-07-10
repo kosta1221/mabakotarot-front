@@ -21,6 +21,9 @@ import { App } from 'app';
 import { HelmetProvider } from 'react-helmet-async';
 
 import { configureAppStore } from 'store/configureStore';
+import MuiThemeProvider from '@material-ui/core/styles/MuiThemeProvider';
+import theme from 'styles/theme';
+import CssBaseline from '@material-ui/core/CssBaseline';
 
 import reportWebVitals from 'reportWebVitals';
 
@@ -34,7 +37,10 @@ ReactDOM.render(
   <Provider store={store}>
     <HelmetProvider>
       <React.StrictMode>
-        <App />
+        <MuiThemeProvider theme={theme}>
+          <CssBaseline />
+          <App />
+        </MuiThemeProvider>
       </React.StrictMode>
     </HelmetProvider>
   </Provider>,
