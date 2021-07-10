@@ -15,6 +15,7 @@ import ReactCompareImage from 'react-compare-image';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
 import Button from '@material-ui/core/Button';
+import Tooltip from '@material-ui/core/Tooltip';
 import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 
@@ -28,8 +29,19 @@ import { selectComparisonTable } from '../../components/ComaprisonTable/slice/se
 import { useSideBySideComparisonSlice } from './slice';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
+import { withStyles } from '@material-ui/core/styles';
 
 interface Props {}
+
+const ButtonsTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'black',
+    maxWidth: 200,
+    fontSize: theme.typography.pxToRem(15),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 export function ComparePage(props: Props) {
   const { comparisons } = useSelector(selectDrawer);
@@ -169,17 +181,23 @@ export function ComparePage(props: Props) {
         </DeleteComparisonButton>
       </TitleAndDeleteArea>
       <CompareTools>
-        <ToolButton onClick={handleCompareClick}>
-          <CompareIcon />
-        </ToolButton>
+        <ButtonsTooltip title="השוואת תמונות זו לצד זו">
+          <ToolButton onClick={handleCompareClick}>
+            <CompareIcon />
+          </ToolButton>
+        </ButtonsTooltip>
         <Divider light={false} orientation="vertical" flexItem />
-        <ToolButton onClick={handleGalleryClick}>
-          <FullscreenIcon />
-        </ToolButton>
+        <ButtonsTooltip title="פתיחת גלריית תמונות">
+          <ToolButton onClick={handleGalleryClick}>
+            <FullscreenIcon />
+          </ToolButton>
+        </ButtonsTooltip>
         <Divider light={false} orientation="vertical" flexItem />
-        <ToolButton onClick={handleRemoveClick}>
-          <DeleteIcon />
-        </ToolButton>
+        <ButtonsTooltip title="הסר כותרות מההשוואה">
+          <ToolButton onClick={handleRemoveClick}>
+            <DeleteIcon />
+          </ToolButton>
+        </ButtonsTooltip>
       </CompareTools>
 
       {isImageGalleryOpen && (
@@ -232,11 +250,14 @@ const CompareContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  width: 95vw;
+  margin: auto;
 `;
 
 const CompareTools = styled.div`
   display: flex;
   width: 30vw;
+  min-height: 3vh;
   margin: auto;
   justify-content: space-around;
   background: #d3d3d3;
@@ -244,8 +265,12 @@ const CompareTools = styled.div`
 `;
 
 const ToolButton = styled(Button)`
-  width: 4vw;
-  height: 4vh;
+  flex: 1 1 5vh;
+  background: black;
+  color: white;
+
+  &:hover {
+  }
 `;
 
 const SideBySideContainer = styled.div`

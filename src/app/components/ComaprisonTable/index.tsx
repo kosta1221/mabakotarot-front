@@ -28,12 +28,15 @@ const useStyles = makeStyles({
   },
   cell: {
     fontSize: '1rem',
-    minWidth: '10vw',
+    maxWidth: '10vw',
+    textAlign: 'center',
   },
   hCell: {
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    minWidth: '10vw',
+    maxWidth: '3vw',
+    minWidth: '4vw',
+    textAlign: 'right',
   },
 });
 
