@@ -13,8 +13,6 @@ import { INDEX_OF_LIGHTBOX_FOR_GRID } from 'utils/constants';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
 
-import { DateTime } from 'luxon';
-
 import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
 import { selectAppbar } from '../Appbar/slice/selectors';
@@ -22,6 +20,7 @@ import { useGridHeadlinePresentorSlice } from './slice';
 import { selectDrawer } from '../Drawer/slice/selectors';
 import { drawerActions } from '../Drawer/slice';
 import { selectGridHeadlinePresentorState } from './slice/selectors';
+import { turnDateStringIntoPresentableFormat } from 'utils/luxon';
 
 interface Props {
   headlines?: Array<any>;
@@ -63,18 +62,12 @@ export function GridHeadlinePresentor(props: Props) {
   // NEED TO FIGURE OUT WHY WE ARE USING THIS
   const { actions } = useGridHeadlinePresentorSlice();
 
-  const pickedStartDateTime = startDate
-    ? new DateTime.fromFormat(startDate, 'yyyy-MM-dd HH:mm').setLocale('he')
-    : null;
-  const pickedStartDatePresentable = pickedStartDateTime
-    ? pickedStartDateTime.toFormat('dd MMM yyyy HH:mm')
+  const pickedStartDatePresentable = startDate
+    ? turnDateStringIntoPresentableFormat(startDate, true)
     : null;
 
-  const pickedEndDateTime = endDate
-    ? new DateTime.fromFormat(endDate, 'yyyy-MM-dd HH:mm').setLocale('he')
-    : null;
-  const pickedEndDatePresentable = pickedEndDateTime
-    ? pickedEndDateTime.toFormat('dd MMM yyyy HH:mm')
+  const pickedEndDatePresentable = endDate
+    ? turnDateStringIntoPresentableFormat(endDate, true)
     : null;
 
   const handleOpenQueryDialog = () => {
@@ -135,7 +128,10 @@ export function GridHeadlinePresentor(props: Props) {
 
   const images = headlines?.map(headline => ({
     url: headline.imageUrl || '',
-    title: headline.titleText || '',
+    title:
+      `${turnDateStringIntoPresentableFormat(headline.date, true)}: ${
+        headline.titleText
+      }` || '',
   }));
 
   const handleImageClick = (indexOfImage: number | undefined) => {
@@ -227,5 +223,9 @@ const CenteredMessage = styled.h1`
 const Div = styled.div`
   & .lb-container {
     direction: ltr;
+  }
+
+  & .lb-title {
+    direction: rtl;
   }
 `;

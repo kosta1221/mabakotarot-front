@@ -26,6 +26,7 @@ import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { numFormatter, getNumFromHHMM } from 'utils/helpers';
+import { turnDateStringIntoPresentableFormat } from 'utils/luxon';
 
 interface Props {
   index: number;
@@ -110,7 +111,10 @@ export function HeadlineSliderPresentor(props: Props) {
 
   const images = headlines?.map(headline => ({
     url: headline.imageUrl || '',
-    title: headline.titleText || '',
+    title:
+      `${turnDateStringIntoPresentableFormat(headline.date, true)}: ${
+        headline.titleText
+      }` || '',
   }));
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -213,6 +217,10 @@ export function HeadlineSliderPresentor(props: Props) {
 const Div = styled.div`
   & .lb-container {
     direction: ltr;
+  }
+
+  & .lb-title {
+    direction: rtl;
   }
 `;
 

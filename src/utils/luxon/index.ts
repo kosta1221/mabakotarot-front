@@ -10,8 +10,8 @@ export const turnDateStringIntoPresentableFormat = (
   ).setLocale('he');
 
   const presentableDateString = withBet
-    ? dateTimeFromDateString.toFormat('dd MMM yyyy HH:mm')
-    : dateTimeFromDateString.toFormat('dd בMMM yyyy HH:mm');
+    ? dateTimeFromDateString.toFormat('dd בMMM yyyy HH:mm')
+    : dateTimeFromDateString.toFormat('dd MMM yyyy HH:mm');
 
   return presentableDateString;
 };
