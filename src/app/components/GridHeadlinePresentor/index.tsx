@@ -9,6 +9,7 @@ import Loader from 'react-loader-spinner';
 
 import 'react-awesome-lightbox/build/style.css';
 import Lightbox from 'react-awesome-lightbox';
+import { INDEX_OF_LIGHTBOX_FOR_GRID } from 'utils/constants';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
 
@@ -53,7 +54,11 @@ export function GridHeadlinePresentor(props: Props) {
   const dispatch = useDispatch();
   const { comparisons } = useSelector(selectDrawer);
   const { selectedHeadline } = useSelector(selectGridHeadlinePresentorState);
-  const { indexOfImageToShow, isImageGalleryOpen } = useSelector(selectAppbar);
+  const {
+    indexOfImageToShow,
+    isImageGalleryOpen,
+    indexOfLightBoxToShow,
+  } = useSelector(selectAppbar);
 
   // NEED TO FIGURE OUT WHY WE ARE USING THIS
   const { actions } = useGridHeadlinePresentorSlice();
@@ -136,6 +141,9 @@ export function GridHeadlinePresentor(props: Props) {
   const handleImageClick = (indexOfImage: number | undefined) => {
     console.log(indexOfImage);
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
+    dispatch(
+      appbarActions.setIndexOfLightBoxToShow(INDEX_OF_LIGHTBOX_FOR_GRID),
+    );
     dispatch(appbarActions.setIsImageGalleryOpen(true));
   };
 
@@ -157,13 +165,14 @@ export function GridHeadlinePresentor(props: Props) {
 
   return (
     <>
-      {isImageGalleryOpen && (
-        <Lightbox
-          images={images}
-          startIndex={indexOfImageToShow}
-          onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
-        />
-      )}
+      {isImageGalleryOpen &&
+        indexOfLightBoxToShow === INDEX_OF_LIGHTBOX_FOR_GRID && (
+          <Lightbox
+            images={images}
+            startIndex={indexOfImageToShow}
+            onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
+          />
+        )}
       <AddToCompareDialog
         onClose={comparisonId => handleCloseDialog(comparisonId)}
       />
