@@ -3,7 +3,6 @@ import 'react-calendar/dist/Calendar.css';
 import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
 
-// import { Feed } from '../../components/Feed';
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
 import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
 
@@ -11,6 +10,7 @@ import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
 import { useHomepageSlice } from './slice';
 import { selectHomepage } from './slice/selectors';
+
 import { useSelector } from 'react-redux';
 
 import { currentLocalTime, startOfLocalDay } from 'utils/times';
@@ -33,9 +33,6 @@ export function HomePage() {
         <meta name="description" content="App for comparing news headlines" />
       </Helmet>
       <Content>
-        {/* <HeadlinesFeedInfiniteScroll countPerFetch={6} isSingularFetch={true}>
-          <Feed />
-        </HeadlinesFeedInfiniteScroll> */}
         <Grid>
           <HeadlinesFeedInfiniteScroll
             index={0}

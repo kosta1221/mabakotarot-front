@@ -6,12 +6,14 @@
 import * as React from 'react';
 // import Loader from 'react-loader-spinner';
 
-// import { DateTime } from 'luxon';
-
+import 'react-awesome-lightbox/build/style.css';
+import Lightbox from 'react-awesome-lightbox';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSliders } from './slice/selectors';
 import { slidersActions, initialSliderState } from './slice';
 import { homepageActions } from 'app/pages/HomePage/slice';
+import { appbarActions } from 'app/components/Appbar/slice';
+import { selectAppbar } from 'app/components/Appbar/slice/selectors';
 
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
@@ -45,6 +47,15 @@ export function HeadlineSliderPresentor(props: Props) {
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
+  const {
+    indexOfImageToShow,
+    isImageGalleryOpen,
+    indexOfLightBoxToShow,
+  } = useSelector(selectAppbar);
+
+  const currentHeadline = headlines?.filter(
+    headline => headline.date.split(' ')[1] === sliders[index]?.showedHeadline,
+  )[0];
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -52,8 +63,6 @@ export function HeadlineSliderPresentor(props: Props) {
   if (index > sliders.length - 1) {
     dispatch(slidersActions.setSliders([...sliders, initialSliderState]));
   }
-
-  //   console.log(sliders);
 
   React.useEffect(() => {
     if (
@@ -99,6 +108,13 @@ export function HeadlineSliderPresentor(props: Props) {
       };
     });
 
+  const images = headlines?.map(headline => ({
+    url: headline.imageUrl || '',
+    title: headline.titleText || '',
+  }));
+
+  console.log('images: ', images);
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -110,8 +126,22 @@ export function HeadlineSliderPresentor(props: Props) {
     }
   };
 
+  const handleImageClick = (indexOfImage: number | undefined) => {
+    console.log(index, indexOfImage);
+    indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
+    dispatch(appbarActions.setIndexOfLightBoxToShow(index));
+    dispatch(appbarActions.setIsImageGalleryOpen(true));
+  };
+
   return (
     <div>
+      {isImageGalleryOpen && indexOfLightBoxToShow === index && (
+        <Lightbox
+          images={images}
+          startIndex={indexOfImageToShow}
+          onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
+        />
+      )}
       <Typography id="time-slider" onClick={handleClick} gutterBottom>
         {`היום ב- `}
         <Button
@@ -141,12 +171,8 @@ export function HeadlineSliderPresentor(props: Props) {
 
       <StyledCard elevation={6}>
         <Image
-          src={
-            headlines?.filter(
-              headline =>
-                headline.date.split(' ')[1] === sliders[index]?.showedHeadline,
-            )[0]?.imageUrl
-          }
+          onClick={e => handleImageClick(headlines?.indexOf(currentHeadline))}
+          src={currentHeadline?.imageUrl}
           alt={'headline-image'}
         />
 

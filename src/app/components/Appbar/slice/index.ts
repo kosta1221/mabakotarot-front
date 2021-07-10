@@ -12,6 +12,9 @@ export const initialState: AppbarState = {
   pickedEndDate: currentLocalTime,
   pickedSites: sites,
   searchInput: '',
+  isImageGalleryOpen: false,
+  indexOfImageToShow: 0,
+  indexOfLightBoxToShow: 0,
 };
 
 const slice = createSlice({
@@ -35,6 +38,15 @@ const slice = createSlice({
     },
     setSearchInput(state, action: PayloadAction<string>) {
       state.searchInput = action.payload;
+    },
+    setIsImageGalleryOpen(state, action: PayloadAction<boolean>) {
+      state.isImageGalleryOpen = action.payload;
+    },
+    setIndexOfImageToShow(state, action: PayloadAction<number>) {
+      state.indexOfImageToShow = action.payload;
+    },
+    setIndexOfLightBoxToShow(state, action: PayloadAction<number>) {
+      state.indexOfLightBoxToShow = action.payload;
     },
   },
 });
