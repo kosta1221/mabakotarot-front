@@ -200,13 +200,15 @@ export function ComparePage(props: Props) {
           </ToolButton>
         </ButtonsTooltip>
       </CompareTools>
-
-      {isImageGalleryOpen && (
-        <Lightbox
-          images={images}
-          onClose={() => dispatch(actions.setIsImageGalleryOpen(false))}
-        />
-      )}
+      <LightboxContainer>
+        {isImageGalleryOpen && (
+          <Lightbox
+            buttonAlign="flex-start"
+            images={images}
+            onClose={() => dispatch(actions.setIsImageGalleryOpen(false))}
+          />
+        )}
+      </LightboxContainer>
       {isSideBySideComparisonOpen && (
         <SideBySideContainer onClick={event => event.stopPropagation()}>
           <StyledReactCompareImage
@@ -301,5 +303,11 @@ const DeleteComparisonButton = styled(Button)`
 
   &:hover {
     background: black;
+  }
+`;
+
+const LightboxContainer = styled.div`
+  & .lb-container {
+    direction: ltr;
   }
 `;
