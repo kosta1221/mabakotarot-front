@@ -13,6 +13,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
 
+import { DateTime } from 'luxon';
 import { makeStyles } from '@material-ui/core/styles';
 import { useSelector, useDispatch } from 'react-redux';
 import { useComparisonTableSlice } from './slice';
@@ -117,9 +118,19 @@ export function ComparisonTable(props: Props) {
     ),
     createData(
       'תאריך',
-      headlines[0].date,
-      headlines[1]?.date,
-      headlines[2]?.date,
+      new DateTime.fromFormat(headlines[0].date, 'yyyy-MM-dd HH:mm')
+        .setLocale('he')
+        .toFormat('dd בMMM yyyy HH:mm'),
+      headlines[1]
+        ? new DateTime.fromFormat(headlines[1]?.date, 'yyyy-MM-dd HH:mm')
+            .setLocale('he')
+            .toFormat('dd בMMM yyyy HH:mm')
+        : '',
+      headlines[2]
+        ? new DateTime.fromFormat(headlines[2]?.date, 'yyyy-MM-dd HH:mm')
+            .setLocale('he')
+            .toFormat('dd בMMM yyyy HH:mm')
+        : '',
     ),
     createData(
       'כותרת ראשית',
