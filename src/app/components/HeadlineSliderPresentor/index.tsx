@@ -136,8 +136,12 @@ export function HeadlineSliderPresentor(props: Props) {
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
         <Lightbox
           buttonAlign="flex-start"
-          images={images}
-          startIndex={indexOfImageToShow}
+          images={images?.reverse()}
+          startIndex={
+            headlines && indexOfImageToShow < headlines?.length
+              ? indexOfImageToShow
+              : 0
+          }
           onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
         />
       )}
@@ -170,7 +174,11 @@ export function HeadlineSliderPresentor(props: Props) {
 
       <StyledCard elevation={6}>
         <Image
-          onClick={e => handleImageClick(headlines?.indexOf(currentHeadline))}
+          onClick={e =>
+            handleImageClick(
+              headlines && [...headlines].reverse().indexOf(currentHeadline),
+            )
+          }
           src={currentHeadline?.imageUrl}
           alt={'headline-image'}
         />

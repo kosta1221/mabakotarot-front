@@ -157,6 +157,7 @@ export function GridHeadlinePresentor(props: Props) {
             index={index}
             key={`GridItem-${index}`}
             handleImageClick={handleImageClick}
+            reverseIndex={headlines.length - 1 - index}
           />
         );
       })}
@@ -169,8 +170,12 @@ export function GridHeadlinePresentor(props: Props) {
         indexOfLightBoxToShow === INDEX_OF_LIGHTBOX_FOR_GRID && (
           <Lightbox
             buttonAlign="flex-start"
-            images={images}
-            startIndex={indexOfImageToShow}
+            images={images?.reverse()}
+            startIndex={
+              headlines && indexOfImageToShow < headlines?.length
+                ? indexOfImageToShow
+                : 0
+            }
             onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
           />
         )}
