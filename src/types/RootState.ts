@@ -5,7 +5,7 @@ import { HeadlinesFeedsState } from 'app/components/HeadlinesFeedInfiniteScroll/
 import { GridHeadlinePresentorState } from 'app/components/GridHeadlinePresentor/slice/types';
 import { SlidersState } from 'app/components/HeadlineSliderPresentor/slice/types';
 import { ComparePageState } from 'app/pages/ComparePage/slice/types';
-import { ComparisonTableState } from 'app/components/ComaprisonTable/slice/types';
+import { ComparisonTableState } from 'app/components/ComparisonTable/slice/types';
 // [IMPORT NEW CONTAINERSTATE ABOVE] < Needed for generating containers seamlessly
 
 /* 

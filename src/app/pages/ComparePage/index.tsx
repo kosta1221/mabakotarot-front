@@ -20,12 +20,12 @@ import Lightbox from 'react-awesome-lightbox';
 import 'react-awesome-lightbox/build/style.css';
 
 import { useRouter } from '../../../utils/useRouter';
-import { ComaprisonTable } from '../../components/ComaprisonTable';
+import { ComparisonTable } from '../../components/ComparisonTable';
 import { useSelector } from 'react-redux';
 import { selectDrawer } from '../../components/Drawer/slice/selectors';
 import { selectComparePage } from './slice/selectors';
 import { drawerActions } from '../../components/Drawer/slice';
-import { selectComparisonTable } from '../../components/ComaprisonTable/slice/selectors';
+import { selectComparisonTable } from '../../components/ComparisonTable/slice/selectors';
 import { useSideBySideComparisonSlice } from './slice';
 import { useLocation } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -228,7 +228,7 @@ export function ComparePage(props: Props) {
         </SideBySideContainer>
       </Popover>
       {comparisonData?.headlines.length > 0 ? (
-        <ComaprisonTable comparisonData={comparisonData} />
+        <ComparisonTable comparisonData={comparisonData} />
       ) : (
         <CenteredMessage>אין כותרות להציג</CenteredMessage>
       )}

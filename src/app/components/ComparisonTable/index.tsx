@@ -1,6 +1,6 @@
 /**
  *
- * ComaprisonTable
+ * ComparisonTable
  *
  */
 import * as React from 'react';
@@ -54,7 +54,7 @@ function createData(
   return { dataTitle, headline1 };
 }
 
-export function ComaprisonTable(props: Props) {
+export function ComparisonTable(props: Props) {
   const { comparisonData } = props;
   const { headlines } = comparisonData;
   const dispatch = useDispatch();
