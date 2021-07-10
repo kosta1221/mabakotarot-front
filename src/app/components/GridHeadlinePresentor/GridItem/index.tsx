@@ -101,4 +101,5 @@ const Image = styled.img`
   height: auto;
   width: 100%;
   align-self: center;
+  cursor: zoom-in;
 `;

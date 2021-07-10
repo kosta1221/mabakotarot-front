@@ -164,10 +164,11 @@ export function GridHeadlinePresentor(props: Props) {
   );
 
   return (
-    <>
+    <Div>
       {isImageGalleryOpen &&
         indexOfLightBoxToShow === INDEX_OF_LIGHTBOX_FOR_GRID && (
           <Lightbox
+            buttonAlign="flex-start"
             images={images}
             startIndex={indexOfImageToShow}
             onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
@@ -199,7 +200,7 @@ export function GridHeadlinePresentor(props: Props) {
       {isLoading && !isFetchError && (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
       )}
-    </>
+    </Div>
   );
 }
 
@@ -216,4 +217,10 @@ const BlueSpan = styled.span`
 
 const CenteredMessage = styled.h1`
   text-align: center;
+`;
+
+const Div = styled.div`
+  & .lb-container {
+    direction: ltr;
+  }
 `;

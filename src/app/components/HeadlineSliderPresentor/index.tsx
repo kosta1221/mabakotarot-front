@@ -113,8 +113,6 @@ export function HeadlineSliderPresentor(props: Props) {
     title: headline.titleText || '',
   }));
 
-  console.log('images: ', images);
-
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -134,9 +132,10 @@ export function HeadlineSliderPresentor(props: Props) {
   };
 
   return (
-    <div>
+    <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
         <Lightbox
+          buttonAlign="flex-start"
           images={images}
           startIndex={indexOfImageToShow}
           onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
@@ -199,14 +198,21 @@ export function HeadlineSliderPresentor(props: Props) {
           marks={marks}
         />
       </StyledCard>
-    </div>
+    </Div>
   );
 }
+
+const Div = styled.div`
+  & .lb-container {
+    direction: ltr;
+  }
+`;
 
 const Image = styled.img`
   height: auto;
   width: 100%;
   align-self: center;
+  cursor: zoom-in;
 `;
 
 const StyledCard = styled(Card)`
