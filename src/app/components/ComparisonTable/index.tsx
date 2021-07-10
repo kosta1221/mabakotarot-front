@@ -25,17 +25,19 @@ interface Props {
 const useStyles = makeStyles({
   table: {
     marginTop: '5vh',
+    border: '0.5px solid black',
   },
   cell: {
     fontSize: '1rem',
     maxWidth: '10vw',
     textAlign: 'center',
+    border: '0.5px solid black',
+    height: 'auto',
   },
   hCell: {
     fontSize: '1.1rem',
     fontWeight: 'bold',
-    maxWidth: '3vw',
-    minWidth: '4vw',
+    width: '7vw',
     textAlign: 'right',
   },
 });
@@ -177,6 +179,7 @@ export function ComparisonTable(props: Props) {
 
 const Image = styled.img`
   max-width: 25vw;
+  border: 0.5px solid black;
 `;
 
 const ArticleLink = styled.a``;

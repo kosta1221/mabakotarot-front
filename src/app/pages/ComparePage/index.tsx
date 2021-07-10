@@ -10,7 +10,6 @@ import queryString from 'query-string';
 
 import CompareIcon from '@material-ui/icons/Compare';
 import FullscreenIcon from '@material-ui/icons/Fullscreen';
-import Popover from '@material-ui/core/Popover';
 import ReactCompareImage from 'react-compare-image';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Divider from '@material-ui/core/Divider';
@@ -96,7 +95,8 @@ export function ComparePage(props: Props) {
     dispatch(drawerActions.setComparisons(newComparisons));
   };
 
-  const handleCompareClick = () => {
+  const handleCompareClick = event => {
+    event.stopPropagation();
     const selectedHeadlinesBool = [
       headlineOneChecked,
       headlineTwoChecked,
@@ -139,7 +139,7 @@ export function ComparePage(props: Props) {
     dispatch(actions.setIsSideBySideComparisonOpen(true));
   };
 
-  const handleClose = () => {
+  const handleClose = event => {
     dispatch(actions.setIsSideBySideComparisonOpen(false));
   };
 
@@ -173,16 +173,17 @@ export function ComparePage(props: Props) {
   ].filter(item => item.url !== '');
 
   const compareDisplay = (
-    <CompareContainer ref={anchorRef}>
+    <CompareContainer ref={anchorRef} onClick={event => handleClose(event)}>
       <TitleAndDeleteArea>
         <CenteredMessage>{comparisonData?.text}</CenteredMessage>
         <DeleteComparisonButton onClick={handleDeleteComparison}>
           מחק השוואה
         </DeleteComparisonButton>
       </TitleAndDeleteArea>
+      <Divider />
       <CompareTools>
         <ButtonsTooltip title="השוואת תמונות זו לצד זו">
-          <ToolButton onClick={handleCompareClick}>
+          <ToolButton onClick={event => handleCompareClick(event)}>
             <CompareIcon />
           </ToolButton>
         </ButtonsTooltip>
@@ -206,27 +207,16 @@ export function ComparePage(props: Props) {
           onClose={() => dispatch(actions.setIsImageGalleryOpen(false))}
         />
       )}
-
-      <Popover
-        open={isSideBySideComparisonOpen}
-        onClose={handleClose}
-        anchorEl={anchorRef.current}
-        anchorOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-        transformOrigin={{
-          vertical: 'top',
-          horizontal: 'center',
-        }}
-      >
-        <SideBySideContainer>
+      {isSideBySideComparisonOpen && (
+        <SideBySideContainer onClick={event => event.stopPropagation()}>
           <StyledReactCompareImage
             leftImage={chosenImages[0]}
             rightImage={chosenImages[1]}
+            sliderLineColor={'red'}
+            sliderLineWidth={3}
           />
         </SideBySideContainer>
-      </Popover>
+      )}
       {comparisonData?.headlines.length > 0 ? (
         <ComparisonTable comparisonData={comparisonData} />
       ) : (
@@ -252,6 +242,7 @@ const CompareContainer = styled.div`
   justify-content: center;
   width: 95vw;
   margin: auto;
+  height: 92vh;
 `;
 
 const CompareTools = styled.div`
@@ -276,11 +267,19 @@ const ToolButton = styled(Button)`
 const SideBySideContainer = styled.div`
   width: 1536px;
   height: 754px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 99;
+  border: 1px solid black;
+  box-sizing: content-box;
 `;
 
 const StyledReactCompareImage = styled(ReactCompareImage)`
   box-sizing: border-box;
-  width: 100%;
+  max-width: 100%;
+  max-height: 100%;
   display: inline-block;
 `;
 

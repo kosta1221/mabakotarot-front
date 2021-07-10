@@ -93,7 +93,11 @@ const GridOptions = styled.div`
   width: 100%;
 `;
 
-const AddToCompareButton = styled.div``;
+const AddToCompareButton = styled.div`
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 const GridDate = styled.h3``;
 
