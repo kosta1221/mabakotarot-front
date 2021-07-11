@@ -105,10 +105,6 @@ export function GridHeadlinePresentor(props: Props) {
     }
 
     dispatch(actions.setIsDialogOpen(false));
-    console.log(comparisonId);
-    console.log(
-      headlines?.filter(headline => headline._id === selectedHeadline),
-    );
 
     const editedComparison = comparisons.find(
       element => element.id === comparisonId,
@@ -169,16 +165,31 @@ export function GridHeadlinePresentor(props: Props) {
     <Div>
       {isImageGalleryOpen &&
         indexOfLightBoxToShow === INDEX_OF_LIGHTBOX_FOR_GRID && (
-          <Lightbox
-            buttonAlign="flex-start"
-            images={images?.reverse()}
-            startIndex={
-              headlines && indexOfImageToShow < headlines?.length
-                ? indexOfImageToShow
-                : 0
-            }
-            onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
-          />
+          <LightboxContainer>
+            <Lightbox
+              buttonAlign="flex-start"
+              images={images?.reverse()}
+              startIndex={
+                headlines && indexOfImageToShow < headlines?.length
+                  ? indexOfImageToShow
+                  : 0
+              }
+              onClose={() =>
+                dispatch(appbarActions.setIsImageGalleryOpen(false))
+              }
+            ></Lightbox>
+            <ArticleLinkInLightbox
+              href={
+                headlines && indexOfImageToShow < headlines?.length
+                  ? headlines[headlines.length - 1 - indexOfImageToShow]
+                      ?.titleArticleLink
+                  : 'test'
+              }
+              target="_blank"
+            >
+              קישור לכתבה
+            </ArticleLinkInLightbox>
+          </LightboxContainer>
         )}
       <AddToCompareDialog
         onClose={comparisonId => handleCloseDialog(comparisonId)}
@@ -234,3 +245,19 @@ const Div = styled.div`
     direction: rtl;
   }
 `;
+
+const ArticleLinkInLightbox = styled.a`
+  z-index: 100000;
+  border: 1px solid white;
+  position: fixed;
+  top: 10%;
+  right: 45vw;
+  font-size: 1.3rem;
+  color: white;
+  background: black;
+  padding: 2px;
+  min-width: 8vw;
+  text-align: center;
+`;
+
+const LightboxContainer = styled.div``;

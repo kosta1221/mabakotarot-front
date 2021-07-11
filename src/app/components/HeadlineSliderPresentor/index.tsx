@@ -138,16 +138,29 @@ export function HeadlineSliderPresentor(props: Props) {
   return (
     <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
-        <Lightbox
-          buttonAlign="flex-start"
-          images={images?.reverse()}
-          startIndex={
-            headlines && indexOfImageToShow < headlines?.length
-              ? indexOfImageToShow
-              : 0
-          }
-          onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
-        />
+        <LightboxContainer>
+          <Lightbox
+            buttonAlign="flex-start"
+            images={images?.reverse()}
+            startIndex={
+              headlines && indexOfImageToShow < headlines?.length
+                ? indexOfImageToShow
+                : 0
+            }
+            onClose={() => dispatch(appbarActions.setIsImageGalleryOpen(false))}
+          />
+          <ArticleLinkInLightbox
+            href={
+              headlines && indexOfImageToShow < headlines?.length
+                ? headlines[headlines.length - 1 - indexOfImageToShow]
+                    ?.titleArticleLink
+                : 'test'
+            }
+            target="_blank"
+          >
+            קישור לכתבה
+          </ArticleLinkInLightbox>
+        </LightboxContainer>
       )}
       <Typography id="time-slider" onClick={handleClick} gutterBottom>
         {`היום ב- `}
@@ -242,3 +255,19 @@ const StyledSlider = styled(Slider)`
   padding: 30px 0 10px 0;
   width: 95%;
 `;
+
+const ArticleLinkInLightbox = styled.a`
+  z-index: 100000;
+  border: 1px solid white;
+  position: fixed;
+  top: 10%;
+  right: 45vw;
+  font-size: 1.3rem;
+  color: white;
+  background: black;
+  padding: 2px;
+  min-width: 8vw;
+  text-align: center;
+`;
+
+const LightboxContainer = styled.div``;
