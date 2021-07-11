@@ -12,6 +12,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Checkbox from '@material-ui/core/Checkbox';
+import Grid from '@material-ui/core/Grid';
 
 import { DateTime } from 'luxon';
 import { makeStyles } from '@material-ui/core/styles';
@@ -24,6 +25,10 @@ interface Props {
 }
 
 const useStyles = makeStyles({
+  root: {
+    display: 'flex',
+    overflowX: 'hidden',
+  },
   table: {
     marginTop: '5vh',
     border: '0.5px solid black',
@@ -160,30 +165,32 @@ export function ComparisonTable(props: Props) {
 
   return (
     <TableContainer component={Paper}>
-      <Table className={classes.table} aria-label="simple table">
-        <TableBody>
-          {rows.map((row, i) => (
-            <TableRow key={row.dataTitle}>
-              <TableCell className={classes.hCell} align="center">
-                {row.dataTitle}
-              </TableCell>
-              <TableCell className={classes.cell} align="center">
-                {row.headline1}
-              </TableCell>
-              {row?.headline2 && headlines[1] && (
-                <TableCell className={classes.cell} align="center">
-                  {row.headline2}
+      <Grid item xs={12}>
+        <Table className={classes.table} aria-label="simple table">
+          <TableBody>
+            {rows.map((row, i) => (
+              <TableRow key={row.dataTitle}>
+                <TableCell className={classes.hCell} align="center">
+                  {row.dataTitle}
                 </TableCell>
-              )}
-              {row?.headline3 && headlines[2] && (
                 <TableCell className={classes.cell} align="center">
-                  {row.headline3}
+                  {row.headline1}
                 </TableCell>
-              )}
-            </TableRow>
-          ))}
-        </TableBody>
-      </Table>
+                {row?.headline2 && headlines[1] && (
+                  <TableCell className={classes.cell} align="center">
+                    {row.headline2}
+                  </TableCell>
+                )}
+                {row?.headline3 && headlines[2] && (
+                  <TableCell className={classes.cell} align="center">
+                    {row.headline3}
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </Grid>
     </TableContainer>
   );
 }

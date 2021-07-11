@@ -185,7 +185,7 @@ export function HeadlineSliderPresentor(props: Props) {
       >
         {allSites.map(site => (
           <MenuItem key={site} onClick={e => handleClose(site)}>
-            {site}
+            {sitesHebrew[site]}
           </MenuItem>
         ))}
       </Menu>
