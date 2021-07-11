@@ -11,6 +11,8 @@ import { headlinesFeedsActions, initialSingleHeadlineFeedState } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectHeadlinesFeeds } from './slice/selectors';
 
+import { selectAppbar } from 'app/components/Appbar/slice/selectors';
+
 interface Props {
   index: number;
   children?: React.ReactElement<any, any>;
@@ -53,7 +55,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     sites: sitesInState,
   } = useSelector(selectHeadlinesFeeds).headlineFeeds[index];
 
+  const { showUniqueOnly } = useSelector(selectAppbar);
+
   const observer = useRef<IntersectionObserver>();
+  const firstUpdate = useRef(true);
 
   useEffect(() => {
     sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
@@ -61,6 +66,19 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
     }
   }, [index, dispatch, sites, sitesInState]);
+
+  useEffect(() => {
+    // because we already have the useEffect below to trigger sagaGetHeadlinesInfiniteScroll on initial render, we don't want this effect which is supposed to refresh headlines to trigger on initial render.
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+  }, [index, dispatch, showUniqueOnly]);
+
+  useEffect(() => {
+    dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
+  }, [index, dispatch, page]);
 
   useEffect(() => {
     startDate &&
@@ -98,10 +116,6 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     search &&
       dispatch(headlinesFeedsActions.setOneFeedsSearch({ index, search }));
   }, [index, dispatch, search]);
-
-  useEffect(() => {
-    dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
-  }, [index, dispatch, page]);
 
   useEffect(() => {
     dispatch(headlinesFeedsActions.sortOneFeedsHeadlines({ index, isSortAsc }));
