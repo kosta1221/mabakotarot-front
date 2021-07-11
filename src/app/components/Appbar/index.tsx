@@ -20,6 +20,7 @@ import { useCreateToggleDrawerUtil } from '../Drawer/utils';
 import { useAppbarSlice } from './slice';
 import { QueryDialog } from './QueryDialog';
 import { SearchBar } from './SearchBar';
+import { UniqueOrNotSwitch } from './UniqueOrNotSwitch';
 import { useRouter } from '../../../utils/useRouter';
 // import { selectAppbar } from './slice/selectors';
 
@@ -61,6 +62,16 @@ export function Appbar(props: Props) {
           >
             מה בכותרות
           </Typography>
+
+          <Typography
+            // className={classes.title}
+            variant="h6"
+            noWrap
+          >
+            רק כותרות ייחודיות?
+          </Typography>
+
+          <UniqueOrNotSwitch />
 
           <SearchBar />
 
