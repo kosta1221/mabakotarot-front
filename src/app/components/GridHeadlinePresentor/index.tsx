@@ -75,11 +75,16 @@ export function GridHeadlinePresentor(props: Props) {
   };
 
   const gridCols = '1fr '.repeat(cols || 2);
+  const gridColsMobile = '1fr '.repeat(cols || 1);
   const Grid = styled.div`
     display: grid;
     grid-template-columns: ${gridCols};
     grid-gap: 1vw;
     /* overflow-y: scroll; */
+
+    @media (max-width: 768px) {
+      grid-template-columns: ${gridColsMobile};
+    }
   `;
 
   const handleCloseDialog = (comparisonId: number) => {

@@ -63,7 +63,7 @@ export function GridItem(props: Props) {
         }`}</GridDate>
         <AddToCompareButton onClick={() => handleClickOpenDialog(headline._id)}>
           <CompareTooltip title="הוספה להשוואת כותרות">
-            <AddCircleOutlineRoundedIcon fontSize="large" />
+            <StyledAddCircleOutlineRoundedIcon fontSize="large" />
           </CompareTooltip>
         </AddToCompareButton>
       </GridOptions>
@@ -91,15 +91,30 @@ const GridOptions = styled.div`
   justify-content: space-around;
   align-items: center;
   width: 100%;
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.7rem;
+  }
 `;
 
 const AddToCompareButton = styled.div`
   &:hover {
     cursor: pointer;
   }
+
+  @media (max-width: 768px) {
+    width: auto;
+  }
 `;
 
 const GridDate = styled.h3``;
+
+const StyledAddCircleOutlineRoundedIcon = styled(AddCircleOutlineRoundedIcon)`
+  @media (max-width: 768px) {
+    font-size: 30px;
+  }
+`;
 
 const Image = styled.img`
   height: auto;
