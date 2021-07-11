@@ -24,7 +24,6 @@ export function HomePage() {
   useHomepageSlice();
   //   const dispatch = useDispatch();
   const { slider1, slider2, slider3 } = useSelector(selectHomepage);
-  console.log(slider1, slider2, slider3);
 
   return (
     <>
