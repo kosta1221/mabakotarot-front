@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/Today';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useStyles } from './styles';
+import styled from 'styled-components/macro';
 
 import { useDispatch } from 'react-redux';
 
@@ -63,13 +64,9 @@ export function Appbar(props: Props) {
             מה בכותרות
           </Typography>
 
-          <Typography
-            // className={classes.title}
-            variant="h6"
-            noWrap
-          >
+          <OnlyBigScreensTypography variant="h6" noWrap>
             רק כותרות ייחודיות?
-          </Typography>
+          </OnlyBigScreensTypography>
 
           <UniqueOrNotSwitch />
 
@@ -91,3 +88,9 @@ export function Appbar(props: Props) {
     </div>
   );
 }
+
+const OnlyBigScreensTypography = styled(Typography)`
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;

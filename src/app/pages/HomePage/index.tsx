@@ -96,7 +96,10 @@ const Grid = styled.div`
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-gap: 1vw;
-  /* overflow-y: scroll; */
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 const FrameForFeed = styled.div`
