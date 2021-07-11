@@ -38,7 +38,6 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   const allHeadlineFeeds = useSelector(selectHeadlinesFeeds).headlineFeeds;
 
   if (index > allHeadlineFeeds.length - 1) {
-    console.log('ayo');
     dispatch(
       headlinesFeedsActions.addHeadlineFeed(initialSingleHeadlineFeedState),
     );

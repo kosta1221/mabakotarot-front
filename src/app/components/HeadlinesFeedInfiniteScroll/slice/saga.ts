@@ -3,11 +3,13 @@ import { headlinesFeedsActions as actions } from '.';
 import axios from 'axios';
 
 import { selectHeadlinesFeeds } from './selectors';
+import { selectAppbar } from 'app/components/Appbar/slice/selectors';
 
 function* fetchHeadlinesWorkerSaga(action) {
   const index = action.payload;
 
   try {
+    const { showUniqueOnly } = yield select(selectAppbar);
     const allHeadlineFeeds = yield select(selectHeadlinesFeeds);
 
     const {
@@ -33,6 +35,7 @@ function* fetchHeadlinesWorkerSaga(action) {
       startDate,
       endDate,
       search,
+      showUniqueOnly,
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
@@ -65,6 +68,7 @@ function* fetchNewHeadlinesWorkerSaga(action) {
   const index = action.payload;
 
   try {
+    const { showUniqueOnly } = yield select(selectAppbar);
     const allHeadlineFeeds = yield select(selectHeadlinesFeeds);
 
     const {
@@ -89,6 +93,7 @@ function* fetchNewHeadlinesWorkerSaga(action) {
       startDate,
       endDate,
       search,
+      showUniqueOnly,
     );
 
     if (isSingularFetch || fetchedHeadlines.length === 0) {
@@ -134,6 +139,7 @@ const fetchHeadlines = async (
   startDate: string,
   endDate: string,
   search: string,
+  unique: boolean = false,
 ) => {
   const sitesStringEncoded = encodeURIComponent(JSON.stringify(sites));
 
@@ -141,14 +147,15 @@ const fetchHeadlines = async (
   const startDateQuery = startDate ? `&startDate=${startDate}` : '';
   const endDateQuery = endDate ? `&endDate=${endDate}` : '';
   const searchQuery = search ? `&search=${search}` : '';
+  const uniqueQuery = unique ? `&unique=${unique}` : '';
 
-  console.log(sitesQuery, startDateQuery, endDateQuery, searchQuery);
+  // console.log(sitesQuery, startDateQuery, endDateQuery, searchQuery);
 
   const {
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}`,
+    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}${uniqueQuery}`,
   });
 
   console.log('headlines fetched for sites: ', sites, headlines);

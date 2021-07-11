@@ -9,4 +9,5 @@ export interface AppbarState {
   isImageGalleryOpen: boolean;
   indexOfImageToShow: number;
   indexOfLightBoxToShow: number;
+  showUniqueOnly: boolean;
 }

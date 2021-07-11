@@ -15,6 +15,7 @@ export const initialState: AppbarState = {
   isImageGalleryOpen: false,
   indexOfImageToShow: 0,
   indexOfLightBoxToShow: 0,
+  showUniqueOnly: true,
 };
 
 const slice = createSlice({
@@ -47,6 +48,9 @@ const slice = createSlice({
     },
     setIndexOfLightBoxToShow(state, action: PayloadAction<number>) {
       state.indexOfLightBoxToShow = action.payload;
+    },
+    setShowUniqueOnly(state, action: PayloadAction<boolean>) {
+      state.showUniqueOnly = action.payload;
     },
   },
 });
