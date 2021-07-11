@@ -62,6 +62,9 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
 
   useEffect(() => {
     sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
+    if (firstUpdate.current) {
+      return;
+    }
     if (sitesInState.length > 0 && sites && sites[0] !== sitesInState[0]) {
       dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
     }
@@ -73,12 +76,16 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       firstUpdate.current = false;
       return;
     }
+    window.scrollTo(0, 0);
+    dispatch(headlinesFeedsActions.setOneFeedsPage({ index, page: 0 }));
+    dispatch(
+      headlinesFeedsActions.setOneFeedsLoadMoreHeadlines({
+        index,
+        loadMoreHeadlines: true,
+      }),
+    );
     dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
   }, [index, dispatch, showUniqueOnly]);
-
-  useEffect(() => {
-    dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
-  }, [index, dispatch, page]);
 
   useEffect(() => {
     startDate &&
@@ -121,6 +128,12 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     dispatch(headlinesFeedsActions.sortOneFeedsHeadlines({ index, isSortAsc }));
   }, [index, dispatch, isSortAsc]);
 
+  useEffect(() => {
+    if (page > 0) {
+      dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
+    }
+  }, [index, dispatch, page]);
+
   const lastItem = useCallback(
     element => {
       if (observer.current) {
@@ -129,12 +142,21 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting && loadMoreHeadlines) {
-            dispatch(
-              headlinesFeedsActions.incrementOneFeedsPageByAmount({
-                index,
-                amount: 1,
-              }),
-            );
+            if (page === 0) {
+              dispatch(
+                headlinesFeedsActions.incrementOneFeedsPageByAmount({
+                  index,
+                  amount: 2,
+                }),
+              );
+            } else {
+              dispatch(
+                headlinesFeedsActions.incrementOneFeedsPageByAmount({
+                  index,
+                  amount: 1,
+                }),
+              );
+            }
           }
         },
         { threshold: 1 },
@@ -144,7 +166,7 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
         observer.current.observe(element);
       }
     },
-    [index, dispatch, loadMoreHeadlines],
+    [index, dispatch, loadMoreHeadlines, page],
   );
 
   const handleToggleSortingorder = e => {

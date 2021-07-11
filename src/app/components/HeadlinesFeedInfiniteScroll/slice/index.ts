@@ -55,6 +55,12 @@ const slice = createSlice({
     ) {
       state.headlineFeeds[action.payload.index].page += action.payload.amount;
     },
+    setOneFeedsPage(
+      state,
+      action: PayloadAction<{ index: number; page: number }>,
+    ) {
+      state.headlineFeeds[action.payload.index].page = action.payload.page;
+    },
     setOneFeedsLoadMoreHeadlines(
       state,
       action: PayloadAction<{ index: number; loadMoreHeadlines: boolean }>,
