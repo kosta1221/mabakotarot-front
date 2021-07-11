@@ -21,6 +21,7 @@ import Fade from '@material-ui/core/Fade';
 import { sites as allSites } from 'utils/sites';
 import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
+import { sitesHebrew } from '../../../utils/sites';
 
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
@@ -170,7 +171,7 @@ export function HeadlineSliderPresentor(props: Props) {
           aria-haspopup="true"
           onClick={handleClick}
         >
-          {`${sliders[index] && sliders[index].pickedSite}:`}
+          {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
         </Button>
       </Typography>
 
