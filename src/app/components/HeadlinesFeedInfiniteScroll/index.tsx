@@ -7,11 +7,14 @@ import * as React from 'react';
 
 import { useEffect, useCallback, useRef } from 'react';
 
-import { useHeadlinesFeedInfiniteScrollSlice } from './slice';
+import { headlinesFeedsActions, initialSingleHeadlineFeedState } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectHeadlinesFeedInfiniteScroll } from './slice/selectors';
+import { selectHeadlinesFeeds } from './slice/selectors';
+
+import { selectAppbar } from 'app/components/Appbar/slice/selectors';
 
 interface Props {
+  index: number;
   children?: React.ReactElement<any, any>;
   countPerFetch?: number;
   sites?: string[] | null;
@@ -23,6 +26,7 @@ interface Props {
 
 export function HeadlinesFeedInfiniteScroll(props: Props) {
   const {
+    index,
     children,
     sites,
     countPerFetch,
@@ -32,49 +36,103 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
     search,
   } = props;
 
-  const { actions } = useHeadlinesFeedInfiniteScrollSlice();
   const dispatch = useDispatch();
+  const allHeadlineFeeds = useSelector(selectHeadlinesFeeds).headlineFeeds;
+
+  if (index > allHeadlineFeeds.length - 1) {
+    dispatch(
+      headlinesFeedsActions.addHeadlineFeed(initialSingleHeadlineFeedState),
+    );
+  }
+
   const {
     headlines,
     page,
     loadMoreHeadlines,
     isLoading,
     isSortAsc,
-  } = useSelector(selectHeadlinesFeedInfiniteScroll);
+    isFetchError,
+    sites: sitesInState,
+  } = useSelector(selectHeadlinesFeeds).headlineFeeds[index];
+
+  const { showUniqueOnly } = useSelector(selectAppbar);
 
   const observer = useRef<IntersectionObserver>();
+  const firstUpdate = useRef(true);
 
   useEffect(() => {
-    sites && dispatch(actions.setSites(sites));
-  }, [dispatch, actions, sites]);
+    sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
+    if (firstUpdate.current) {
+      return;
+    }
+    if (sitesInState.length > 0 && sites && sites[0] !== sitesInState[0]) {
+      dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+    }
+  }, [index, dispatch, sites, sitesInState]);
 
   useEffect(() => {
-    startDate && dispatch(actions.setStartDate(startDate));
-  }, [dispatch, actions, startDate]);
+    // because we already have the useEffect below to trigger sagaGetHeadlinesInfiniteScroll on initial render, we don't want this effect which is supposed to refresh headlines to trigger on initial render.
+    if (firstUpdate.current) {
+      firstUpdate.current = false;
+      return;
+    }
+    window.scrollTo(0, 0);
+    dispatch(headlinesFeedsActions.setOneFeedsPage({ index, page: 0 }));
+    dispatch(
+      headlinesFeedsActions.setOneFeedsLoadMoreHeadlines({
+        index,
+        loadMoreHeadlines: true,
+      }),
+    );
+    dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+  }, [index, dispatch, showUniqueOnly]);
 
   useEffect(() => {
-    endDate && dispatch(actions.setEndDate(endDate));
-  }, [dispatch, actions, endDate]);
+    startDate &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsStartDate({ index, startDate }),
+      );
+  }, [index, dispatch, startDate]);
 
   useEffect(() => {
-    countPerFetch && dispatch(actions.setCountPerFetch(countPerFetch));
-  }, [dispatch, actions, countPerFetch]);
+    endDate &&
+      dispatch(headlinesFeedsActions.setOneFeedsEndDate({ index, endDate }));
+  }, [index, dispatch, endDate]);
 
   useEffect(() => {
-    isSingularFetch && dispatch(actions.setIsSingularFetch(isSingularFetch));
-  }, [dispatch, actions, isSingularFetch]);
+    countPerFetch != null &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsCountPerFetch({
+          index,
+          countPerFetch,
+        }),
+      );
+  }, [index, dispatch, countPerFetch]);
 
   useEffect(() => {
-    search && dispatch(actions.setSearch(search));
-  }, [dispatch, actions, search]);
+    isSingularFetch &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsIsSingularFetch({
+          index,
+          isSingularFetch,
+        }),
+      );
+  }, [index, dispatch, isSingularFetch]);
 
   useEffect(() => {
-    dispatch(actions.sagaGetHeadlinesInfiniteScroll());
-  }, [dispatch, actions, page]);
+    search &&
+      dispatch(headlinesFeedsActions.setOneFeedsSearch({ index, search }));
+  }, [index, dispatch, search]);
 
   useEffect(() => {
-    dispatch(actions.sortHeadlines(isSortAsc));
-  }, [dispatch, actions, isSortAsc]);
+    dispatch(headlinesFeedsActions.sortOneFeedsHeadlines({ index, isSortAsc }));
+  }, [index, dispatch, isSortAsc]);
+
+  useEffect(() => {
+    if (page > 0) {
+      dispatch(headlinesFeedsActions.sagaGetHeadlinesInfiniteScroll(index));
+    }
+  }, [index, dispatch, page]);
 
   const lastItem = useCallback(
     element => {
@@ -84,7 +142,21 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       observer.current = new IntersectionObserver(
         entries => {
           if (entries[0].isIntersecting && loadMoreHeadlines) {
-            dispatch(actions.incrementPageByAmount(1));
+            if (page === 0) {
+              dispatch(
+                headlinesFeedsActions.incrementOneFeedsPageByAmount({
+                  index,
+                  amount: 2,
+                }),
+              );
+            } else {
+              dispatch(
+                headlinesFeedsActions.incrementOneFeedsPageByAmount({
+                  index,
+                  amount: 1,
+                }),
+              );
+            }
           }
         },
         { threshold: 1 },
@@ -94,11 +166,11 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
         observer.current.observe(element);
       }
     },
-    [dispatch, actions, loadMoreHeadlines],
+    [index, dispatch, loadMoreHeadlines, page],
   );
 
   const handleToggleSortingorder = e => {
-    dispatch(actions.toggleIsSortAsc());
+    dispatch(headlinesFeedsActions.toggleOneFeedsIsSortAsc(index));
   };
 
   if (!children) {
@@ -112,6 +184,10 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
         lastItem,
         isLoading,
         isSortAsc,
+        startDate,
+        endDate,
+        sites,
+        isFetchError,
         handleToggleSortingorder,
       })}
     </>

@@ -6,4 +6,8 @@ export interface AppbarState {
   pickedEndDate: string;
   pickedSites: Array<string>;
   searchInput: string;
+  isImageGalleryOpen: boolean;
+  indexOfImageToShow: number;
+  indexOfLightBoxToShow: number;
+  showUniqueOnly: boolean;
 }

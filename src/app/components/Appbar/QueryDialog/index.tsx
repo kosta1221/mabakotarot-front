@@ -144,6 +144,8 @@ export function QueryDialog(props: Props) {
               clockIcon={null}
             />
 
+            <p>-</p>
+
             <StyledTimePicker
               onChange={onEndHourPick}
               value={pickedEndDateTime.toFormat('HH:mm')}
@@ -155,7 +157,11 @@ export function QueryDialog(props: Props) {
           </FlexDiv>
 
           <DialogContentText>
-            {`${pickedStartDatePresentable} - ${pickedEndDatePresentable}`}
+            {`מתאריך ${pickedStartDatePresentable.slice(-0, -5)} בשעה
+            ${pickedStartDatePresentable.slice(
+              12,
+            )} - עד לתאריך ${pickedEndDatePresentable.slice(-0, -5)} בשעה
+            ${pickedEndDatePresentable.slice(12)}`}
           </DialogContentText>
 
           <StyledDialogContentText>

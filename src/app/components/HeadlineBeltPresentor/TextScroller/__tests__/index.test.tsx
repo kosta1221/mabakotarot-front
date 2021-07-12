@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { render } from '@testing-library/react';
 
-import { SingleDateOrRangeToggle } from '..';
+import { TextScroller } from '..';
 
-describe('<SingleDateOrRangeToggle  />', () => {
+describe('<TextScroller  />', () => {
   it('should match snapshot', () => {
-    const loadingIndicator = render(<SingleDateOrRangeToggle />);
+    const loadingIndicator = render(<TextScroller />);
     expect(loadingIndicator.container.firstChild).toMatchSnapshot();
   });
 });

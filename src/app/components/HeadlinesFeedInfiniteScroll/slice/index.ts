@@ -2,10 +2,12 @@ import { PayloadAction, createAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer, useInjectSaga } from 'utils/redux-injectors';
 import { headlinesFeedInfiniteScrollSaga } from './saga';
-import { HeadlinesFeedInfiniteScrollState } from './types';
+import { Headline } from 'types/Headline';
+import { HeadlinesFeedsState, HeadlinesFeedInfiniteScroll } from './types';
 import { sortByDateAsc, sortByDateDesc } from './utils';
 
-export const initialState: HeadlinesFeedInfiniteScrollState = {
+export const initialSingleHeadlineFeedState = {
+  index: 0,
   headlines: [],
   page: 1,
   countPerFetch: 5,
@@ -20,70 +22,139 @@ export const initialState: HeadlinesFeedInfiniteScrollState = {
   search: '',
 };
 
+export const initialState: HeadlinesFeedsState = {
+  headlineFeeds: [initialSingleHeadlineFeedState],
+};
+
 const slice = createSlice({
-  name: 'headlinesFeedInfiniteScroll',
+  name: 'headlinesFeeds',
   initialState,
   reducers: {
-    setHeadlines(state, action: PayloadAction<any>) {
-      state.headlines = action.payload;
+    addHeadlineFeed(state, action: PayloadAction<HeadlinesFeedInfiniteScroll>) {
+      state.headlineFeeds.push(action.payload);
     },
-    sortHeadlines(state, action: PayloadAction<boolean>) {
-      action.payload
-        ? sortByDateAsc(state.headlines)
-        : sortByDateDesc(state.headlines);
+
+    setOneFeedsHeadlines(
+      state,
+      action: PayloadAction<{ index: number; headlines: Headline[] }>,
+    ) {
+      state.headlineFeeds[action.payload.index].headlines =
+        action.payload.headlines;
     },
-    incrementPageByAmount(state, action: PayloadAction<number>) {
-      state.page += action.payload;
+    sortOneFeedsHeadlines(
+      state,
+      action: PayloadAction<{ index: number; isSortAsc: boolean }>,
+    ) {
+      action.payload.isSortAsc
+        ? sortByDateAsc(state.headlineFeeds[action.payload.index].headlines)
+        : sortByDateDesc(state.headlineFeeds[action.payload.index].headlines);
     },
-    setLoadMoreHeadlines(state, action: PayloadAction<boolean>) {
-      state.loadMoreHeadlines = action.payload;
+    incrementOneFeedsPageByAmount(
+      state,
+      action: PayloadAction<{ index: number; amount: number }>,
+    ) {
+      state.headlineFeeds[action.payload.index].page += action.payload.amount;
     },
-    setIsLoading(state, action: PayloadAction<boolean>) {
-      state.isLoading = action.payload;
+    setOneFeedsPage(
+      state,
+      action: PayloadAction<{ index: number; page: number }>,
+    ) {
+      state.headlineFeeds[action.payload.index].page = action.payload.page;
     },
-    setItFetchError(state, action: PayloadAction<boolean>) {
-      state.isFetchError = action.payload;
+    setOneFeedsLoadMoreHeadlines(
+      state,
+      action: PayloadAction<{ index: number; loadMoreHeadlines: boolean }>,
+    ) {
+      state.headlineFeeds[action.payload.index].loadMoreHeadlines =
+        action.payload.loadMoreHeadlines;
     },
-    setIsSortAsc(state, action: PayloadAction<boolean>) {
-      state.isSortAsc = action.payload;
+    setOneFeedsIsLoading(
+      state,
+      action: PayloadAction<{ index: number; isLoading: boolean }>,
+    ) {
+      state.headlineFeeds[action.payload.index].isLoading =
+        action.payload.isLoading;
     },
-    toggleIsSortAsc(state) {
-      state.isSortAsc = !state.isSortAsc;
+    setOneFeedsIsFetchError(
+      state,
+      action: PayloadAction<{ index: number; isFetchError: boolean }>,
+    ) {
+      state.headlineFeeds[action.payload.index].isFetchError =
+        action.payload.isFetchError;
     },
-    setSites(state, action: PayloadAction<string[]>) {
-      state.sites = action.payload;
+    setOneFeedsIsSortAsc(
+      state,
+      action: PayloadAction<{ index: number; isSortAsc: boolean }>,
+    ) {
+      state.headlineFeeds[action.payload.index].isSortAsc =
+        action.payload.isSortAsc;
     },
-    setCountPerFetch(state, action: PayloadAction<number>) {
-      state.countPerFetch = action.payload;
+    toggleOneFeedsIsSortAsc(state, action: PayloadAction<number>) {
+      state.headlineFeeds[action.payload].isSortAsc = !state.headlineFeeds[
+        action.payload
+      ].isSortAsc;
     },
-    setIsSingularFetch(state, action: PayloadAction<boolean>) {
-      state.isSingularFetch = action.payload;
+    setOneFeedsSites(
+      state,
+      action: PayloadAction<{ index: number; sites: string[] }>,
+    ) {
+      state.headlineFeeds[action.payload.index].sites = action.payload.sites;
     },
-    setStartDate(state, action: PayloadAction<string>) {
-      state.startDate = action.payload;
+    setOneFeedsCountPerFetch(
+      state,
+      action: PayloadAction<{ index: number; countPerFetch: number }>,
+    ) {
+      state.headlineFeeds[action.payload.index].countPerFetch =
+        action.payload.countPerFetch;
     },
-    setEndDate(state, action: PayloadAction<string>) {
-      state.endDate = action.payload;
+    setOneFeedsIsSingularFetch(
+      state,
+      action: PayloadAction<{ index: number; isSingularFetch: boolean }>,
+    ) {
+      state.headlineFeeds[action.payload.index].isSingularFetch =
+        action.payload.isSingularFetch;
     },
-    setSearch(state, action: PayloadAction<string>) {
-      state.search = action.payload;
+    setOneFeedsStartDate(
+      state,
+      action: PayloadAction<{ index: number; startDate: string }>,
+    ) {
+      state.headlineFeeds[action.payload.index].startDate =
+        action.payload.startDate;
+    },
+    setOneFeedsEndDate(
+      state,
+      action: PayloadAction<{ index: number; endDate: string }>,
+    ) {
+      state.headlineFeeds[action.payload.index].endDate =
+        action.payload.endDate;
+    },
+    setOneFeedsSearch(
+      state,
+      action: PayloadAction<{ index: number; search: string }>,
+    ) {
+      state.headlineFeeds[action.payload.index].search = action.payload.search;
     },
   },
 });
 
-const sagaGetHeadlinesInfiniteScroll = createAction(
+const sagaGetHeadlinesInfiniteScroll = createAction<number | undefined>(
   'GET_HEADLINES_INFINITE_SCROLL',
 );
 
-export const headlinesFeedInfiniteScrollActions = {
+const sagaFetchNewHeadlines = createAction<number | undefined>(
+  'FETCH_NEW_HEADLINES',
+);
+
+export const headlinesFeedsActions = {
   ...slice.actions,
   sagaGetHeadlinesInfiniteScroll,
+  sagaFetchNewHeadlines,
 };
 
-export const useHeadlinesFeedInfiniteScrollSlice = () => {
+export const useHeadlinesFeedsSlice = () => {
   useInjectReducer({ key: slice.name, reducer: slice.reducer });
   useInjectSaga({ key: slice.name, saga: headlinesFeedInfiniteScrollSaga });
-  return { actions: headlinesFeedInfiniteScrollActions };
+  return { actions: headlinesFeedsActions };
 };
 
 /**

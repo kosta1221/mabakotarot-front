@@ -3,10 +3,9 @@ import { createSelector } from '@reduxjs/toolkit';
 import { RootState } from 'types';
 import { initialState } from '.';
 
-const selectSlice = (state: RootState) =>
-  state.headlinesFeedInfiniteScroll || initialState;
+const selectSlice = (state: RootState) => state.headlinesFeeds || initialState;
 
-export const selectHeadlinesFeedInfiniteScroll = createSelector(
+export const selectHeadlinesFeeds = createSelector(
   [selectSlice],
   state => state,
 );

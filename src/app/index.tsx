@@ -14,6 +14,7 @@ import { GlobalStyle } from 'styles/global-styles';
 
 import { HomePage } from './pages/HomePage/Loadable';
 import { HeadlinesPage } from './pages/HeadlinesPage/Loadable';
+import { ComparePage } from './pages/ComparePage/Loadable';
 import { Drawer } from './components/Drawer';
 import { Appbar } from './components/Appbar';
 import { NotFoundPage } from './pages/NotFoundPage/Loadable';
@@ -37,6 +38,8 @@ export function App() {
         <Route exact path="/" component={HomePage} />
         <Route exact path="/headlines" component={HeadlinesPage} />
         <Route exact path="/headlines/:site" component={HeadlinesPage} />
+        <Route exact path="/compare" component={ComparePage} />
+        <Route exact path="/compare/:id" component={ComparePage} />
         <Route component={NotFoundPage} />
       </Switch>
       <GlobalStyle />

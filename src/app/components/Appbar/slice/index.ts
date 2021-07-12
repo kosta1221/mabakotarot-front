@@ -2,18 +2,20 @@ import { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 import { AppbarState } from './types';
-import { DateTime } from 'luxon';
+import { currentLocalTime, startOfLocalDay } from 'utils/times';
 import { sites } from '../../../../utils/sites';
 
 export const initialState: AppbarState = {
   isQueryDialogOpen: false,
   isDateRange: true,
-  pickedStartDate: new DateTime(
-    DateTime.local().set({ hour: 0, minute: 0 }),
-  ).toFormat('yyyy-MM-dd HH:mm'),
-  pickedEndDate: new DateTime(DateTime.local()).toFormat('yyyy-MM-dd HH:mm'),
+  pickedStartDate: startOfLocalDay,
+  pickedEndDate: currentLocalTime,
   pickedSites: sites,
   searchInput: '',
+  isImageGalleryOpen: false,
+  indexOfImageToShow: 0,
+  indexOfLightBoxToShow: 0,
+  showUniqueOnly: true,
 };
 
 const slice = createSlice({
@@ -37,6 +39,18 @@ const slice = createSlice({
     },
     setSearchInput(state, action: PayloadAction<string>) {
       state.searchInput = action.payload;
+    },
+    setIsImageGalleryOpen(state, action: PayloadAction<boolean>) {
+      state.isImageGalleryOpen = action.payload;
+    },
+    setIndexOfImageToShow(state, action: PayloadAction<number>) {
+      state.indexOfImageToShow = action.payload;
+    },
+    setIndexOfLightBoxToShow(state, action: PayloadAction<number>) {
+      state.indexOfLightBoxToShow = action.payload;
+    },
+    setShowUniqueOnly(state, action: PayloadAction<boolean>) {
+      state.showUniqueOnly = action.payload;
     },
   },
 });

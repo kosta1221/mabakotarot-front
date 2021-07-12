@@ -1,4 +1,4 @@
-export const sortByDateAsc = arr => {
+export const sortByDateAsc = (arr: any[]) => {
   return arr.sort((a, b) => {
     const aDate = new Date(a.date);
     const bDate = new Date(b.date);
@@ -7,7 +7,7 @@ export const sortByDateAsc = arr => {
   });
 };
 
-export const sortByDateDesc = arr => {
+export const sortByDateDesc = (arr: any[]) => {
   return arr.sort((a, b) => {
     const aDate = new Date(a.date);
     const bDate = new Date(b.date);

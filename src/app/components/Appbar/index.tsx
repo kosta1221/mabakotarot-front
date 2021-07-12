@@ -12,6 +12,7 @@ import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/Today';
 import MenuIcon from '@material-ui/icons/Menu';
 import { useStyles } from './styles';
+import styled from 'styled-components/macro';
 
 import { useDispatch } from 'react-redux';
 
@@ -20,6 +21,8 @@ import { useCreateToggleDrawerUtil } from '../Drawer/utils';
 import { useAppbarSlice } from './slice';
 import { QueryDialog } from './QueryDialog';
 import { SearchBar } from './SearchBar';
+import { UniqueOrNotSwitch } from './UniqueOrNotSwitch';
+import { useRouter } from '../../../utils/useRouter';
 // import { selectAppbar } from './slice/selectors';
 
 interface Props {}
@@ -29,8 +32,14 @@ export function Appbar(props: Props) {
 
   const { actions } = useAppbarSlice();
   const dispatch = useDispatch();
+  const router = useRouter();
 
   const toggleDrawer = useCreateToggleDrawerUtil(dispatch, drawerActions);
+
+  const handleHomePageClick = () => {
+    router.push('/');
+    router.history.go(0);
+  };
 
   return (
     <div className={`${classes.root} search-app-bar`}>
@@ -46,9 +55,20 @@ export function Appbar(props: Props) {
             <MenuIcon />
           </IconButton>
 
-          <Typography className={classes.title} variant="h6" noWrap>
+          <Typography
+            onClick={handleHomePageClick}
+            className={classes.title}
+            variant="h6"
+            noWrap
+          >
             מה בכותרות
           </Typography>
+
+          <OnlyBigScreensTypography variant="h6" noWrap>
+            רק כותרות ייחודיות?
+          </OnlyBigScreensTypography>
+
+          <UniqueOrNotSwitch />
 
           <SearchBar />
 
@@ -68,3 +88,9 @@ export function Appbar(props: Props) {
     </div>
   );
 }
+
+const OnlyBigScreensTypography = styled(Typography)`
+  @media (max-width: 700px) {
+    display: none;
+  }
+`;

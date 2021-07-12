@@ -3,10 +3,13 @@ import { createSlice } from 'utils/@reduxjs/toolkit';
 import { useInjectReducer } from 'utils/redux-injectors';
 import { DrawerState } from './types';
 
+import { getComparisonsFromLocalStorage } from 'utils/localStorage';
+
 export const initialState: DrawerState = {
   isDrawerDisplayed: false,
   isComparisonOpen: true,
-  comparisons: [],
+  comparisons: getComparisonsFromLocalStorage() || [],
+  editing: false,
 };
 
 const slice = createSlice({
@@ -20,7 +23,10 @@ const slice = createSlice({
       state.isComparisonOpen = action.payload;
     },
     setComparisons(state, action: PayloadAction<Array<any>>) {
-      state.comparisons.push({ text: 'test' });
+      state.comparisons = action.payload;
+    },
+    setEditing(state, action: PayloadAction<boolean>) {
+      state.editing = action.payload;
     },
   },
 });

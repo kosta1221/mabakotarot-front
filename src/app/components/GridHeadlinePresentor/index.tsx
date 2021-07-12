@@ -6,36 +6,35 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
 import Loader from 'react-loader-spinner';
-import Divider from '@material-ui/core/Divider';
-import Tooltip from '@material-ui/core/Tooltip';
-import AddCircleOutlineRoundedIcon from '@material-ui/icons/AddCircleOutlineRounded';
 
-import { DateTime } from 'luxon';
+import 'react-awesome-lightbox/build/style.css';
+import Lightbox from 'react-awesome-lightbox';
+import { INDEX_OF_LIGHTBOX_FOR_GRID } from 'utils/constants';
+import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
+import { GridItem } from './GridItem';
 
-import { withStyles } from '@material-ui/core/styles';
-import { useSelector, useDispatch } from 'react-redux';
-import { selectHeadlinesFeedInfiniteScroll } from '../HeadlinesFeedInfiniteScroll/slice/selectors';
+import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
-import { appActions } from '../../slice';
+import { selectAppbar } from '../Appbar/slice/selectors';
+import { useGridHeadlinePresentorSlice } from './slice';
+import { selectDrawer } from '../Drawer/slice/selectors';
+import { drawerActions } from '../Drawer/slice';
+import { selectGridHeadlinePresentorState } from './slice/selectors';
+import { turnDateStringIntoPresentableFormat } from 'utils/luxon';
 
 interface Props {
   headlines?: Array<any>;
   lastItem?: any;
   isLoading?: boolean;
   isSortAsc?: boolean;
+  startDate?: string;
+  endDate?: string;
+  sites?: any[];
+  isFetchError?: boolean;
   handleToggleSortingorder?: any;
   comparisonItems?: Array<any>;
+  cols?: number;
 }
-
-const CompareTooltip = withStyles(theme => ({
-  tooltip: {
-    backgroundColor: '#f5f5f9',
-    color: 'black',
-    maxWidth: 200,
-    fontSize: theme.typography.pxToRem(15),
-    border: '1px solid #dadde9',
-  },
-}))(Tooltip);
 
 export function GridHeadlinePresentor(props: Props) {
   const {
@@ -44,74 +43,164 @@ export function GridHeadlinePresentor(props: Props) {
     isLoading,
     isSortAsc,
     handleToggleSortingorder,
-    comparisonItems,
+    startDate,
+    endDate,
+    sites,
+    isFetchError,
+    cols,
   } = props;
 
   const dispatch = useDispatch();
-  const { startDate, endDate, sites, isFetchError } = useSelector(
-    selectHeadlinesFeedInfiniteScroll,
-  );
+  const { comparisons } = useSelector(selectDrawer);
+  const { selectedHeadline } = useSelector(selectGridHeadlinePresentorState);
+  const {
+    indexOfImageToShow,
+    isImageGalleryOpen,
+    indexOfLightBoxToShow,
+  } = useSelector(selectAppbar);
 
-  const pickedStartDateTime = new DateTime.fromFormat(
-    startDate,
-    'yyyy-MM-dd HH:mm',
-  ).setLocale('he');
-  const pickedStartDatePresentable = pickedStartDateTime.toFormat(
-    'dd MMM yyyy HH:mm',
-  );
+  // NEED TO FIGURE OUT WHY WE ARE USING THIS
+  const { actions } = useGridHeadlinePresentorSlice();
 
-  const pickedEndDateTime = new DateTime.fromFormat(
-    endDate,
-    'yyyy-MM-dd HH:mm',
-  ).setLocale('he');
-  const pickedEndDatePresentable = pickedEndDateTime.toFormat(
-    'dd MMM yyyy HH:mm',
-  );
+  const pickedStartDatePresentable = startDate
+    ? turnDateStringIntoPresentableFormat(startDate, true)
+    : null;
+
+  const pickedEndDatePresentable = endDate
+    ? turnDateStringIntoPresentableFormat(endDate, true)
+    : null;
 
   const handleOpenQueryDialog = () => {
     dispatch(appbarActions.setIsQueryDialogOpen(true));
   };
 
-  const handleAddToCompare = () => {
-    dispatch(appActions.setComparisonItems(headlines));
-    console.log(comparisonItems);
+  const gridCols = '1fr '.repeat(cols || 2);
+  const gridColsMobile = '1fr '.repeat(cols || 1);
+  const Grid = styled.div`
+    display: grid;
+    grid-template-columns: ${gridCols};
+    grid-gap: 1vw;
+    /* overflow-y: scroll; */
+
+    @media (max-width: 768px) {
+      grid-template-columns: ${gridColsMobile};
+    }
+  `;
+
+  const handleCloseDialog = (comparisonId: number) => {
+    // if user pressed on new comparison button
+    if (comparisonId === 99) {
+      if (comparisons.length > 8) {
+        alert('מותר עד 9 השוואות!');
+        return;
+      }
+      const newCompare = {
+        id: comparisons.length + 1,
+        text: `השוואה חדשה - ${comparisons.length + 1}`,
+        headlines: [],
+      };
+
+      const newComparisons = [...comparisons, newCompare];
+      return dispatch(drawerActions.setComparisons(newComparisons));
+    }
+
+    dispatch(actions.setIsDialogOpen(false));
+
+    const editedComparison = comparisons.find(
+      element => element.id === comparisonId,
+    );
+    const comparisonWithNewHeadline = {
+      id: editedComparison?.id,
+      text: editedComparison?.text,
+      headlines: [
+        ...editedComparison?.headlines,
+        headlines?.filter(headline => headline._id === selectedHeadline)[0],
+      ],
+    };
+
+    const newComparisons = [
+      ...comparisons.filter(comparison => comparison.id !== comparisonId),
+      comparisonWithNewHeadline,
+    ];
+
+    dispatch(drawerActions.setComparisons(newComparisons));
+    console.log(comparisons);
+  };
+
+  const images = headlines?.map(headline => ({
+    url: headline.imageUrl || '',
+    title:
+      `${turnDateStringIntoPresentableFormat(headline.date, true)}: ${
+        headline.titleText
+      }` || '',
+  }));
+
+  const handleImageClick = (indexOfImage: number | undefined) => {
+    console.log(indexOfImage);
+    indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
+    dispatch(
+      appbarActions.setIndexOfLightBoxToShow(INDEX_OF_LIGHTBOX_FOR_GRID),
+    );
+    dispatch(appbarActions.setIsImageGalleryOpen(true));
   };
 
   const grid = (
     <Grid>
-      {headlines?.map((headline, i) => {
+      {headlines?.map((headline, index) => {
         return (
           <GridItem
-            ref={headlines.length === i + 1 ? lastItem : null}
-            key={headline._id}
-          >
-            <GridOptions>
-              <GridDate>{`${headline.date} ${headline._id.slice(
-                20,
-              )}`}</GridDate>
-              <Divider orientation="vertical" flexItem />
-              <AddToCompareButton onClick={handleAddToCompare}>
-                <CompareTooltip title="הוספה להשוואת כותרות">
-                  <AddCircleOutlineRoundedIcon fontSize="large" />
-                </CompareTooltip>
-              </AddToCompareButton>
-            </GridOptions>
-            <Image src={headline.imageUrl} alt={`headline-${i}`} />
-          </GridItem>
+            headline={headline}
+            lastItem={lastItem}
+            index={index}
+            key={`GridItem-${index}`}
+            handleImageClick={handleImageClick}
+            reverseIndex={headlines.length - 1 - index}
+          />
         );
       })}
     </Grid>
   );
 
   return (
-    <>
+    <Div>
+      {isImageGalleryOpen &&
+        indexOfLightBoxToShow === INDEX_OF_LIGHTBOX_FOR_GRID && (
+          <LightboxContainer>
+            <Lightbox
+              buttonAlign="flex-start"
+              images={images?.reverse()}
+              startIndex={
+                headlines && indexOfImageToShow < headlines?.length
+                  ? indexOfImageToShow
+                  : 0
+              }
+              onClose={() =>
+                dispatch(appbarActions.setIsImageGalleryOpen(false))
+              }
+            ></Lightbox>
+            <ArticleLinkInLightbox
+              href={
+                headlines && indexOfImageToShow < headlines?.length
+                  ? headlines[headlines.length - 1 - indexOfImageToShow]
+                      ?.titleArticleLink
+                  : 'test'
+              }
+              target="_blank"
+            >
+              קישור לכתבה
+            </ArticleLinkInLightbox>
+          </LightboxContainer>
+        )}
+      <AddToCompareDialog
+        onClose={comparisonId => handleCloseDialog(comparisonId)}
+      />
       <span onClick={handleToggleSortingorder}>{`סדר  ${
         isSortAsc ? 'עולה' : 'יורד'
       }, `}</span>
       {startDate && endDate && (
         <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
       )}
-      {sites.length > 0 ? (
+      {sites && sites.length > 0 ? (
         <span>{`אתרים: ${sites.toString()}. `}</span>
       ) : (
         <span>{`כל האתרים. `}</span>
@@ -128,42 +217,9 @@ export function GridHeadlinePresentor(props: Props) {
       {isLoading && !isFetchError && (
         <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
       )}
-    </>
+    </Div>
   );
 }
-
-const Grid = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-gap: 1vw;
-  overflow-y: scroll;
-`;
-const GridItem = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: lightgrey;
-  border: 1.5px solid black;
-  margin: 0.5vw;
-`;
-
-const GridOptions = styled.div`
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-`;
-
-const AddToCompareButton = styled.div``;
-
-const GridDate = styled.h3``;
-
-const Image = styled.img`
-  height: auto;
-  width: 100%;
-  align-self: center;
-`;
 
 const CenteredLoader = styled(Loader)`
   display: flex;
@@ -179,3 +235,29 @@ const BlueSpan = styled.span`
 const CenteredMessage = styled.h1`
   text-align: center;
 `;
+
+const Div = styled.div`
+  & .lb-container {
+    direction: ltr;
+  }
+
+  & .lb-title {
+    direction: rtl;
+  }
+`;
+
+const ArticleLinkInLightbox = styled.a`
+  z-index: 100000;
+  border: 1px solid white;
+  position: fixed;
+  top: 10%;
+  right: 45vw;
+  font-size: 1.3rem;
+  color: white;
+  background: black;
+  padding: 2px;
+  min-width: 8vw;
+  text-align: center;
+`;
+
+const LightboxContainer = styled.div``;
