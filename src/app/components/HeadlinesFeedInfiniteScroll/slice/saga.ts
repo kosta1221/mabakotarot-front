@@ -152,7 +152,7 @@ const fetchHeadlines = async (
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `http://localhost:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}${uniqueQuery}`,
+    url: `http://3.68.107.158:3001/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}${uniqueQuery}`,
   });
 
   console.log('headlines fetched for sites: ', sites, headlines);
