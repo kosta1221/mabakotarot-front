@@ -4,7 +4,9 @@ import styled from 'styled-components/macro';
 import { Helmet } from 'react-helmet-async';
 
 import { HeadlineSliderPresentor } from '../../components/HeadlineSliderPresentor';
-import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
+// import { GridHeadlinePresentor } from '../../components/GridHeadlinePresentor';
+import { HeadlineBeltPresentor } from '../../components/HeadlineBeltPresentor';
+import { sites } from 'utils/sites';
 
 import { useSlidersSlice } from 'app/components/HeadlineSliderPresentor/slice';
 import { useHeadlinesFeedsSlice } from 'app/components/HeadlinesFeedInfiniteScroll/slice';
@@ -23,7 +25,7 @@ export function HomePage() {
 
   useHomepageSlice();
   //   const dispatch = useDispatch();
-  const { slider1, slider2, slider3 } = useSelector(selectHomepage);
+  const { slider1, slider2 } = useSelector(selectHomepage);
 
   return (
     <>
@@ -31,10 +33,20 @@ export function HomePage() {
         <title>Home Page</title>
         <meta name="description" content="App for comparing news headlines" />
       </Helmet>
+      <HeadlinesFeedInfiniteScroll
+        index={0}
+        sites={sites}
+        countPerFetch={5}
+        startDate={startOfLocalDay}
+        endDate={currentLocalTime}
+        isSingularFetch={true}
+      >
+        <HeadlineBeltPresentor />
+      </HeadlinesFeedInfiniteScroll>
       <Content>
         <Grid>
           <HeadlinesFeedInfiniteScroll
-            index={0}
+            index={1}
             sites={[slider1]}
             countPerFetch={0}
             startDate={startOfLocalDay}
@@ -45,7 +57,7 @@ export function HomePage() {
           </HeadlinesFeedInfiniteScroll>
 
           <HeadlinesFeedInfiniteScroll
-            index={1}
+            index={2}
             sites={[slider2]}
             startDate={startOfLocalDay}
             endDate={currentLocalTime}
@@ -55,18 +67,7 @@ export function HomePage() {
             <HeadlineSliderPresentor index={1} />
           </HeadlinesFeedInfiniteScroll>
 
-          <HeadlinesFeedInfiniteScroll
-            index={2}
-            sites={[slider3]}
-            countPerFetch={0}
-            startDate={startOfLocalDay}
-            endDate={currentLocalTime}
-            isSingularFetch={true}
-          >
-            <HeadlineSliderPresentor index={2} />
-          </HeadlinesFeedInfiniteScroll>
-
-          <FrameForFeed>
+          {/* <FrameForFeed>
             <HeadlinesFeedInfiniteScroll
               index={3}
               sites={['haaretz']}
@@ -77,7 +78,7 @@ export function HomePage() {
             >
               <GridHeadlinePresentor cols={1} />
             </HeadlinesFeedInfiniteScroll>
-          </FrameForFeed>
+          </FrameForFeed> */}
         </Grid>
       </Content>
     </>
@@ -102,7 +103,7 @@ const Grid = styled.div`
   }
 `;
 
-const FrameForFeed = styled.div`
-  height: 30vw;
-  overflow-y: scroll;
-`;
+// const FrameForFeed = styled.div`
+//   height: 30vw;
+//   overflow-y: scroll;
+// `;
