@@ -300,7 +300,7 @@ const StyledSitePickerButton = styled(Button)`
 `;
 
 const StyledTypography = styled(Typography)`
-  max-width: 10vw;
+  max-width: 15vw;
   @media (max-width: 700px) {
     max-width: 60vw;
   }
