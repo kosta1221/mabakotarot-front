@@ -30,7 +30,6 @@ const useStyles = makeStyles({
     overflowX: 'hidden',
   },
   table: {
-    marginTop: '5vh',
     border: '0.5px solid black',
   },
   cell: {

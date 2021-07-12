@@ -244,7 +244,7 @@ const CompareContainer = styled.div`
   justify-content: center;
   width: 95vw;
   margin: auto;
-  height: 92vh;
+  height: 100vh - 64px;
 `;
 
 const CompareTools = styled.div`
@@ -291,7 +291,10 @@ const TitleAndDeleteArea = styled.div`
   align-items: center;
 `;
 
-const CenteredMessage = styled.h1``;
+const CenteredMessage = styled.h1`
+  font-family: Liberation Sans;
+  font-size: 2rem;
+`;
 
 const DeleteComparisonButton = styled(Button)`
   background: red;
@@ -300,6 +303,7 @@ const DeleteComparisonButton = styled(Button)`
   font-size: 1rem;
   font-weight: 900;
   border: 0.5px solid black;
+  font-family: Liberation Sans;
 
   &:hover {
     background: black;
