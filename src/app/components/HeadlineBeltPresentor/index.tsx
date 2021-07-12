@@ -5,6 +5,7 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
+import { sitesHebrew } from 'utils/sites';
 
 import { TextScroller } from './TextScroller';
 
@@ -23,7 +24,7 @@ export function HeadlineBeltPresentor(props: Props) {
     <Div>
       <TextScroller
         text={headlines?.map((headline, i) => {
-          const text = ` ${headline.site}: ${headline.titleText} `;
+          const text = ` ${sitesHebrew[headline.site]}: ${headline.titleText} `;
 
           if (i === 0) {
             return text.padEnd(text.length + 30, String.fromCharCode(160));
@@ -44,6 +45,7 @@ export function HeadlineBeltPresentor(props: Props) {
 
 const Div = styled.div`
   text-align: center;
+  font-size: 1.4rem;
   overflow-x: hidden;
   & > div {
     white-space: nowrap;
