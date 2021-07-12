@@ -4,28 +4,26 @@
  *
  */
 import * as React from 'react';
-// import Loader from 'react-loader-spinner';
 
 import 'react-awesome-lightbox/build/style.css';
 import Lightbox from 'react-awesome-lightbox';
+import Button from '@material-ui/core/Button';
+import Menu from '@material-ui/core/Menu';
+import Fade from '@material-ui/core/Fade';
+import MenuItem from '@material-ui/core/MenuItem';
+import Card from '@material-ui/core/Card';
+import styled from 'styled-components/macro';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+
+import { sites as allSites } from 'utils/sites';
+import { sitesHebrew } from '../../../utils/sites';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSliders } from './slice/selectors';
 import { slidersActions, initialSliderState } from './slice';
 import { homepageActions } from 'app/pages/HomePage/slice';
 import { appbarActions } from 'app/components/Appbar/slice';
 import { selectAppbar } from 'app/components/Appbar/slice/selectors';
-
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import Fade from '@material-ui/core/Fade';
-import { sites as allSites } from 'utils/sites';
-import MenuItem from '@material-ui/core/MenuItem';
-import Card from '@material-ui/core/Card';
-import { sitesHebrew } from '../../../utils/sites';
-
-import styled from 'styled-components/macro';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
 import { numFormatter, getNumFromHHMM } from 'utils/helpers';
 import { turnDateStringIntoPresentableFormat } from 'utils/luxon';
 
@@ -40,12 +38,7 @@ interface Props {
 }
 
 export function HeadlineSliderPresentor(props: Props) {
-  const {
-    index,
-    headlines,
-    sites,
-    // isLoading,
-  } = props;
+  const { index, headlines, sites } = props;
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
@@ -100,7 +93,6 @@ export function HeadlineSliderPresentor(props: Props) {
     )
     .map(headline => {
       const hhmm = headline.date.split(' ')[1];
-      // console.log('index: ', index, 'hhmm: ', hhmm);
 
       const value = getNumFromHHMM(hhmm);
 
@@ -130,13 +122,11 @@ export function HeadlineSliderPresentor(props: Props) {
   };
 
   const handleImageClick = (indexOfImage: number | undefined) => {
-    console.log(index, indexOfImage);
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
     dispatch(appbarActions.setIndexOfLightBoxToShow(index));
     dispatch(appbarActions.setIsImageGalleryOpen(true));
   };
 
-  console.log(anchorEl);
   return (
     <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
@@ -263,6 +253,15 @@ const StyledCard = styled(Card)`
 const StyledSlider = styled(Slider)`
   padding: 30px 0 10px 0;
   width: 95%;
+  color: #1a237e;
+
+  & .MuiSlider-track {
+    height: 4px;
+  }
+
+  & .MuiSlider-rack {
+    height: 4px;
+  }
 `;
 
 const ArticleLinkInLightbox = styled.a`

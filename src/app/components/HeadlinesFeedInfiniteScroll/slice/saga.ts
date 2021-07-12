@@ -47,9 +47,6 @@ function* fetchHeadlinesWorkerSaga(action) {
       );
     }
 
-    // console.log('current headlines: ', currentHeadlines);
-    // console.log('fetched headlines: ', fetchedHeadlines);
-
     yield put(
       actions.setOneFeedsHeadlines({
         index,

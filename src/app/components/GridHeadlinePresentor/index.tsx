@@ -124,7 +124,6 @@ export function GridHeadlinePresentor(props: Props) {
     ];
 
     dispatch(drawerActions.setComparisons(newComparisons));
-    console.log(comparisons);
   };
 
   const images = headlines?.map(headline => ({
@@ -136,7 +135,6 @@ export function GridHeadlinePresentor(props: Props) {
   }));
 
   const handleImageClick = (indexOfImage: number | undefined) => {
-    console.log(indexOfImage);
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
     dispatch(
       appbarActions.setIndexOfLightBoxToShow(INDEX_OF_LIGHTBOX_FOR_GRID),

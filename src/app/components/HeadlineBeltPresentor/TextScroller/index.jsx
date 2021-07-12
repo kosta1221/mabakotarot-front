@@ -17,7 +17,6 @@ export function TextScroller(props) {
     to: { transform: 'translate(-350%,0)' },
     config: { duration: 90000 },
     reset: true,
-    //reverse: key % 2 == 0,
     onRest: () => {
       setKey(key + 1);
     },

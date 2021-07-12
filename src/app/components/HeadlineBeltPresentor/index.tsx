@@ -5,8 +5,8 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-import { sitesHebrew } from 'utils/sites';
 
+import { sitesHebrew } from 'utils/sites';
 import { TextScroller } from './TextScroller';
 
 interface Props {
@@ -15,13 +15,10 @@ interface Props {
 }
 
 export function HeadlineBeltPresentor(props: Props) {
-  const {
-    headlines,
-    // isLoading,
-  } = props;
+  const { headlines } = props;
 
   return (
-    <Div>
+    <BeltContainer>
       <TextScroller
         text={headlines?.map((headline, i) => {
           const text = ` ${sitesHebrew[headline.site]}: ${headline.titleText} `;
@@ -39,14 +36,19 @@ export function HeadlineBeltPresentor(props: Props) {
             .padEnd(text.length + 40, String.fromCharCode(160));
         })}
       />
-    </Div>
+    </BeltContainer>
   );
 }
 
-const Div = styled.div`
+const BeltContainer = styled.div`
+  margin-top: 1vh;
   text-align: center;
   font-size: 1.4rem;
   overflow-x: hidden;
+  background: white;
+  border-top: 0.5px black solid;
+  border-bottom: 0.5px black solid;
+
   & > div {
     white-space: nowrap;
     text-overflow: ellipsis;

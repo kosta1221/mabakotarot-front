@@ -4,7 +4,6 @@
  *
  */
 import * as React from 'react';
-
 import InputBase from '@material-ui/core/InputBase';
 import SearchIcon from '@material-ui/icons/Search';
 import IconButton from '@material-ui/core/IconButton';
@@ -13,7 +12,6 @@ import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAppbar } from '../slice/selectors';
 import { useRouter } from 'utils/useRouter';
-
 import { useStyles } from './styles';
 
 interface Props {}

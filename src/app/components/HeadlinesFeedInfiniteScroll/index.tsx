@@ -6,11 +6,9 @@
 import * as React from 'react';
 
 import { useEffect, useCallback, useRef } from 'react';
-
 import { headlinesFeedsActions, initialSingleHeadlineFeedState } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectHeadlinesFeeds } from './slice/selectors';
-
 import { selectAppbar } from 'app/components/Appbar/slice/selectors';
 
 interface Props {
