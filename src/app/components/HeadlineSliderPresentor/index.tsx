@@ -136,6 +136,7 @@ export function HeadlineSliderPresentor(props: Props) {
     dispatch(appbarActions.setIsImageGalleryOpen(true));
   };
 
+  console.log(anchorEl);
   return (
     <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
@@ -163,7 +164,7 @@ export function HeadlineSliderPresentor(props: Props) {
           </ArticleLinkInLightbox>
         </LightboxContainer>
       )}
-      <Typography
+      <StyledTypography
         variant="h6"
         id="time-slider"
         onClick={handleClick}
@@ -178,9 +179,9 @@ export function HeadlineSliderPresentor(props: Props) {
         >
           {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
         </StyledSitePickerButton>
-      </Typography>
+      </StyledTypography>
 
-      <Menu
+      <StyledMenu
         id="fade-menu"
         anchorEl={anchorEl}
         keepMounted
@@ -193,7 +194,7 @@ export function HeadlineSliderPresentor(props: Props) {
             {sitesHebrew[site]}
           </MenuItem>
         ))}
-      </Menu>
+      </StyledMenu>
 
       <StyledCard elevation={6}>
         <Image
@@ -296,4 +297,17 @@ const StyledSitePickerButton = styled(Button)`
   &:hover {
      background-color: #4095c6;
   }
+`;
+
+const StyledTypography = styled(Typography)`
+  max-width: 10vw;
+  @media (max-width: 700px) {
+    max-width: 60vw;
+  }
+`;
+
+const StyledMenu = styled(Menu)`
+  position: relative;
+  margin-top: 5vh;
+  margin-left: 1.5vw;
 `;
