@@ -108,6 +108,7 @@ export function QueryDialog(props: Props) {
       open={isQueryDialogOpen}
       onClose={handleDialogClose}
       aria-labelledby="form-dialog-title"
+      maxWidth={'md'}
     >
       <DialogTitle id="form-dialog-title">
         סינון לפי טווח תאריכים ואתרים
