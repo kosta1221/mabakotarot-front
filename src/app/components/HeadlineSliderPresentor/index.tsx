@@ -163,16 +163,21 @@ export function HeadlineSliderPresentor(props: Props) {
           </ArticleLinkInLightbox>
         </LightboxContainer>
       )}
-      <Typography id="time-slider" onClick={handleClick} gutterBottom>
+      <Typography
+        variant="h6"
+        id="time-slider"
+        onClick={handleClick}
+        gutterBottom
+      >
         {`היום ב- `}
-        <Button
+        <StyledSitePickerButton
           style={{ textTransform: 'none' }}
           aria-controls="fade-menu"
           aria-haspopup="true"
           onClick={handleClick}
         >
           {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
-        </Button>
+        </StyledSitePickerButton>
       </Typography>
 
       <Menu
@@ -229,6 +234,7 @@ export function HeadlineSliderPresentor(props: Props) {
 }
 
 const Div = styled.div`
+  margin-top: 1vh;
   & .lb-container {
     direction: ltr;
   }
@@ -272,3 +278,22 @@ const ArticleLinkInLightbox = styled.a`
 `;
 
 const LightboxContainer = styled.div``;
+
+const StyledSitePickerButton = styled(Button)`
+   display: inline-block;
+   padding: 0.3em 1.2em;
+   margin: 0 0.3em 0.3em 0;
+   border-radius: 2em;
+   box-sizing: border-box;
+   text-decoration: none;
+  font-size: 0.85rem;
+   font-weight: 300;
+   color: #ffffff;
+   background-color: #4eb5f1;
+   text-align: center;
+   transition: all 0.2s;
+
+  &:hover {
+     background-color: #4095c6;
+  }
+`;
