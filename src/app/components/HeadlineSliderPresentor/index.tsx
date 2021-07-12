@@ -235,7 +235,7 @@ export function HeadlineSliderPresentor(props: Props) {
 }
 
 const Div = styled.div`
-  margin-top: 1vh;
+  margin-top: 5vh;
   & .lb-container {
     direction: ltr;
   }
@@ -253,6 +253,7 @@ const Image = styled.img`
 `;
 
 const StyledCard = styled(Card)`
+  margin-top: 2vh;
   border: 1.5px solid black;
   display: flex;
   flex-direction: column;
@@ -290,7 +291,7 @@ const StyledSitePickerButton = styled(Button)`
   font-size: 0.85rem;
    font-weight: 300;
    color: #ffffff;
-   background-color: #4eb5f1;
+   background-color: #1a237e;
    text-align: center;
    transition: all 0.2s;
 
@@ -308,6 +309,6 @@ const StyledTypography = styled(Typography)`
 
 const StyledMenu = styled(Menu)`
   position: relative;
-  margin-top: 5vh;
+  margin-top: 6vh;
   margin-left: 1.5vw;
 `;
