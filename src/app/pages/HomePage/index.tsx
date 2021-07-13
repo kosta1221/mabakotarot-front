@@ -28,11 +28,6 @@ export function HomePage() {
     slider2EndDate,
   } = useSelector(selectHomepage);
 
-  console.log(slider1StartDate);
-  console.log(slider1EndDate);
-  console.log(slider2StartDate);
-  console.log(slider2EndDate);
-
   return (
     <>
       <Helmet>
@@ -43,8 +38,8 @@ export function HomePage() {
         index={0}
         sites={sites}
         countPerFetch={5}
-        startDate={currentLocalTime}
-        endDate={startOfLocalDay}
+        startDate={startOfLocalDay}
+        endDate={currentLocalTime}
         isSingularFetch={true}
       >
         <HeadlineBeltPresentor />
