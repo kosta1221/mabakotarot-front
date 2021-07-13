@@ -5,7 +5,6 @@ export const GlobalStyle = createGlobalStyle`
   body {
     height: 100%;
     width: 100%;
-		/* overflow-x: hidden; */
   }
 
   body {

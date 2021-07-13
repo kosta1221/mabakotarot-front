@@ -71,7 +71,7 @@ const Content = styled.div`
   flex-direction: column;
   margin: auto;
   width: 93vw;
-  min-height: 90vh;
+  height: 83vh;
 `;
 
 const Grid = styled.div`

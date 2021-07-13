@@ -15,6 +15,7 @@ import Card from '@material-ui/core/Card';
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import { withStyles } from '@material-ui/core/styles';
 
 import { sites as allSites } from 'utils/sites';
 import { sitesHebrew } from '../../../utils/sites';
@@ -250,19 +251,41 @@ const StyledCard = styled(Card)`
   align-items: center;
 `;
 
-const StyledSlider = styled(Slider)`
-  padding: 30px 0 10px 0;
-  width: 95%;
-  color: #1a237e;
-
-  & .MuiSlider-track {
-    height: 4px;
-  }
-
-  & .MuiSlider-rack {
-    height: 4px;
-  }
-`;
+const StyledSlider = withStyles({
+  root: {
+    color: '#1a237e',
+    padding: '30px 0 10px 0',
+    width: '95%',
+    height: 8,
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+  },
+  active: {},
+  mark: {
+    width: '3px',
+    height: '8px',
+  },
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 8,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4,
+  },
+})(Slider);
 
 const ArticleLinkInLightbox = styled.a`
   z-index: 100000;
@@ -301,6 +324,9 @@ const StyledSitePickerButton = styled(Button)`
 
 const StyledTypography = styled(Typography)`
   max-width: 15vw;
+  @media (max-width: 1140px) {
+    max-width: 40vw;
+  }
   @media (max-width: 700px) {
     max-width: 60vw;
   }
