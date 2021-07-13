@@ -59,6 +59,22 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
   const firstUpdate = useRef(true);
 
   useEffect(() => {
+    startDate &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsStartDate({ index, startDate }),
+      );
+    endDate &&
+      dispatch(headlinesFeedsActions.setOneFeedsEndDate({ index, endDate }));
+    if (firstUpdate.current) {
+      return;
+    }
+    if (startDate?.split(' ')[0] === endDate?.split(' ')[0]) {
+      console.log('FETCHING NEW');
+      dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+    }
+  }, [index, dispatch, startDate, endDate]);
+
+  useEffect(() => {
     sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));
     if (firstUpdate.current) {
       return;

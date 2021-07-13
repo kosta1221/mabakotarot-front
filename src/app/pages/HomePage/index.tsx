@@ -19,7 +19,19 @@ export function HomePage() {
   useHeadlinesFeedsSlice();
 
   useHomepageSlice();
-  const { slider1, slider2 } = useSelector(selectHomepage);
+  const {
+    slider1,
+    slider2,
+    slider1StartDate,
+    slider1EndDate,
+    slider2StartDate,
+    slider2EndDate,
+  } = useSelector(selectHomepage);
+
+  console.log(slider1StartDate);
+  console.log(slider1EndDate);
+  console.log(slider2StartDate);
+  console.log(slider2EndDate);
 
   return (
     <>
@@ -31,8 +43,8 @@ export function HomePage() {
         index={0}
         sites={sites}
         countPerFetch={5}
-        startDate={startOfLocalDay}
-        endDate={currentLocalTime}
+        startDate={currentLocalTime}
+        endDate={startOfLocalDay}
         isSingularFetch={true}
       >
         <HeadlineBeltPresentor />
@@ -43,8 +55,8 @@ export function HomePage() {
             index={1}
             sites={[slider1]}
             countPerFetch={0}
-            startDate={startOfLocalDay}
-            endDate={currentLocalTime}
+            startDate={slider1StartDate}
+            endDate={slider1EndDate}
             isSingularFetch={true}
           >
             <HeadlineSliderPresentor index={0} />
@@ -53,8 +65,8 @@ export function HomePage() {
           <HeadlinesFeedInfiniteScroll
             index={2}
             sites={[slider2]}
-            startDate={startOfLocalDay}
-            endDate={currentLocalTime}
+            startDate={slider2StartDate}
+            endDate={slider2EndDate}
             countPerFetch={0}
             isSingularFetch={true}
           >

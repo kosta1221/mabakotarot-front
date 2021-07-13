@@ -15,7 +15,11 @@ import Card from '@material-ui/core/Card';
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
 import { withStyles } from '@material-ui/core/styles';
+import { DateTime } from 'luxon';
+import { currentLocalTime, yesterday } from 'utils/times';
 
 import { sites as allSites } from 'utils/sites';
 import { sitesHebrew } from '../../../utils/sites';
@@ -36,10 +40,40 @@ interface Props {
   isSortAsc?: boolean;
   sites?: string[] | null;
   handleToggleSortingorder?: any;
+  startDate?: string;
+  endDate?: string;
 }
 
 export function HeadlineSliderPresentor(props: Props) {
-  const { index, headlines, sites } = props;
+  const { index, headlines, sites, startDate } = props;
+
+  const sliderDatePresentable =
+    startDate?.split(' ')[0] === currentLocalTime.split(' ')[0]
+      ? 'היום'
+      : [
+          startDate?.split(' ')[0] === yesterday.split(' ')[0]
+            ? 'אתמול'
+            : turnDateStringIntoPresentableFormat(startDate || '', true)
+                .split(' ')[0]
+                .concat(
+                  ` ${
+                    turnDateStringIntoPresentableFormat(
+                      startDate || '',
+                      true,
+                    ).split(' ')[1]
+                  }`,
+                )
+                .concat(
+                  ` ${
+                    turnDateStringIntoPresentableFormat(
+                      startDate || '',
+                      true,
+                    ).split(' ')[2]
+                  }`,
+                ),
+        ];
+
+  console.log(sliderDatePresentable);
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
@@ -54,7 +88,9 @@ export function HeadlineSliderPresentor(props: Props) {
   )[0];
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl2, setAnchorEl2] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const open2 = Boolean(anchorEl2);
 
   if (index > sliders.length - 1) {
     dispatch(slidersActions.setSliders([...sliders, initialSliderState]));
@@ -111,21 +147,52 @@ export function HeadlineSliderPresentor(props: Props) {
       }` || '',
   }));
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSitesMenuClicks = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = site => {
+  const handleDateMenuClicks = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl2(event.currentTarget);
+  };
+
+  const handleCloseSitesMenu = site => {
     setAnchorEl(null);
     if (site && typeof site === 'string') {
       dispatch(homepageActions.setSliderByIndex({ index, site }));
     }
   };
 
+  const handleCloseDateMenu = () => {
+    setAnchorEl2(null);
+  };
+
   const handleImageClick = (indexOfImage: number | undefined) => {
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
     dispatch(appbarActions.setIndexOfLightBoxToShow(index));
     dispatch(appbarActions.setIsImageGalleryOpen(true));
+  };
+
+  const handleSliderDateChange = (value, event) => {
+    setAnchorEl2(null);
+    const pickedStartDateFormatted = new DateTime.fromJSDate(value).toFormat(
+      'yyyy-MM-dd HH:mm',
+    );
+    const pickedEndDateFormatted = new DateTime.fromJSDate(value)
+      .set({ hour: 23, minute: 59 })
+      .toFormat('yyyy-MM-dd HH:mm');
+    dispatch(
+      homepageActions.setSliderStartDateByIndex({
+        index,
+        startDate: pickedStartDateFormatted,
+      }),
+    );
+    dispatch(
+      homepageActions.setSlidersEndDateByIndex({
+        index,
+        endDate: pickedEndDateFormatted,
+      }),
+    );
   };
 
   return (
@@ -158,15 +225,15 @@ export function HeadlineSliderPresentor(props: Props) {
       <StyledTypography
         variant="h6"
         id="time-slider"
-        onClick={handleClick}
+        onClick={handleDateMenuClicks}
         gutterBottom
       >
-        {`היום ב- `}
+        {`${sliderDatePresentable} ב-`}
         <StyledSitePickerButton
           style={{ textTransform: 'none' }}
           aria-controls="fade-menu"
           aria-haspopup="true"
-          onClick={handleClick}
+          onClick={handleSitesMenuClicks}
         >
           {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
         </StyledSitePickerButton>
@@ -177,15 +244,49 @@ export function HeadlineSliderPresentor(props: Props) {
         anchorEl={anchorEl}
         keepMounted
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseSitesMenu}
         TransitionComponent={Fade}
       >
         {allSites.map(site => (
-          <MenuItem key={site} onClick={e => handleClose(site)}>
+          <MenuItem key={site} onClick={e => handleCloseSitesMenu(site)}>
             {sitesHebrew[site]}
           </MenuItem>
         ))}
       </StyledMenu>
+
+      {index && index === 1 ? (
+        <Slider1StyledCalendarMenu
+          id="calendar-menu"
+          anchorEl={anchorEl2}
+          keepMounted
+          open={open2}
+          onClose={handleCloseDateMenu}
+          TransitionComponent={Fade}
+        >
+          <Calendar
+            onChange={handleSliderDateChange}
+            value={startDate && new Date(startDate)}
+            maxDate={new Date()}
+            minDate={new Date('2021-06-19')}
+          />
+        </Slider1StyledCalendarMenu>
+      ) : (
+        <Slider2StyledCalendarMenu
+          id="calendar-menu2"
+          anchorEl={anchorEl2}
+          keepMounted
+          open={open2}
+          onClose={handleCloseDateMenu}
+          TransitionComponent={Fade}
+        >
+          <Calendar
+            onChange={handleSliderDateChange}
+            value={startDate && new Date(startDate)}
+            maxDate={new Date()}
+            minDate={new Date('2021-06-19')}
+          />
+        </Slider2StyledCalendarMenu>
+      )}
 
       <StyledCard elevation={6}>
         <Image
@@ -336,4 +437,18 @@ const StyledMenu = styled(Menu)`
   position: relative;
   margin-top: 6vh;
   margin-left: 1.5vw;
+`;
+
+const Slider1StyledCalendarMenu = styled(Menu)`
+  & > .MuiPaper-root {
+    top: 205px !important;
+    left: 660px !important;
+  }
+`;
+
+const Slider2StyledCalendarMenu = styled(Menu)`
+  & > .MuiPaper-root {
+    top: 205px !important;
+    left: 1625px !important;
+  }
 `;
