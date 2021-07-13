@@ -21,7 +21,9 @@ export function HeadlineBeltPresentor(props: Props) {
     <BeltContainer>
       <TextScroller
         text={headlines?.map((headline, i) => {
-          const text = ` ${sitesHebrew[headline.site]}: ${headline.titleText} `;
+          const text = ` ${sitesHebrew[headline.site]} ב${
+            headline.date.split(' ')[1]
+          }: ${headline.titleText} `;
 
           if (i === 0) {
             return text.padEnd(text.length + 30, String.fromCharCode(160));
