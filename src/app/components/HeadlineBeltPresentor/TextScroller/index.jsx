@@ -11,11 +11,14 @@ export function TextScroller(props) {
   const { text } = props;
 
   const [key, setKey] = useState(1);
+  console.log(text.toString().length);
 
   const scrolling = useSpring({
-    from: { transform: 'translate(350%,0)' },
-    to: { transform: 'translate(-350%,0)' },
-    config: { duration: 90000 },
+    from: { transform: 'translate(-100%,0)' },
+    to: {
+      transform: `translate(${Math.floor(text.toString().length / 1.9)}%,0)`,
+    },
+    config: { duration: 60000 },
     reset: true,
     onRest: () => {
       setKey(key + 1);
