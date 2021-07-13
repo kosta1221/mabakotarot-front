@@ -430,12 +430,12 @@ const StyledSitePickerButton = styled(Button)`
 `;
 
 const StyledTypography = styled(Typography)`
-  max-width: 15vw;
+  max-width: 25vw;
   @media (max-width: 1140px) {
     max-width: 40vw;
   }
   @media (max-width: 700px) {
-    max-width: 60vw;
+    max-width: 80vw;
   }
 `;
 
