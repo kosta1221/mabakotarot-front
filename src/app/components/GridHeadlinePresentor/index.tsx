@@ -12,7 +12,7 @@ import Lightbox from 'react-awesome-lightbox';
 import { INDEX_OF_LIGHTBOX_FOR_GRID } from 'utils/constants';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
-
+import { sitesLogos } from '../../../utils/sites';
 import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
 import { selectAppbar } from '../Appbar/slice/selectors';
@@ -192,19 +192,26 @@ export function GridHeadlinePresentor(props: Props) {
       <AddToCompareDialog
         onClose={comparisonId => handleCloseDialog(comparisonId)}
       />
-      <span onClick={handleToggleSortingorder}>{`סדר  ${
-        isSortAsc ? 'עולה' : 'יורד'
-      }, `}</span>
-      {startDate && endDate && (
-        <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
-      )}
-      {sites && sites.length > 0 ? (
-        <span>{`אתרים: ${sites.toString()}. `}</span>
-      ) : (
-        <span>{`כל האתרים. `}</span>
-      )}
 
-      <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
+      <OrderAndSitesContainer>
+        <OrderAndSitesText onClick={handleToggleSortingorder}>{`סדר  ${
+          isSortAsc ? 'עולה' : 'יורד'
+        }, `}</OrderAndSitesText>
+        {startDate && endDate && (
+          <OrderAndSitesText>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</OrderAndSitesText>
+        )}
+        {sites && sites.length > 0 ? (
+          <SitesFlex>
+            <SitesDisplayedText>אתרים מוצגים:</SitesDisplayedText>
+            {sites.map(site => (
+              <SiteLogo src={sitesLogos[site]} alt={site} />
+            ))}
+          </SitesFlex>
+        ) : (
+          <span>{`כל האתרים. `}</span>
+        )}
+        <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
+      </OrderAndSitesContainer>
 
       {isFetchError && <CenteredMessage>אירעה שגיאת רשת</CenteredMessage>}
 
@@ -228,6 +235,14 @@ const BlueSpan = styled.span`
   color: blue;
   text-decoration: underline;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.75rem;
+  }
 `;
 
 const CenteredMessage = styled.h1`
@@ -259,3 +274,63 @@ const ArticleLinkInLightbox = styled.a`
 `;
 
 const LightboxContainer = styled.div``;
+
+const OrderAndSitesContainer = styled.div`
+  display: flex;
+  width: 60vw;
+  justify-content: space-around;
+  align-items: center;
+  margin-right: 1vw;
+  margin-top: 1vh;
+  font-size: 1rem;
+  height: 50px;
+
+  @media (max-width: 1800px) {
+    width: 75vw;
+  }
+
+  @media (max-width: 1300px) {
+    width: 90vw;
+  }
+
+  @media (max-width: 1050px) {
+    width: 95vw;
+  }
+`;
+
+const SitesFlex = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex: 1 0 auto;
+`;
+
+const SiteLogo = styled.img`
+  height: 2.1vh;
+
+  @media (max-width: 1000px) {
+    height: 1.5vh;
+  }
+
+  @media (max-width: 650px) {
+    display: none;
+  }
+`;
+
+const OrderAndSitesText = styled.p`
+  font-size: 1rem;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.75rem;
+  }
+`;
+
+const SitesDisplayedText = styled.p`
+  @media (max-width: 750px) {
+    display: none;
+  }
+`;
