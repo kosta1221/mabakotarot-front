@@ -20,6 +20,7 @@ import 'react-calendar/dist/Calendar.css';
 import { withStyles } from '@material-ui/core/styles';
 import { DateTime } from 'luxon';
 import { currentLocalTime, yesterday } from 'utils/times';
+import theme from 'styles/theme';
 
 import { sites as allSites } from 'utils/sites';
 import { sitesHebrew } from '../../../utils/sites';
@@ -72,8 +73,6 @@ export function HeadlineSliderPresentor(props: Props) {
                   }`,
                 ),
         ];
-
-  console.log(sliderDatePresentable);
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
@@ -350,6 +349,11 @@ const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  & .MuiSlider-markActive {
+    background-color: white;
+    opacity: 0.9;
+  }
 `;
 
 const StyledSlider = withStyles({
@@ -370,11 +374,13 @@ const StyledSlider = withStyles({
       boxShadow: 'inherit',
     },
   },
-  active: {},
+
   mark: {
     width: '3px',
     height: '8px',
+    background: theme.palette.secondary.main,
   },
+  markActive: {},
   valueLabel: {
     left: 'calc(-50% + 4px)',
   },
@@ -442,13 +448,13 @@ const StyledMenu = styled(Menu)`
 const Slider1StyledCalendarMenu = styled(Menu)`
   & > .MuiPaper-root {
     top: 205px !important;
-    left: 660px !important;
+    left: 13% !important;
   }
 `;
 
 const Slider2StyledCalendarMenu = styled(Menu)`
   & > .MuiPaper-root {
     top: 205px !important;
-    left: 1625px !important;
+    left: 60% !important;
   }
 `;
