@@ -7,11 +7,14 @@ import * as React from 'react';
 
 import 'react-awesome-lightbox/build/style.css';
 import Lightbox from 'react-awesome-lightbox';
-import Button from '@material-ui/core/Button';
+import CalendarIcon from '@material-ui/icons/Today';
 import Menu from '@material-ui/core/Menu';
 import Fade from '@material-ui/core/Fade';
 import MenuItem from '@material-ui/core/MenuItem';
 import Card from '@material-ui/core/Card';
+import Chip from '@material-ui/core/Chip';
+import EditIcon from '@material-ui/icons/Edit';
+import Backdrop from '@material-ui/core/Backdrop';
 import styled from 'styled-components/macro';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
@@ -87,7 +90,9 @@ export function HeadlineSliderPresentor(props: Props) {
   )[0];
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const [anchorEl2, setAnchorEl2] = React.useState<null | HTMLElement>(null);
+  const [anchorEl2, setAnchorEl2] = React.useState<
+    null | undefined | HTMLElement
+  >(null);
   const open = Boolean(anchorEl);
   const open2 = Boolean(anchorEl2);
 
@@ -152,7 +157,7 @@ export function HeadlineSliderPresentor(props: Props) {
   };
 
   const handleDateMenuClicks = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl2(event.currentTarget);
+    setAnchorEl2(event.currentTarget.closest('h6')?.parentElement);
   };
 
   const handleCloseSitesMenu = site => {
@@ -221,21 +226,26 @@ export function HeadlineSliderPresentor(props: Props) {
           </ArticleLinkInLightbox>
         </LightboxContainer>
       )}
-      <StyledTypography
-        variant="h6"
-        id="time-slider"
-        onClick={handleDateMenuClicks}
-        gutterBottom
-      >
-        {`${sliderDatePresentable} ב-`}
-        <StyledSitePickerButton
+      <StyledTypography variant="h6" id="time-slider" gutterBottom>
+        <StyledChip
+          label={sliderDatePresentable}
+          style={{ textTransform: 'none' }}
+          aria-controls="fade-menu"
+          aria-haspopup="true"
+          onClick={handleDateMenuClicks}
+          icon={<StyledCalendarIcon fontSize="small" />}
+          color="primary"
+        />
+        {` ב- `}
+        <StyledChip
+          label={`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
           style={{ textTransform: 'none' }}
           aria-controls="fade-menu"
           aria-haspopup="true"
           onClick={handleSitesMenuClicks}
-        >
-          {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
-        </StyledSitePickerButton>
+          icon={<StyledEditIcon fontSize="small" />}
+          color="primary"
+        />
       </StyledTypography>
 
       <StyledMenu
@@ -254,7 +264,7 @@ export function HeadlineSliderPresentor(props: Props) {
       </StyledMenu>
 
       {index && index === 1 ? (
-        <Slider1StyledCalendarMenu
+        <Slider2StyledCalendarMenu
           id="calendar-menu"
           anchorEl={anchorEl2}
           keepMounted
@@ -268,9 +278,10 @@ export function HeadlineSliderPresentor(props: Props) {
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
           />
-        </Slider1StyledCalendarMenu>
+          <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
+        </Slider2StyledCalendarMenu>
       ) : (
-        <Slider2StyledCalendarMenu
+        <Slider1StyledCalendarMenu
           id="calendar-menu2"
           anchorEl={anchorEl2}
           keepMounted
@@ -284,7 +295,8 @@ export function HeadlineSliderPresentor(props: Props) {
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
           />
-        </Slider2StyledCalendarMenu>
+          <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
+        </Slider1StyledCalendarMenu>
       )}
 
       <StyledCard elevation={6}>
@@ -410,33 +422,37 @@ const ArticleLinkInLightbox = styled.a`
 
 const LightboxContainer = styled.div``;
 
-const StyledSitePickerButton = styled(Button)`
-   display: inline-block;
-   padding: 0.3em 1.2em;
-   margin: 0 0.3em 0.3em 0;
-   border-radius: 2em;
-   box-sizing: border-box;
-   text-decoration: none;
-  font-size: 0.85rem;
-   font-weight: 300;
-   color: #ffffff;
-   background-color: #1a237e;
-   text-align: center;
-   transition: all 0.2s;
+const StyledChip = styled(Chip)`
+  transition: all 0.2s;
 
   &:hover {
-     background-color: #4095c6;
+    background-color: #4095c6;
   }
 `;
 
+const StyledEditIcon = styled(EditIcon)`
+  font-size: 1rem;
+  margin: 0;
+  margin-left: -6px;
+  margin-right: 5px;
+`;
+const StyledCalendarIcon = styled(CalendarIcon)`
+  font-size: 1rem;
+  margin: 0;
+  margin-left: -6px;
+  margin-right: 5px;
+`;
+
 const StyledTypography = styled(Typography)`
-  max-width: 25vw;
-  @media (max-width: 1140px) {
+  /* max-width: 25vw; */
+  width: 100%;
+  text-align: center;
+  /* @media (max-width: 1140px) {
     max-width: 40vw;
   }
   @media (max-width: 700px) {
     max-width: 80vw;
-  }
+  } */
 `;
 
 const StyledMenu = styled(Menu)`
@@ -445,16 +461,6 @@ const StyledMenu = styled(Menu)`
   margin-left: 1.5vw;
 `;
 
-const Slider1StyledCalendarMenu = styled(Menu)`
-  & > .MuiPaper-root {
-    top: 205px !important;
-    left: 13% !important;
-  }
-`;
+const Slider1StyledCalendarMenu = styled(Menu)``;
 
-const Slider2StyledCalendarMenu = styled(Menu)`
-  & > .MuiPaper-root {
-    top: 205px !important;
-    left: 60% !important;
-  }
-`;
+const Slider2StyledCalendarMenu = styled(Menu)``;
