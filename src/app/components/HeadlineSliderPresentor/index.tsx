@@ -4,28 +4,35 @@
  *
  */
 import * as React from 'react';
-// import Loader from 'react-loader-spinner';
 
 import 'react-awesome-lightbox/build/style.css';
 import Lightbox from 'react-awesome-lightbox';
+import CalendarIcon from '@material-ui/icons/Today';
+import Menu from '@material-ui/core/Menu';
+import Fade from '@material-ui/core/Fade';
+import MenuItem from '@material-ui/core/MenuItem';
+import Card from '@material-ui/core/Card';
+import Chip from '@material-ui/core/Chip';
+import EditIcon from '@material-ui/icons/Edit';
+import Backdrop from '@material-ui/core/Backdrop';
+import styled from 'styled-components/macro';
+import Typography from '@material-ui/core/Typography';
+import Slider from '@material-ui/core/Slider';
+import Calendar from 'react-calendar';
+import 'react-calendar/dist/Calendar.css';
+import { withStyles } from '@material-ui/core/styles';
+import { DateTime } from 'luxon';
+import { currentLocalTime, yesterday } from 'utils/times';
+import theme from 'styles/theme';
+
+import { sites as allSites } from 'utils/sites';
+import { sitesHebrew } from '../../../utils/sites';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectSliders } from './slice/selectors';
 import { slidersActions, initialSliderState } from './slice';
 import { homepageActions } from 'app/pages/HomePage/slice';
 import { appbarActions } from 'app/components/Appbar/slice';
 import { selectAppbar } from 'app/components/Appbar/slice/selectors';
-
-import Button from '@material-ui/core/Button';
-import Menu from '@material-ui/core/Menu';
-import Fade from '@material-ui/core/Fade';
-import { sites as allSites } from 'utils/sites';
-import MenuItem from '@material-ui/core/MenuItem';
-import Card from '@material-ui/core/Card';
-import { sitesHebrew } from '../../../utils/sites';
-
-import styled from 'styled-components/macro';
-import Typography from '@material-ui/core/Typography';
-import Slider from '@material-ui/core/Slider';
 import { numFormatter, getNumFromHHMM } from 'utils/helpers';
 import { turnDateStringIntoPresentableFormat } from 'utils/luxon';
 
@@ -37,15 +44,38 @@ interface Props {
   isSortAsc?: boolean;
   sites?: string[] | null;
   handleToggleSortingorder?: any;
+  startDate?: string;
+  endDate?: string;
 }
 
 export function HeadlineSliderPresentor(props: Props) {
-  const {
-    index,
-    headlines,
-    sites,
-    // isLoading,
-  } = props;
+  const { index, headlines, sites, startDate } = props;
+
+  const sliderDatePresentable =
+    startDate?.split(' ')[0] === currentLocalTime.split(' ')[0]
+      ? 'היום'
+      : [
+          startDate?.split(' ')[0] === yesterday.split(' ')[0]
+            ? 'אתמול'
+            : turnDateStringIntoPresentableFormat(startDate || '', true)
+                .split(' ')[0]
+                .concat(
+                  ` ${
+                    turnDateStringIntoPresentableFormat(
+                      startDate || '',
+                      true,
+                    ).split(' ')[1]
+                  }`,
+                )
+                .concat(
+                  ` ${
+                    turnDateStringIntoPresentableFormat(
+                      startDate || '',
+                      true,
+                    ).split(' ')[2]
+                  }`,
+                ),
+        ];
 
   const dispatch = useDispatch();
   const { sliders } = useSelector(selectSliders);
@@ -60,7 +90,11 @@ export function HeadlineSliderPresentor(props: Props) {
   )[0];
 
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl2, setAnchorEl2] = React.useState<
+    null | undefined | HTMLElement
+  >(null);
   const open = Boolean(anchorEl);
+  const open2 = Boolean(anchorEl2);
 
   if (index > sliders.length - 1) {
     dispatch(slidersActions.setSliders([...sliders, initialSliderState]));
@@ -100,7 +134,6 @@ export function HeadlineSliderPresentor(props: Props) {
     )
     .map(headline => {
       const hhmm = headline.date.split(' ')[1];
-      // console.log('index: ', index, 'hhmm: ', hhmm);
 
       const value = getNumFromHHMM(hhmm);
 
@@ -118,25 +151,54 @@ export function HeadlineSliderPresentor(props: Props) {
       }` || '',
   }));
 
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+  const handleSitesMenuClicks = (event: React.MouseEvent<HTMLElement>) => {
+    event.stopPropagation();
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = site => {
+  const handleDateMenuClicks = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl2(event.currentTarget.closest('h6')?.parentElement);
+  };
+
+  const handleCloseSitesMenu = site => {
     setAnchorEl(null);
     if (site && typeof site === 'string') {
       dispatch(homepageActions.setSliderByIndex({ index, site }));
     }
   };
 
+  const handleCloseDateMenu = () => {
+    setAnchorEl2(null);
+  };
+
   const handleImageClick = (indexOfImage: number | undefined) => {
-    console.log(index, indexOfImage);
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
     dispatch(appbarActions.setIndexOfLightBoxToShow(index));
     dispatch(appbarActions.setIsImageGalleryOpen(true));
   };
 
-  console.log(anchorEl);
+  const handleSliderDateChange = (value, event) => {
+    setAnchorEl2(null);
+    const pickedStartDateFormatted = new DateTime.fromJSDate(value).toFormat(
+      'yyyy-MM-dd HH:mm',
+    );
+    const pickedEndDateFormatted = new DateTime.fromJSDate(value)
+      .set({ hour: 23, minute: 59 })
+      .toFormat('yyyy-MM-dd HH:mm');
+    dispatch(
+      homepageActions.setSliderStartDateByIndex({
+        index,
+        startDate: pickedStartDateFormatted,
+      }),
+    );
+    dispatch(
+      homepageActions.setSlidersEndDateByIndex({
+        index,
+        endDate: pickedEndDateFormatted,
+      }),
+    );
+  };
+
   return (
     <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
@@ -164,21 +226,26 @@ export function HeadlineSliderPresentor(props: Props) {
           </ArticleLinkInLightbox>
         </LightboxContainer>
       )}
-      <StyledTypography
-        variant="h6"
-        id="time-slider"
-        onClick={handleClick}
-        gutterBottom
-      >
-        {`היום ב- `}
-        <StyledSitePickerButton
+      <StyledTypography variant="h6" id="time-slider" gutterBottom>
+        <StyledChip
+          label={sliderDatePresentable}
           style={{ textTransform: 'none' }}
           aria-controls="fade-menu"
           aria-haspopup="true"
-          onClick={handleClick}
-        >
-          {`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
-        </StyledSitePickerButton>
+          onClick={handleDateMenuClicks}
+          icon={<StyledCalendarIcon fontSize="small" />}
+          color="primary"
+        />
+        {` ב- `}
+        <StyledChip
+          label={`${sliders[index] && sitesHebrew[sliders[index].pickedSite]}:`}
+          style={{ textTransform: 'none' }}
+          aria-controls="fade-menu"
+          aria-haspopup="true"
+          onClick={handleSitesMenuClicks}
+          icon={<StyledEditIcon fontSize="small" />}
+          color="primary"
+        />
       </StyledTypography>
 
       <StyledMenu
@@ -186,15 +253,51 @@ export function HeadlineSliderPresentor(props: Props) {
         anchorEl={anchorEl}
         keepMounted
         open={open}
-        onClose={handleClose}
+        onClose={handleCloseSitesMenu}
         TransitionComponent={Fade}
       >
         {allSites.map(site => (
-          <MenuItem key={site} onClick={e => handleClose(site)}>
+          <MenuItem key={site} onClick={e => handleCloseSitesMenu(site)}>
             {sitesHebrew[site]}
           </MenuItem>
         ))}
       </StyledMenu>
+
+      {index && index === 1 ? (
+        <Slider2StyledCalendarMenu
+          id="calendar-menu"
+          anchorEl={anchorEl2}
+          keepMounted
+          open={open2}
+          onClose={handleCloseDateMenu}
+          TransitionComponent={Fade}
+        >
+          <Calendar
+            onChange={handleSliderDateChange}
+            value={startDate && new Date(startDate)}
+            maxDate={new Date()}
+            minDate={new Date('2021-06-19')}
+          />
+          <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
+        </Slider2StyledCalendarMenu>
+      ) : (
+        <Slider1StyledCalendarMenu
+          id="calendar-menu2"
+          anchorEl={anchorEl2}
+          keepMounted
+          open={open2}
+          onClose={handleCloseDateMenu}
+          TransitionComponent={Fade}
+        >
+          <Calendar
+            onChange={handleSliderDateChange}
+            value={startDate && new Date(startDate)}
+            maxDate={new Date()}
+            minDate={new Date('2021-06-19')}
+          />
+          <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
+        </Slider1StyledCalendarMenu>
+      )}
 
       <StyledCard elevation={6}>
         <Image
@@ -258,12 +361,50 @@ const StyledCard = styled(Card)`
   display: flex;
   flex-direction: column;
   align-items: center;
+
+  & .MuiSlider-markActive {
+    background-color: white;
+    opacity: 0.9;
+  }
 `;
 
-const StyledSlider = styled(Slider)`
-  padding: 30px 0 10px 0;
-  width: 95%;
-`;
+const StyledSlider = withStyles({
+  root: {
+    color: '#1a237e',
+    padding: '30px 0 10px 0',
+    width: '95%',
+    height: 8,
+  },
+  thumb: {
+    height: 24,
+    width: 24,
+    backgroundColor: '#fff',
+    border: '2px solid currentColor',
+    marginTop: -8,
+    marginLeft: -12,
+    '&:focus, &:hover, &$active': {
+      boxShadow: 'inherit',
+    },
+  },
+
+  mark: {
+    width: '3px',
+    height: '8px',
+    background: theme.palette.secondary.main,
+  },
+  markActive: {},
+  valueLabel: {
+    left: 'calc(-50% + 4px)',
+  },
+  track: {
+    height: 8,
+    borderRadius: 4,
+  },
+  rail: {
+    height: 8,
+    borderRadius: 4,
+  },
+})(Slider);
 
 const ArticleLinkInLightbox = styled.a`
   z-index: 100000;
@@ -281,30 +422,37 @@ const ArticleLinkInLightbox = styled.a`
 
 const LightboxContainer = styled.div``;
 
-const StyledSitePickerButton = styled(Button)`
-   display: inline-block;
-   padding: 0.3em 1.2em;
-   margin: 0 0.3em 0.3em 0;
-   border-radius: 2em;
-   box-sizing: border-box;
-   text-decoration: none;
-  font-size: 0.85rem;
-   font-weight: 300;
-   color: #ffffff;
-   background-color: #1a237e;
-   text-align: center;
-   transition: all 0.2s;
+const StyledChip = styled(Chip)`
+  transition: all 0.2s;
 
   &:hover {
-     background-color: #4095c6;
+    background-color: #4095c6;
   }
 `;
 
+const StyledEditIcon = styled(EditIcon)`
+  font-size: 1rem;
+  margin: 0;
+  margin-left: -6px;
+  margin-right: 5px;
+`;
+const StyledCalendarIcon = styled(CalendarIcon)`
+  font-size: 1rem;
+  margin: 0;
+  margin-left: -6px;
+  margin-right: 5px;
+`;
+
 const StyledTypography = styled(Typography)`
-  max-width: 15vw;
-  @media (max-width: 700px) {
-    max-width: 60vw;
+  /* max-width: 25vw; */
+  width: 100%;
+  text-align: center;
+  /* @media (max-width: 1140px) {
+    max-width: 40vw;
   }
+  @media (max-width: 700px) {
+    max-width: 80vw;
+  } */
 `;
 
 const StyledMenu = styled(Menu)`
@@ -312,3 +460,7 @@ const StyledMenu = styled(Menu)`
   margin-top: 6vh;
   margin-left: 1.5vw;
 `;
+
+const Slider1StyledCalendarMenu = styled(Menu)``;
+
+const Slider2StyledCalendarMenu = styled(Menu)``;

@@ -12,7 +12,7 @@ import Lightbox from 'react-awesome-lightbox';
 import { INDEX_OF_LIGHTBOX_FOR_GRID } from 'utils/constants';
 import { AddToCompareDialog } from './AddToCompareDialog/Loadable';
 import { GridItem } from './GridItem';
-
+import { sitesLogos, sites as allSites } from 'utils/sites';
 import { useDispatch, useSelector } from 'react-redux';
 import { appbarActions } from '../Appbar/slice';
 import { selectAppbar } from '../Appbar/slice/selectors';
@@ -124,7 +124,6 @@ export function GridHeadlinePresentor(props: Props) {
     ];
 
     dispatch(drawerActions.setComparisons(newComparisons));
-    console.log(comparisons);
   };
 
   const images = headlines?.map(headline => ({
@@ -136,7 +135,6 @@ export function GridHeadlinePresentor(props: Props) {
   }));
 
   const handleImageClick = (indexOfImage: number | undefined) => {
-    console.log(indexOfImage);
     indexOfImage && dispatch(appbarActions.setIndexOfImageToShow(indexOfImage));
     dispatch(
       appbarActions.setIndexOfLightBoxToShow(INDEX_OF_LIGHTBOX_FOR_GRID),
@@ -206,7 +204,32 @@ export function GridHeadlinePresentor(props: Props) {
         <span>{`כל האתרים. `}</span>
       )}
 
-      <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
+      <OrderAndSitesContainer>
+        <OrderAndSitesTextContainer>
+          <OrderAndSitesText onClick={handleToggleSortingorder}>{`סדר  ${
+            isSortAsc ? 'עולה' : 'יורד'
+          }, `}</OrderAndSitesText>
+          {startDate && endDate && (
+            <OrderAndSitesText>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</OrderAndSitesText>
+          )}
+          <SitesDisplayedText>אתרים:</SitesDisplayedText>
+        </OrderAndSitesTextContainer>
+        {sites && sites.length > 0 ? (
+          <SitesAndChangeContainer>
+            {sites.map(site => (
+              <SiteLogo src={sitesLogos[site]} alt={site} />
+            ))}
+            <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
+          </SitesAndChangeContainer>
+        ) : (
+          <SitesAndChangeContainer>
+            {allSites.map(site => (
+              <SiteLogo src={sitesLogos[site]} alt={site} />
+            ))}
+            <BlueSpan onClick={handleOpenQueryDialog}>{`שינוי`}</BlueSpan>
+          </SitesAndChangeContainer>
+        )}
+      </OrderAndSitesContainer>
 
       {isFetchError && <CenteredMessage>אירעה שגיאת רשת</CenteredMessage>}
 
@@ -260,4 +283,71 @@ const ArticleLinkInLightbox = styled.a`
   text-align: center;
 `;
 
+const OrderAndSitesTextContainer = styled.div`
+  display: flex;
+`;
+
 const LightboxContainer = styled.div``;
+
+const OrderAndSitesContainer = styled.div`
+  display: flex;
+  width: 100vw;
+  justify-content: flex-start;
+  align-items: center;
+  margin-right: 1vw;
+  margin-top: 1vh;
+  font-size: 1rem;
+  height: 50px;
+
+  @media (max-width: 1100px) {
+    flex-direction: column;
+  }
+`;
+
+const SitesAndChangeContainer = styled.div`
+  display: inline-block;
+  margin-right: 2vw;
+`;
+
+const SiteLogo = styled.img`
+  height: 30px;
+  margin-left: 2vw;
+
+  @media (max-width: 1400px) {
+    height: 20px;
+  }
+
+  @media (max-width: 1190px) {
+    height: 15px;
+  }
+
+  @media (max-width: 1100px) {
+    height: 20px;
+
+    @media (max-width: 600px) {
+      height: 15px;
+  }
+  @media (max-width: 440px) {
+    height: 12px;
+}
+`;
+
+const OrderAndSitesText = styled.p`
+  font-size: 1rem;
+  font-family: Liberation Sans;
+  margin: 0px;
+  margin-left: 0.5vw;
+
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+  }
+
+  @media (max-width: 450px) {
+    font-size: 0.75rem;
+  }
+`;
+
+const SitesDisplayedText = styled.p`
+  font-family: Liberation Sans;
+  margin: 0;
+`;

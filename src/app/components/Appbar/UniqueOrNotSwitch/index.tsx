@@ -5,7 +5,6 @@
  */
 import * as React from 'react';
 import styled from 'styled-components/macro';
-
 import Switch from '@material-ui/core/Switch';
 import Tooltip from '@material-ui/core/Tooltip';
 

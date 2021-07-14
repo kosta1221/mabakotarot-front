@@ -28,7 +28,6 @@ export function HeadlinesPage(props: Props) {
   const { startDate, endDate, site, sites, search } = queryParams;
   const parsedSites =
     typeof sites === 'string' ? JSON.parse(sites.toString()) : '';
-  console.log('parsed sites: ', parsedSites);
 
   return (
     <HeadlinesFeedInfiniteScroll

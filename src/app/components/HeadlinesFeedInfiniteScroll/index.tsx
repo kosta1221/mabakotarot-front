@@ -6,11 +6,9 @@
 import * as React from 'react';
 
 import { useEffect, useCallback, useRef } from 'react';
-
 import { headlinesFeedsActions, initialSingleHeadlineFeedState } from './slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectHeadlinesFeeds } from './slice/selectors';
-
 import { selectAppbar } from 'app/components/Appbar/slice/selectors';
 
 interface Props {
@@ -59,6 +57,22 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
 
   const observer = useRef<IntersectionObserver>();
   const firstUpdate = useRef(true);
+
+  useEffect(() => {
+    startDate &&
+      dispatch(
+        headlinesFeedsActions.setOneFeedsStartDate({ index, startDate }),
+      );
+    endDate &&
+      dispatch(headlinesFeedsActions.setOneFeedsEndDate({ index, endDate }));
+    if (firstUpdate.current) {
+      return;
+    }
+    if (startDate?.split(' ')[0] === endDate?.split(' ')[0]) {
+      console.log('FETCHING NEW');
+      dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
+    }
+  }, [index, dispatch, startDate, endDate]);
 
   useEffect(() => {
     sites && dispatch(headlinesFeedsActions.setOneFeedsSites({ index, sites }));

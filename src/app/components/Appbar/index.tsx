@@ -4,18 +4,17 @@
  *
  */
 import * as React from 'react';
-
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
 import IconButton from '@material-ui/core/IconButton';
 import Typography from '@material-ui/core/Typography';
 import CalendarIcon from '@material-ui/icons/Today';
 import MenuIcon from '@material-ui/icons/Menu';
-import { useStyles } from './styles';
 import styled from 'styled-components/macro';
+import Tooltip from '@material-ui/core/Tooltip';
 
+import { useStyles } from './styles';
 import { useDispatch } from 'react-redux';
-
 import { drawerActions } from '../Drawer/slice';
 import { useCreateToggleDrawerUtil } from '../Drawer/utils';
 import { useAppbarSlice } from './slice';
@@ -23,9 +22,19 @@ import { QueryDialog } from './QueryDialog';
 import { SearchBar } from './SearchBar';
 import { UniqueOrNotSwitch } from './UniqueOrNotSwitch';
 import { useRouter } from '../../../utils/useRouter';
-// import { selectAppbar } from './slice/selectors';
+import { withStyles } from '@material-ui/core/styles';
 
 interface Props {}
+
+const QueryDialogTooltip = withStyles(theme => ({
+  tooltip: {
+    backgroundColor: '#f5f5f9',
+    color: 'black',
+    maxWidth: 200,
+    fontSize: theme.typography.pxToRem(15),
+    border: '1px solid #dadde9',
+  },
+}))(Tooltip);
 
 export function Appbar(props: Props) {
   const classes = useStyles();
@@ -72,15 +81,17 @@ export function Appbar(props: Props) {
 
           <SearchBar />
 
-          <IconButton
-            aria-label="open calendar dialogue"
-            color="inherit"
-            onClick={() => {
-              dispatch(actions.setIsQueryDialogOpen(true));
-            }}
-          >
-            <CalendarIcon />
-          </IconButton>
+          <QueryDialogTooltip title="פתח אפשרויות הצגת כותרות">
+            <IconButton
+              aria-label="open calendar dialogue"
+              color="inherit"
+              onClick={() => {
+                dispatch(actions.setIsQueryDialogOpen(true));
+              }}
+            >
+              <CalendarIcon />
+            </IconButton>
+          </QueryDialogTooltip>
 
           <QueryDialog />
         </Toolbar>

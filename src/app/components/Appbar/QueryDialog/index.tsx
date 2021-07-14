@@ -4,11 +4,10 @@
  *
  */
 import * as React from 'react';
-
 import 'react-calendar/dist/Calendar.css';
+
 import { DateTime } from 'luxon';
 import { useRouter } from '../../../../utils/useRouter';
-
 import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
@@ -23,7 +22,6 @@ import {
   StyledDialogContentText,
   StyledTimePicker,
 } from './styles';
-
 import { appbarActions } from '../slice';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectAppbar } from '../slice/selectors';
@@ -87,9 +85,6 @@ export function QueryDialog(props: Props) {
     const hour = hourMinute.slice(0, 2);
     const minute = hourMinute.slice(3);
 
-    console.log(hourMinute);
-    console.log(hour, minute);
-
     dispatch(
       appbarActions.setPickedStartDate(
         pickedStartDateTime.set({ hour, minute }).toFormat('yyyy-MM-dd HH:mm'),
@@ -100,9 +95,6 @@ export function QueryDialog(props: Props) {
   const onEndHourPick = (hourMinute: string) => {
     const hour = hourMinute.slice(0, 2);
     const minute = hourMinute.slice(3);
-
-    console.log(hourMinute);
-    console.log(hour, minute);
 
     dispatch(
       appbarActions.setPickedEndDate(
@@ -116,6 +108,7 @@ export function QueryDialog(props: Props) {
       open={isQueryDialogOpen}
       onClose={handleDialogClose}
       aria-labelledby="form-dialog-title"
+      maxWidth={'md'}
     >
       <DialogTitle id="form-dialog-title">
         סינון לפי טווח תאריכים ואתרים
