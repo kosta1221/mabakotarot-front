@@ -277,6 +277,7 @@ export function HeadlineSliderPresentor(props: Props) {
             value={startDate && new Date(startDate)}
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
+            calendarType="Hebrew"
           />
           <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
         </Slider2StyledCalendarMenu>
@@ -294,6 +295,7 @@ export function HeadlineSliderPresentor(props: Props) {
             value={startDate && new Date(startDate)}
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
+            calendarType="Hebrew"
           />
           <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
         </Slider1StyledCalendarMenu>
@@ -444,15 +446,8 @@ const StyledCalendarIcon = styled(CalendarIcon)`
 `;
 
 const StyledTypography = styled(Typography)`
-  /* max-width: 25vw; */
   width: 100%;
   text-align: center;
-  /* @media (max-width: 1140px) {
-    max-width: 40vw;
-  }
-  @media (max-width: 700px) {
-    max-width: 80vw;
-  } */
 `;
 
 const StyledMenu = styled(Menu)`
@@ -461,6 +456,14 @@ const StyledMenu = styled(Menu)`
   margin-left: 1.5vw;
 `;
 
-const Slider1StyledCalendarMenu = styled(Menu)``;
+const Slider1StyledCalendarMenu = styled(Menu)`
+  & .MuiMenu-list {
+    padding: 0;
+  }
+`;
 
-const Slider2StyledCalendarMenu = styled(Menu)``;
+const Slider2StyledCalendarMenu = styled(Menu)`
+  & .MuiMenu-list {
+    padding: 0;
+  }
+`;
