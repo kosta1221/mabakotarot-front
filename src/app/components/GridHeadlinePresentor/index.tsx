@@ -192,17 +192,6 @@ export function GridHeadlinePresentor(props: Props) {
       <AddToCompareDialog
         onClose={comparisonId => handleCloseDialog(comparisonId)}
       />
-      <span onClick={handleToggleSortingorder}>{`סדר  ${
-        isSortAsc ? 'עולה' : 'יורד'
-      }, `}</span>
-      {startDate && endDate && (
-        <span>{`מתאריך  ${pickedStartDatePresentable} עד ${pickedEndDatePresentable}, `}</span>
-      )}
-      {sites && sites.length > 0 ? (
-        <span>{`אתרים: ${sites.toString()}. `}</span>
-      ) : (
-        <span>{`כל האתרים. `}</span>
-      )}
 
       <OrderAndSitesContainer>
         <OrderAndSitesTextContainer>
