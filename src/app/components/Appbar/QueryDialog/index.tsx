@@ -125,6 +125,7 @@ export function QueryDialog(props: Props) {
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
             selectRange
+            calendarType="Hebrew"
           />
 
           <FlexDiv>

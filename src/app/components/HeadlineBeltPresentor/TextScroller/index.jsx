@@ -11,7 +11,7 @@ export function TextScroller(props) {
   const { text } = props;
 
   const [key, setKey] = useState(1);
-  console.log(text.toString().length);
+  //   console.log(text.toString().length);
 
   const scrolling = useSpring({
     from: { transform: 'translate(-100%,0)' },

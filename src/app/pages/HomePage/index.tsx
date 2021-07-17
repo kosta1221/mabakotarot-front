@@ -19,7 +19,14 @@ export function HomePage() {
   useHeadlinesFeedsSlice();
 
   useHomepageSlice();
-  const { slider1, slider2 } = useSelector(selectHomepage);
+  const {
+    slider1,
+    slider2,
+    slider1StartDate,
+    slider1EndDate,
+    slider2StartDate,
+    slider2EndDate,
+  } = useSelector(selectHomepage);
 
   return (
     <>
@@ -43,8 +50,8 @@ export function HomePage() {
             index={1}
             sites={[slider1]}
             countPerFetch={0}
-            startDate={startOfLocalDay}
-            endDate={currentLocalTime}
+            startDate={slider1StartDate}
+            endDate={slider1EndDate}
             isSingularFetch={true}
           >
             <HeadlineSliderPresentor index={0} />
@@ -53,8 +60,8 @@ export function HomePage() {
           <HeadlinesFeedInfiniteScroll
             index={2}
             sites={[slider2]}
-            startDate={startOfLocalDay}
-            endDate={currentLocalTime}
+            startDate={slider2StartDate}
+            endDate={slider2EndDate}
             countPerFetch={0}
             isSingularFetch={true}
           >
