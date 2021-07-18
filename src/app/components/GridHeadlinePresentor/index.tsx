@@ -59,7 +59,6 @@ export function GridHeadlinePresentor(props: Props) {
     indexOfLightBoxToShow,
   } = useSelector(selectAppbar);
 
-  // NEED TO FIGURE OUT WHY WE ARE USING THIS
   const { actions } = useGridHeadlinePresentorSlice();
 
   const pickedStartDatePresentable = startDate
@@ -80,7 +79,6 @@ export function GridHeadlinePresentor(props: Props) {
     display: grid;
     grid-template-columns: ${gridCols};
     grid-gap: 1vw;
-    /* overflow-y: scroll; */
 
     @media (max-width: 768px) {
       grid-template-columns: ${gridColsMobile};
@@ -312,18 +310,19 @@ const SiteLogo = styled.img`
 
   @media (max-width: 1100px) {
     height: 20px;
+  }
 
-    @media (max-width: 600px) {
-      height: 15px;
+  @media (max-width: 600px) {
+    height: 15px;
   }
   @media (max-width: 440px) {
     height: 12px;
-}
+  }
 `;
 
 const OrderAndSitesText = styled.p`
   font-size: 1rem;
-  font-family: Liberation Sans;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0px;
   margin-left: 0.5vw;
 
@@ -337,6 +336,6 @@ const OrderAndSitesText = styled.p`
 `;
 
 const SitesDisplayedText = styled.p`
-  font-family: Liberation Sans;
+  font-family: Arial, Helvetica, sans-serif;
   margin: 0;
 `;
