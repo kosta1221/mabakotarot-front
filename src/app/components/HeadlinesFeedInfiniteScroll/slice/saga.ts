@@ -56,7 +56,7 @@ function* fetchHeadlinesWorkerSaga(action) {
 
     yield put(actions.setOneFeedsIsLoading({ index, isLoading: false }));
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     yield put(actions.setOneFeedsIsFetchError({ index, isFetchError: true }));
   }
 }
@@ -111,7 +111,7 @@ function* fetchNewHeadlinesWorkerSaga(action) {
 
     yield put(actions.setOneFeedsIsLoading({ index, isLoading: false }));
   } catch (e) {
-    console.log(e);
+    // console.log(e);
     yield put(actions.setOneFeedsIsFetchError({ index, isFetchError: true }));
   }
 }
@@ -152,9 +152,9 @@ const fetchHeadlines = async (
     data: { headlines },
   } = await axios({
     method: 'GET',
-    url: `https://3.68.107.158/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}${uniqueQuery}`,
+    url: `https://api.mabakotarot.co.il/api/headlines?page=${page}&count=${count}&isSortAsc=${isSortAsc}${sitesQuery}${startDateQuery}${endDateQuery}${searchQuery}${uniqueQuery}`,
   });
 
-  console.log('headlines fetched for sites: ', sites, headlines);
+  // console.log('headlines fetched for sites: ', sites, headlines);
   return headlines;
 };
