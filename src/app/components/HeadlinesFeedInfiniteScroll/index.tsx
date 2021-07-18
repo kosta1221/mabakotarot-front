@@ -69,7 +69,7 @@ export function HeadlinesFeedInfiniteScroll(props: Props) {
       return;
     }
     if (startDate?.split(' ')[0] === endDate?.split(' ')[0]) {
-      console.log('FETCHING NEW');
+      //   console.log('FETCHING NEW');
       dispatch(headlinesFeedsActions.sagaFetchNewHeadlines(index));
     }
   }, [index, dispatch, startDate, endDate]);

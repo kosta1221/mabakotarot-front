@@ -6,6 +6,7 @@
 import * as React from 'react';
 
 import 'react-awesome-lightbox/build/style.css';
+import Loader from 'react-loader-spinner';
 import Lightbox from 'react-awesome-lightbox';
 import CalendarIcon from '@material-ui/icons/Today';
 import Menu from '@material-ui/core/Menu';
@@ -41,6 +42,7 @@ interface Props {
   headlines?: Array<any>;
   lastItem?: any;
   isLoading?: boolean;
+  isFetchError?: boolean;
   isSortAsc?: boolean;
   sites?: string[] | null;
   handleToggleSortingorder?: any;
@@ -49,7 +51,7 @@ interface Props {
 }
 
 export function HeadlineSliderPresentor(props: Props) {
-  const { index, headlines, sites, startDate } = props;
+  const { index, headlines, sites, startDate, isLoading, isFetchError } = props;
 
   const sliderDatePresentable =
     startDate?.split(' ')[0] === currentLocalTime.split(' ')[0]
@@ -199,6 +201,43 @@ export function HeadlineSliderPresentor(props: Props) {
     );
   };
 
+  const presentor = (
+    <StyledCard elevation={6}>
+      <Image
+        onClick={e =>
+          handleImageClick(
+            headlines && [...headlines].reverse().indexOf(currentHeadline),
+          )
+        }
+        src={currentHeadline?.imageUrl}
+        alt={'headline-image'}
+      />
+
+      <StyledSlider
+        aria-labelledby="time-slider"
+        getAriaValueText={numFormatter}
+        min={0}
+        max={95}
+        value={getNumFromHHMM(
+          (sliders[index] && sliders[index].showedHeadline) || '',
+        )}
+        onChange={(e, v) => {
+          if (Array.isArray(v)) return;
+          dispatch(
+            slidersActions.setOneSlidersShowedHeadline({
+              index,
+              showedHeadline: numFormatter(v),
+            }),
+          );
+        }}
+        step={null}
+        valueLabelDisplay="on"
+        valueLabelFormat={numFormatter}
+        marks={marks}
+      />
+    </StyledCard>
+  );
+
   return (
     <Div>
       {isImageGalleryOpen && indexOfLightBoxToShow === index && (
@@ -277,6 +316,7 @@ export function HeadlineSliderPresentor(props: Props) {
             value={startDate && new Date(startDate)}
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
+            calendarType="Hebrew"
           />
           <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
         </Slider2StyledCalendarMenu>
@@ -294,45 +334,21 @@ export function HeadlineSliderPresentor(props: Props) {
             value={startDate && new Date(startDate)}
             maxDate={new Date()}
             minDate={new Date('2021-06-19')}
+            calendarType="Hebrew"
           />
           <Backdrop open={open2} onClick={handleCloseDateMenu}></Backdrop>
         </Slider1StyledCalendarMenu>
       )}
 
-      <StyledCard elevation={6}>
-        <Image
-          onClick={e =>
-            handleImageClick(
-              headlines && [...headlines].reverse().indexOf(currentHeadline),
-            )
-          }
-          src={currentHeadline?.imageUrl}
-          alt={'headline-image'}
-        />
+      {isFetchError && <CenteredMessage>אירעה שגיאת רשת</CenteredMessage>}
 
-        <StyledSlider
-          aria-labelledby="time-slider"
-          getAriaValueText={numFormatter}
-          min={0}
-          max={95}
-          value={getNumFromHHMM(
-            (sliders[index] && sliders[index].showedHeadline) || '',
-          )}
-          onChange={(e, v) => {
-            if (Array.isArray(v)) return;
-            dispatch(
-              slidersActions.setOneSlidersShowedHeadline({
-                index,
-                showedHeadline: numFormatter(v),
-              }),
-            );
-          }}
-          step={null}
-          valueLabelDisplay="on"
-          valueLabelFormat={numFormatter}
-          marks={marks}
-        />
-      </StyledCard>
+      {headlines && headlines.length > 0 && presentor}
+      {(!headlines || headlines.length === 0) && !isLoading && (
+        <CenteredMessage>לא נמצאו כותרות</CenteredMessage>
+      )}
+      {isLoading && !isFetchError && (
+        <CenteredLoader type="Oval" color="#00BFFF" height={80} width={80} />
+      )}
     </Div>
   );
 }
@@ -444,15 +460,8 @@ const StyledCalendarIcon = styled(CalendarIcon)`
 `;
 
 const StyledTypography = styled(Typography)`
-  /* max-width: 25vw; */
   width: 100%;
   text-align: center;
-  /* @media (max-width: 1140px) {
-    max-width: 40vw;
-  }
-  @media (max-width: 700px) {
-    max-width: 80vw;
-  } */
 `;
 
 const StyledMenu = styled(Menu)`
@@ -461,6 +470,23 @@ const StyledMenu = styled(Menu)`
   margin-left: 1.5vw;
 `;
 
-const Slider1StyledCalendarMenu = styled(Menu)``;
+const Slider1StyledCalendarMenu = styled(Menu)`
+  & .MuiMenu-list {
+    padding: 0;
+  }
+`;
 
-const Slider2StyledCalendarMenu = styled(Menu)``;
+const Slider2StyledCalendarMenu = styled(Menu)`
+  & .MuiMenu-list {
+    padding: 0;
+  }
+`;
+
+const CenteredMessage = styled.h1`
+  text-align: center;
+`;
+
+const CenteredLoader = styled(Loader)`
+  display: flex;
+  justify-content: center;
+`;

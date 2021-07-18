@@ -15,6 +15,6 @@ export const saveComparisonsToLocalStorage = comparisons => {
     const serializedComparisons = JSON.stringify(comparisons);
     localStorage.setItem('comparisons', serializedComparisons);
   } catch (err) {
-    console.log(err);
+    // console.log(err);
   }
 };
