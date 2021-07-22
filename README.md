@@ -1,2 +1,2 @@
-# dw-scraper-front
- Front end for my dw-scraper.
+# Ma Bakotarot - Front End
+ Front end for the Ma Bakotarot project
